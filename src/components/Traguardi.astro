@@ -1,0 +1,102 @@
+---
+// Pubblicazioni, mostre e riconoscimenti: cronologia (anno a sinistra) con eventuali copertine accanto.
+import Picture from './Picture.astro';
+import type { Img } from '../lib/img';
+
+interface Props {
+  voci: { anno: string; titolo: string; testo: string }[];
+  copertine?: Img[];
+}
+const { voci, copertine = [] } = Astro.props;
+---
+<div class:list={['traguardi', { 'con-copertine': copertine.length }]}>
+  {
+    copertine.length > 0 && (
+      <div class="copertine reveal">
+        {copertine.map((c) => (
+          <figure>
+            <Picture img={c} sizes="(min-width: 900px) 16vw, 40vw" />
+          </figure>
+        ))}
+      </div>
+    )
+  }
+  <ol class="cronologia">
+    {
+      voci.map((v) => (
+        <li class="reveal">
+          <span class="anno">{v.anno || '·'}</span>
+          <div>
+            <h3>{v.titolo}</h3>
+            <p>{v.testo}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<style>
+  .traguardi {
+    display: grid;
+    gap: 2.5rem;
+  }
+  @media (width >= 900px) {
+    .traguardi.con-copertine {
+      grid-template-columns: 2fr 3fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .copertine {
+      position: sticky;
+      top: calc(var(--header-h) + 2rem);
+    }
+  }
+  .copertine {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .copertine figure {
+    margin: 0;
+    box-shadow: 0 18px 40px -26px #22222299;
+  }
+  .copertine figure:nth-child(2) {
+    margin-top: 3rem;
+  }
+  .copertine :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .cronologia {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .cronologia li {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr;
+    gap: 1rem;
+    padding: 1.1rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .anno {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+  .cronologia h3 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: 1.2rem;
+    line-height: 1.3;
+    color: var(--ink);
+    margin-bottom: 0.3rem;
+  }
+  .cronologia p {
+    color: var(--text);
+    font-size: 0.98rem;
+  }
+</style>

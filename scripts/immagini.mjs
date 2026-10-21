@@ -26,7 +26,9 @@ const { progetti } = await imp('src/data/progetti.ts');
 const { team } = await imp('src/data/team.ts');
 const { slides, fotoStudio } = await imp('src/data/home.ts');
 const { processo } = await imp('src/data/metodo.ts');
-const { studioTestata, studioFoto, serviziTestata, ogPagine } = await imp('src/data/sezioni.ts');
+const sezioni = await imp('src/data/sezioni.ts');
+const { ogPagine } = sezioni;
+const reputazione = existsSync(path.join(ROOT, 'src/data/reputazione.ts')) ? await imp('src/data/reputazione.ts') : {};
 const { site } = await imp('src/data/site.ts');
 
 // ---------- slot ----------
@@ -37,7 +39,12 @@ team.forEach((m) => add(m.foto));
 slides.forEach((s) => add(s.img));
 add(fotoStudio);
 processo.forEach((s) => add(s.img));
-[studioTestata, ...studioFoto, serviziTestata].forEach(add);
+// tutte le immagini esportate (anche annidate) da sezioni.ts e reputazione.ts
+const raccogli = (v) => {
+  if (Array.isArray(v)) v.forEach(raccogli);
+  else if (v && typeof v === 'object') v.base && v.w && v.h ? add(v) : Object.values(v).forEach(raccogli);
+};
+[sezioni, reputazione].forEach((modulo) => Object.values(modulo).forEach(raccogli));
 
 // ---------- utilità ----------
 const EXT = ['jpg', 'jpeg', 'png', 'webp', 'tif', 'tiff', 'svg'];

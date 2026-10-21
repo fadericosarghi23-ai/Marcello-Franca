@@ -5,7 +5,6 @@ import '@fontsource-variable/newsreader/wght-italic.css';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import Intro from '../components/Intro.astro';
 import { site, url } from '../data/site';
 import { organizzazione, sitoWeb } from '../lib/seo';
 
@@ -74,24 +73,10 @@ const grafo = { '@context': 'https://schema.org', '@graph': [organizzazione(), s
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
-    {site.logo.marchio && <meta name="intro" content="1" />}
     <script type="application/ld+json" set:html={JSON.stringify(grafo)} />
-    <script is:inline>
-      (function () {
-        var h = document.documentElement;
-        h.classList.remove('no-js');
-        // intro col logo: una volta per visita, mai con riduci movimento
-        try {
-          if (document.querySelector('meta[name=intro]') && !sessionStorage.getItem('intro-vista') && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            h.classList.add('con-intro');
-            sessionStorage.setItem('intro-vista', '1');
-          }
-        } catch (e) {}
-      })();
-    </script>
+    <script is:inline>document.documentElement.classList.remove('no-js');</script>
   </head>
   <body>
-    <Intro />
     <a href="#main" class="skip-link">Salta al contenuto</a>
     <Header transparent={transparent} />
     <main id="main">
@@ -130,8 +115,6 @@ const grafo = { '@context': 'https://schema.org', '@graph': [organizzazione(), s
         });
       }
 
-      const ridotto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
       // Elementi di griglie e gallerie: compaiono uno dopo l'altro (ritardo a cascata per colonna)
       document.querySelectorAll('.projects-grid, [data-gallery]').forEach((gruppo) => {
         [...gruppo.children].forEach((el, i) => {
@@ -160,53 +143,6 @@ const grafo = { '@context': 'https://schema.org', '@graph': [organizzazione(), s
         { rootMargin: '0px 0px -8% 0px' },
       );
       document.querySelectorAll('.reveal, .reveal-contenuto').forEach((el) => io.observe(el));
-
-      if (!ridotto) {
-        // Parallax leggero delle foto di testata (la foto scorre più lenta della pagina)
-        const testate = [...document.querySelectorAll<HTMLElement>('.page-hero > picture, .hero-slides')];
-        if (testate.length) {
-          let attesa = false;
-          const sposta = () => {
-            attesa = false;
-            const y = Math.min(window.scrollY, window.innerHeight);
-            testate.forEach((el) => el.style.setProperty('--parallax', `${(y * 0.18).toFixed(1)}px`));
-          };
-          window.addEventListener(
-            'scroll',
-            () => {
-              if (!attesa) {
-                attesa = true;
-                requestAnimationFrame(sposta);
-              }
-            },
-            { passive: true },
-          );
-        }
-
-        // Numeri delle statistiche: contano fino al valore quando entrano in vista (gli anni restano fissi)
-        const contatori = new IntersectionObserver(
-          (entries) =>
-            entries.forEach((entry) => {
-              if (!entry.isIntersecting) return;
-              contatori.unobserve(entry.target);
-              const el = entry.target as HTMLElement;
-              const [, n, coda] = el.textContent!.trim().match(/^(\d+)(\D*)$/)!;
-              const fine = Number(n);
-              const t0 = performance.now();
-              const passo = (t: number) => {
-                const k = Math.min((t - t0) / 1400, 1);
-                el.textContent = `${Math.round(fine * (1 - (1 - k) ** 3))}${coda}`;
-                if (k < 1) requestAnimationFrame(passo);
-              };
-              requestAnimationFrame(passo);
-            }),
-          { threshold: 0.6 },
-        );
-        document.querySelectorAll<HTMLElement>('.stat strong').forEach((el) => {
-          const m = el.textContent!.trim().match(/^(\d+)(\D*)$/);
-          if (m && Number(m[1]) > 1 && Number(m[1]) < 1000) contatori.observe(el);
-        });
-      }
     </script>
   </body>
 </html>

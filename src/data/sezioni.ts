@@ -6,7 +6,7 @@ const sezione = (nome: string, w: number, h: number, alt: string): Img => ({ bas
 export const studioTestata = sezione('studio-testata', 2400, 580, 'Lo Studio di Design e Architettura d’interni Telemaco di Pesaro');
 export const studioFoto = [
   sezione('studio-foto-1', 1056, 1519, 'Allestimento di una vetrina con ceramiche ai Musei Civici di Pesaro'),
-  sezione('studio-foto-2', 1216, 1695, 'Copertina della pubblicazione “Colori della Romagna”'),
+  sezione('studio-foto-2', 1559, 1023, 'Studio cromatico di una facciata per il Piano del Colore di Pesaro'),
 ];
 export const serviziTestata = sezione('servizi-testata', 1942, 1348, 'Palazzo Ajmonino a Pesaro dopo il restyling cromatico');
 

@@ -30,7 +30,7 @@ export function llms(): string {
     `- [Servizi](${url('/servizi/')}): ${servizi.map((s) => s.nome.toLowerCase()).join(', ')}.`,
     `- [Metodo](${url('/metodo/')}): le ${fasi.length} fasi di lavoro, dal primo incontro al collaudo.`,
     `- [Progetti](${url('/progetti/')}): portfolio completo, filtrabile per categoria.`,
-    `- [Contatti](${url('/contatti/')}): recapiti, mappa e modulo di richiesta preventivo.`,
+    `- [Contatti](${url('/contatti/')}): recapiti, mappa e modulo di contatto.`,
     `- [Versione estesa per LLM](${url('/llms-full.txt')}): testi completi di tutti i progetti.`,
     '',
   );

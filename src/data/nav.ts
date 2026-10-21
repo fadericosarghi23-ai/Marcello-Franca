@@ -7,4 +7,4 @@ export const nav = [
 ];
 
 /** Invito all'azione principale (header, CTA, menu mobile) */
-export const ctaPrincipale = { label: 'Richiedi un preventivo', href: '/contatti/#richiesta' };
+export const ctaPrincipale = { label: 'Contatta lo studio', href: '/contatti/' };

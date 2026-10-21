@@ -3,6 +3,9 @@ import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
 import Picture from '../components/Picture.astro';
 import Cta from '../components/Cta.astro';
+import Committenti from '../components/Committenti.astro';
+import Traguardi from '../components/Traguardi.astro';
+import { committenti, traguardi, copertine, maestro, arte } from '../data/reputazione';
 import { site } from '../data/site';
 import { team } from '../data/team';
 import { pagina, briciole, titolo } from '../lib/seo';
@@ -137,6 +140,67 @@ const ld = [
           ))
         }
       </ul>
+    </div>
+  </section>
+
+  <section class="section bg-sand" id="maestro">
+    <div class="container split">
+      <div class="reveal">
+        <div class="ratio-45">
+          <Picture img={maestro.foto} sizes="(min-width: 1024px) 38vw, 92vw" />
+        </div>
+      </div>
+      <div class="reveal">
+        <p class="eyebrow mb-2">Il maestro</p>
+        <h2 class="h2">Michele Provinciali</h2>
+        <div class="prose mt-3 lead">
+          {maestro.testo.map((t) => <p>{t}</p>)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="pubblicazioni">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">Percorso</p>
+          <h2 class="h2">Pubblicazioni, mostre e riconoscimenti</h2>
+          <p class="lead mt-2">Quarant’anni di progetti, scritti e mostre attorno a un filo conduttore: il colore nell’ambiente costruito.</p>
+        </div>
+      </div>
+      <Traguardi voci={traguardi} copertine={copertine} />
+    </div>
+  </section>
+
+  <section class="section bg-sand" id="committenti">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">Committenti</p>
+          <h2 class="h2">Hanno lavorato con me</h2>
+          <p class="lead mt-2">Progettista e consulente per enti pubblici, istituzioni culturali, associazioni e aziende.</p>
+        </div>
+      </div>
+      <Committenti gruppi={committenti} />
+    </div>
+  </section>
+
+  <section class="section" id="arte">
+    <div class="container split split-rev">
+      <div class="reveal" style="order: 2">
+        <div class="ratio-32">
+          <Picture img={arte.foto} sizes="(min-width: 1024px) 45vw, 92vw" />
+        </div>
+      </div>
+      <div class="reveal">
+        <p class="eyebrow mb-2">Arte e fotografia</p>
+        <h2 class="h2">Lo sguardo del fotografo</h2>
+        <p class="lead mt-3">{arte.testo}</p>
+        <ul class="checklist mt-4">
+          {arte.mostre.map((m) => <li>{m}</li>)}
+        </ul>
+      </div>
     </div>
   </section>
 

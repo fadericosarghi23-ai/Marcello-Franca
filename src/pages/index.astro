@@ -6,8 +6,9 @@ import ProjectCard from '../components/ProjectCard.astro';
 import ProcessCards from '../components/ProcessCards.astro';
 import MapEmbed from '../components/MapEmbed.astro';
 import Cta from '../components/Cta.astro';
+import Committenti from '../components/Committenti.astro';
+import { committentiInEvidenza } from '../data/reputazione';
 import { site, telHref, mailHref, localitaRiga } from '../data/site';
-import { ctaPrincipale } from '../data/nav';
 import { servizi } from '../data/servizi';
 import { team } from '../data/team';
 import { slides, fotoStudio, numeriHome, inEvidenza, aree, faq } from '../data/home';
@@ -59,7 +60,7 @@ const ld = [
           </p>
           <div class="btn-row">
             <a href="/progetti/" class="btn btn-primary">Guarda i progetti</a>
-            <a href={ctaPrincipale.href} class="btn btn-outline-light">{ctaPrincipale.label}</a>
+            <a href={telHref} class="btn btn-outline-light">Chiama il {site.telefono.testo}</a>
           </div>
         </div>
         <div class="hero-caption" aria-live="polite">
@@ -173,6 +174,20 @@ const ld = [
           ))
         }
       </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">Committenti</p>
+          <h2 class="h2">Hanno lavorato con me</h2>
+          <p class="lead mt-2">Progettista e consulente per enti pubblici, istituzioni culturali e aziende, a Pesaro e non solo.</p>
+        </div>
+        <a href="/studio/#committenti" class="text-link link-underline">Tutti i committenti e le pubblicazioni</a>
+      </div>
+      <Committenti nomi={committentiInEvidenza} />
     </div>
   </section>
 

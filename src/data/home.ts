@@ -77,7 +77,7 @@ export const faq: { d: string; r: string }[] = [
     r: 'Sì, a seconda del progetto coordino gruppi di lavoro con architetti, ingegneri e geometri: da anni collaboro con gli architetti Massimo D’Agnillo e Andrea Pagnetti e con lo Studio di Design e Architettura d’interni Telemaco di Pesaro.',
   },
   {
-    d: 'Come posso richiedere un preventivo?',
-    r: 'Puoi compilare il modulo nella pagina Contatti, scrivere ad architetto@marcellofranca.it o chiamare il 347 338 8121, descrivendo lo spazio e il tipo di intervento: ti ricontatterò per fissare un primo incontro.',
+    d: 'Come posso contattarti?',
+    r: 'Il modo più semplice è chiamare il 347 338 8121 o scrivere ad architetto@marcellofranca.it; puoi anche usare il modulo nella pagina Contatti. Ti ricontatterò per fissare un primo incontro.',
   },
 ];

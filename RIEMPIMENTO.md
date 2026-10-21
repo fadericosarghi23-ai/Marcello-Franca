@@ -19,10 +19,17 @@ attuale https://www.marcellofranca.it/ (WordPress), riscritti in italiano.
   numeri sono `numeriStudio` in `src/data/sezioni.ts`.
 - Logo: marchio originale (squadra e voluta) ricolorato + nome in Georgia, alla misura 882×182.
   Favicon "MF" su antracite. Marchio decorativo della CTA ridisegnato in vettoriale dalla squadra.
-- Intro all'apertura (una volta per visita): marchio che si disegna, nome lettera per lettera, sipario.
-  Si disattiva togliendo `site.logo.marchio`.
 - Palette: quella del sito attuale (tema chiaro): antracite #222, grigi #6b6b6b/#bbb/#eee/#f7f7f7 su bianco. Il grigio è #6b6b6b invece di #767676 per restare AA anche su fondo grigio chiaro.
 - Progetti con soli disegni o rendering piccoli: pagina senza foto grande in testa (`hero: false`).
+
+## Indicazioni dal brief
+
+- Cliente che lavora di passaparola e nomea, non giovanissimo: sito sobrio, poche animazioni (solo
+  comparse morbide allo scroll; resta il percorso animato in /metodo/), testo leggermente più grande,
+  telefono in evidenza, inviti a contattare invece di "richiedi un preventivo".
+- Reputazione in primo piano (`src/data/reputazione.ts`): committenti (home + /studio/#committenti),
+  pubblicazioni, mostre e riconoscimenti, il maestro Michele Provinciali, arte e fotografia.
+- Il sito lo gestiamo noi: lui non deve toccare nulla.
 
 ## Dati da chiedere al cliente
 

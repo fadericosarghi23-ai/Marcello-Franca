@@ -1,0 +1,74 @@
+---
+// Elenco dei committenti: in home una selezione su più colonne, in /studio/ tutti, divisi per gruppo.
+interface Props {
+  nomi?: string[];
+  gruppi?: { gruppo: string; nomi: string[] }[];
+}
+const { nomi, gruppi } = Astro.props;
+---
+{
+  nomi && (
+    <ul class="nomi reveal">
+      {nomi.map((n) => <li>{n}</li>)}
+    </ul>
+  )
+}
+{
+  gruppi && (
+    <div class="gruppi">
+      {gruppi.map((g) => (
+        <div class="gruppo reveal">
+          <h3 class="titolo">{g.gruppo}</h3>
+          <ul class="nomi">
+            {g.nomi.map((n) => <li>{n}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+<style>
+  .nomi {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    column-gap: 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .nomi li {
+    padding: 0.85rem 0;
+    border-top: 1px solid var(--line);
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .gruppi {
+    display: grid;
+    gap: 2.5rem;
+  }
+  @media (width >= 900px) {
+    .gruppi {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+    .gruppi .nomi {
+      grid-template-columns: 1fr;
+    }
+  }
+  .titolo {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-bottom: 0.75rem;
+    font-family: var(--font-sans);
+  }
+  .gruppi .nomi li {
+    font-size: 1.05rem;
+    padding: 0.6rem 0;
+  }
+</style>
