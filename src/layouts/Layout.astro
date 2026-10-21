@@ -143,6 +143,32 @@ const grafo = { '@context': 'https://schema.org', '@graph': [organizzazione(), s
         { rootMargin: '0px 0px -8% 0px' },
       );
       document.querySelectorAll('.reveal, .reveal-contenuto').forEach((el) => io.observe(el));
+
+      // Numeri delle statistiche: contano fino al valore quando entrano in vista (gli anni restano fissi)
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const contatori = new IntersectionObserver(
+          (entries) =>
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              contatori.unobserve(entry.target);
+              const el = entry.target as HTMLElement;
+              const [, n, coda] = el.textContent!.trim().match(/^(\d+)(\D*)$/)!;
+              const fine = Number(n);
+              const t0 = performance.now();
+              const passo = (t: number) => {
+                const k = Math.min((t - t0) / 1400, 1);
+                el.textContent = `${Math.round(fine * (1 - (1 - k) ** 3))}${coda}`;
+                if (k < 1) requestAnimationFrame(passo);
+              };
+              requestAnimationFrame(passo);
+            }),
+          { threshold: 0.6 },
+        );
+        document.querySelectorAll<HTMLElement>('.stat strong').forEach((el) => {
+          const m = el.textContent!.trim().match(/^(\d+)(\D*)$/);
+          if (m && Number(m[1]) > 1 && Number(m[1]) < 1000) contatori.observe(el);
+        });
+      }
     </script>
   </body>
 </html>
