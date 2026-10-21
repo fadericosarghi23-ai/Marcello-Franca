@@ -8,7 +8,7 @@ import Cta from './Cta.astro';
 import type { Progetto } from '../data/progetti';
 import { membro } from '../data/team';
 import { categoria, vicini, simili, nomiCategorie } from '../lib/progetti';
-import { fullSrc, sizedSrc } from '../lib/img';
+import { fullSrc, sizedSrc, larghezze } from '../lib/img';
 
 interface Props {
   p: Progetto;
@@ -72,7 +72,7 @@ const { prev, next } = vicini(p);
               <dt>Referente</dt>
               <dd>
                 <a href={`/studio/#${ref.id}`} class="lead-person">
-                  <img src={sizedSrc(ref.foto, 400)} alt="" width="52" height="52" loading="lazy" />
+                  <img src={sizedSrc(ref.foto, larghezze(ref.foto)[0])} alt="" width="52" height="52" loading="lazy" />
                   <span><strong style="font-weight:500">{ref.nome}</strong><br /><span class="muted small">{ref.ruolo}</span></span>
                 </a>
               </dd>

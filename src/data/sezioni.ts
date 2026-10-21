@@ -3,20 +3,20 @@ import type { Img } from '../lib/img';
 // Foto di sezione non legate a un progetto (testate di pagina, foto di corredo).
 const sezione = (nome: string, w: number, h: number, alt: string): Img => ({ base: `/img/sezioni/${nome}`, w, h, alt });
 
-export const studioTestata = sezione('studio-testata', 2400, 1800, 'DA COMPILARE: descrizione foto di testata dello studio');
+export const studioTestata = sezione('studio-testata', 2400, 580, 'Lo Studio di Design e Architettura d’interni Telemaco di Pesaro');
 export const studioFoto = [
-  sezione('studio-foto-1', 2400, 3682, 'DA COMPILARE: descrizione foto 1 della sezione approccio'),
-  sezione('studio-foto-2', 2400, 1800, 'DA COMPILARE: descrizione foto 2 della sezione approccio'),
+  sezione('studio-foto-1', 1056, 1519, 'Allestimento di una vetrina con ceramiche ai Musei Civici di Pesaro'),
+  sezione('studio-foto-2', 1216, 1695, 'Copertina della pubblicazione “Colori della Romagna”'),
 ];
-export const serviziTestata = sezione('servizi-testata', 2400, 3200, 'DA COMPILARE: descrizione foto di testata dei servizi');
+export const serviziTestata = sezione('servizi-testata', 1942, 1348, 'Palazzo Ajmonino a Pesaro dopo il restyling cromatico');
 
 /** Immagini Open Graph (1200×630) delle pagine principali, oltre a quelle dei progetti (/img/og/<slug>.jpg) */
 export const ogPagine = ['sito', 'studio', 'servizi', 'metodo'];
 
 /** Numeri di /studio/. auto: 'team' (persone), 'progetti', oppure un ruolo del team ('Architetto'…) da contare. */
 export const numeriStudio: { n?: string; label: string; auto?: string }[] = [
-  { auto: 'team', label: 'Professionisti' },
-  { auto: 'Architetto', label: 'Architetti' },
-  { auto: 'Ingegnere', label: 'Ingegneri' },
-  { auto: 'Geometra', label: 'Geometri' },
+  { n: '1985', label: 'Architetto dal' },
+  { auto: 'progetti', label: 'Progetti in portfolio' },
+  { n: '6', label: 'Ambiti di progetto' },
+  { n: '40+', label: 'Committenti pubblici e privati' },
 ];

@@ -1,9 +1,9 @@
 /* Design system: token (palette, font, ritmo) in :root. Font caricati da @fontsource-variable nel Layout. */
 :root {
-  --accent: #931a1d;
-  --accent-dark: #741417;
-  --accent-soft: #f3e4e3;
-  --accent-on-dark: #e79a9b;
+  --accent: #a24a2a; /* terracotta dei Piani del Colore di Pesaro */
+  --accent-dark: #7f3820;
+  --accent-soft: #f5e6df;
+  --accent-on-dark: #eaa284;
   --ink: #1c1a19;
   --ink-2: #2a2725;
   --text: #3a3735;

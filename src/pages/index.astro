@@ -15,9 +15,9 @@ import { progetti } from '../data/progetti';
 import { perSlug } from '../lib/progetti';
 import { pagina } from '../lib/seo';
 
-const title = `${site.nome} | [[DA COMPILARE: attività e città, 5-6 parole]]`;
+const title = `${site.nome} | Architetto a Pesaro: architettura e colore`;
 const description =
-  '[[DA COMPILARE: meta description della home, 140-155 caratteri]]';
+  'Studio di Architettura Marcello Franca a Pesaro: architettura, interni, allestimenti museali, design, urbanistica e Piani del Colore dal 1985.';
 const hero = slides.map((s) => ({ ...s, p: perSlug(s.progetto) }));
 const numeri = numeriHome.map((n) => ({
   ...n,
@@ -50,12 +50,12 @@ const ld = [
       }
     </div>
     <div class="container hero-content">
-      <p class="eyebrow-light mb-3">{site.nome} · [[DA COMPILARE: attività, 2-3 parole]] · {site.indirizzo.citta}</p>
-      <h1 class="h1">[[DA COMPILARE: headline, 3 parole]] <em>[[DA COMPILARE: chiusa in corsivo, 3 parole]]</em></h1>
+      <p class="eyebrow-light mb-3">{site.nome} · Architettura e colore · {site.indirizzo.citta}</p>
+      <h1 class="h1">Architettura e colore, <em>una visione progettuale globale</em></h1>
       <div class="hero-meta">
         <div>
           <p class="lead">
-            [[DA COMPILARE: sottotitolo dell’hero, 1 frase di circa 190 caratteri]]
+            Da oltre trent’anni architettura, interni, allestimenti, disegno industriale e urbanistica, con grande attenzione allo sviluppo delle idee e alle esigenze della committenza.
           </p>
           <div class="btn-row">
             <a href="/progetti/" class="btn btn-primary">Guarda i progetti</a>
@@ -82,13 +82,13 @@ const ld = [
       </div>
       <div class="reveal">
         <p class="eyebrow mb-2">Lo studio</p>
-        <h2 class="h2">[[DA COMPILARE: titolo presentazione, 7-9 parole]]</h2>
+        <h2 class="h2">Fare architettura: equilibrio tra forma e funzione</h2>
         <div class="prose mt-3 lead">
           <p>
-            <strong>{site.sigla}</strong> [[DA COMPILARE: chi è lo studio e di cosa si occupa, 2 frasi (circa 200 caratteri)]]
+            <strong>{site.sigla}</strong> è architetto a Pesaro, dove vive e lavora dal 1985 dopo la laurea al Politecnico di Torino con una tesi sul colore nel paesaggio urbano lungo il mare.
           </p>
           <p>
-            [[DA COMPILARE: come lavora lo studio, 2 frasi (circa 230 caratteri)]]
+            Osserva i fenomeni che ci circondano e progetta edifici, spazi e oggetti d’uso quotidiano cercando l’equilibrio tra forma e funzione, il valore della memoria e l’uso sapiente dei materiali. Il colore è luce.
           </p>
         </div>
         <div class="stats mt-4">
@@ -104,8 +104,8 @@ const ld = [
       <div class="section-head reveal">
         <div>
           <p class="eyebrow mb-2">Servizi</p>
-          <h2 class="h2">[[DA COMPILARE: titolo sezione servizi, 6 parole]]</h2>
-          <p class="lead mt-2">[[DA COMPILARE: sottotitolo servizi, 1 frase breve]]</p>
+          <h2 class="h2">Dalla scala urbana al dettaglio d’arredo</h2>
+          <p class="lead mt-2">Architettura, interni, allestimenti, colore, urbanistica e design: una visione progettuale globale.</p>
         </div>
         <a href="/servizi/" class="btn btn-outline">Scopri tutti i servizi</a>
       </div>
@@ -128,7 +128,7 @@ const ld = [
       <div class="section-head reveal">
         <div>
           <p class="eyebrow">Metodo</p>
-          <h2 class="h2">[[DA COMPILARE: titolo metodo, 2 parole]]</h2>
+          <h2 class="h2">Come lavoro</h2>
         </div>
         <a href="/metodo/" class="text-link link-underline">Il metodo completo</a>
       </div>
@@ -141,7 +141,7 @@ const ld = [
       <div class="section-head reveal">
         <div>
           <p class="eyebrow">Progetti</p>
-          <h2 class="h2">[[DA COMPILARE: titolo sezione progetti, 7-9 parole]]</h2>
+          <h2 class="h2">Da una piazza medievale a un museo della moto</h2>
         </div>
         <a href="/progetti/" class="text-link link-underline">Tutti i {progetti.length} progetti</a>
       </div>
@@ -156,9 +156,9 @@ const ld = [
       <div class="section-head reveal">
         <div>
           <p class="eyebrow">Dove lavoriamo</p>
-          <h2 class="h2">[[DA COMPILARE: titolo zone di lavoro, 7-8 parole]]</h2>
+          <h2 class="h2">Da Pesaro alle Marche, fino a Dubai e all’Alabama</h2>
           <p class="lead mt-2" style="color: rgb(255 255 255 / 0.72)">
-            [[DA COMPILARE: dove ha sede e dove lavora lo studio, 1 frase (circa 120 caratteri)]]
+            Lo studio ha sede a Pesaro e lavora per enti pubblici, aziende e privati nelle Marche, in Romagna, a San Marino e all’estero.
           </p>
         </div>
       </div>
@@ -182,8 +182,8 @@ const ld = [
       <div class="section-head reveal">
         <div>
           <p class="eyebrow">Il team</p>
-          <h2 class="h2">[[DA COMPILARE: titolo team, 4 parole]]</h2>
-          <p class="lead mt-2">{team.length} [[DA COMPILARE: chi sono e come lavorano, 9-10 parole]]</p>
+          <h2 class="h2">Architetti, ingegneri e geometri</h2>
+          <p class="lead mt-2">{team.length} professionisti che lavorano insieme dal primo sopralluogo al collaudo.</p>
         </div>
         <a href="/studio/#team" class="text-link link-underline">Conosci il team</a>
       </div>

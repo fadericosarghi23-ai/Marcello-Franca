@@ -165,7 +165,9 @@ for (const img of lista) for (const w of larghezze(img)) {
   if (w === fallbackWidth(img)) attesi.add(path.join(PUB, `${img.base}-${w}.jpg`));
 }
 async function* walk(d) { if (!existsSync(d)) return; for (const e of await fs.readdir(d, { withFileTypes: true })) { const p = path.join(d, e.name); if (e.isDirectory()) yield* walk(p); else yield p; } }
-for (const dir of ['progetti', 'team', 'sezioni']) {
+for (const p of progetti) attesi.add(path.join(PUB, 'img', 'og', `${p.slug}.jpg`));
+for (const n of ogPagine) attesi.add(path.join(PUB, 'img', 'og', `${n}.jpg`));
+for (const dir of ['progetti', 'team', 'sezioni', 'og']) {
   for await (const f of walk(path.join(PUB, 'img', dir))) if (!attesi.has(path.normalize(f))) { await fs.rm(f); orfani++; }
 }
 

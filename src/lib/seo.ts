@@ -8,10 +8,10 @@ import { fallbackSrc } from './img';
 const MAX_TITLE = 65;
 const SUFFISSO = ` | ${site.nome}`;
 
-/** Per ogni candidato in ordine: prima con " | Nome" in coda, poi da solo; il primo che sta in 65 caratteri. */
+/** Per ogni candidato in ordine: prima con " | Nome" in coda (se il nome non c'è già), poi da solo; il primo che sta in 65 caratteri. */
 export function titolo(...candidati: string[]): string {
   for (const c of candidati) {
-    if ((c + SUFFISSO).length <= MAX_TITLE) return c + SUFFISSO;
+    if (!c.includes(site.nome) && (c + SUFFISSO).length <= MAX_TITLE) return c + SUFFISSO;
     if (c.length <= MAX_TITLE) return c;
   }
   return candidati[candidati.length - 1];

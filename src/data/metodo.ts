@@ -3,29 +3,40 @@ import type { Img } from '../lib/img';
 /** Le 4 card del processo (home + /metodo/). La foto della card 4 è anche la testata di /metodo/. */
 export const processo: { titolo: string; testo: string; img: Img }[] = [
   {
-    titolo: '[[DA COMPILARE: fase 1, 2-3 parole]]',
-    testo: '[[DA COMPILARE: descrizione fase 1, 1 frase di circa 180 caratteri]]',
-    img: { base: '/img/sezioni/metodo-1', w: 1537, h: 2049, alt: 'DA COMPILARE: descrizione foto fase 1' },
+    titolo: 'Osservare i luoghi',
+    testo:
+      'Ogni progetto parte dall’osservazione: ripresa fotografica, analisi metrica e ottico-percettiva, ricerca sulla storia e sulla cultura del luogo e ascolto di chi lo vivrà.',
+    img: { base: '/img/sezioni/metodo-1', w: 2400, h: 1378, alt: 'Il percorso lungo i chioschi della piazza di Gradara' },
   },
   {
-    titolo: '[[DA COMPILARE: fase 2, 2 parole]]',
-    testo: '[[DA COMPILARE: descrizione fase 2, 1 frase di circa 180 caratteri]]',
-    img: { base: '/img/sezioni/metodo-2', w: 800, h: 317, alt: 'DA COMPILARE: descrizione foto fase 2' },
+    titolo: 'Idee e simulazioni',
+    testo:
+      'Schizzi, modelli, rendering e simulazioni permettono alla committenza di valutare il risultato, i costi di realizzazione e i tempi prima di scegliere la soluzione.',
+    img: { base: '/img/sezioni/metodo-2', w: 2400, h: 3392, alt: 'Schizzo di studio per gli interni di una villa a Dubai' },
   },
   {
-    titolo: '[[DA COMPILARE: fase 3, 3 parole]]',
-    testo: '[[DA COMPILARE: descrizione fase 3, 1 frase di circa 180 caratteri]]',
-    img: { base: '/img/sezioni/metodo-3', w: 800, h: 444, alt: 'DA COMPILARE: descrizione foto fase 3' },
+    titolo: 'Colore e materia',
+    testo:
+      'Luce, colore e materia sono al centro di ogni scelta: materiali sani e a basso impatto, cromie che rispettano la memoria dei luoghi e il ritmo dell’architettura.',
+    img: { base: '/img/sezioni/metodo-3', w: 2400, h: 2975, alt: 'Le cartelle dei grigi proposte per il restyling cromatico di Palazzo Ajmonino' },
   },
   {
-    titolo: '[[DA COMPILARE: fase 4, 3 parole]]',
-    testo: '[[DA COMPILARE: descrizione fase 4, 1 frase di circa 180 caratteri]]',
-    img: { base: '/img/sezioni/metodo-4', w: 2400, h: 1109, alt: 'DA COMPILARE: descrizione foto fase 4' },
+    titolo: 'Realizzazione e direzione lavori',
+    testo:
+      'Pratiche edilizie, direzione dei lavori e direzione artistica: seguo il cantiere coordinando i gruppi di lavoro fino alla consegna dell’opera.',
+    img: { base: '/img/sezioni/metodo-4', w: 2400, h: 1594, alt: 'Vista notturna dell’Ingresso d’Onore del Quartiere Fieristico di Pesaro' },
   },
 ];
 
 /** Le fasi nel dettaglio (/metodo/, JSON-LD HowTo) */
-export const fasi: { titolo: string; testo: string }[] = Array.from({ length: 9 }, (_, i) => ({
-  titolo: `[[DA COMPILARE: titolo passaggio ${i + 1}, 2-4 parole]]`,
-  testo: `[[DA COMPILARE: descrizione passaggio ${i + 1}, 1-2 frasi (circa 160 caratteri)]]`,
-}));
+export const fasi: { titolo: string; testo: string }[] = [
+  { titolo: 'Primo incontro', testo: 'Mi racconti lo spazio, l’edificio o l’evento, le tue esigenze, i tempi e il budget: capiamo insieme quale intervento è possibile.' },
+  { titolo: 'Sopralluogo e rilievo', testo: 'Un’ampia ripresa fotografica dei luoghi e un’analisi metrica e ottico-percettiva dello stato di fatto, raccogliendo il materiale grafico esistente.' },
+  { titolo: 'Analisi del contesto', testo: 'Studio la storia, la tradizione e la cultura del luogo, i vincoli e le cromie storiche, per un progetto in dialogo con il paesaggio e con la memoria.' },
+  { titolo: 'Ipotesi e simulazioni', testo: 'Elaboro ipotesi progettuali, rendering e simulazioni che permettono di valutare il risultato, i costi di realizzazione e i tempi di costruzione.' },
+  { titolo: 'Colore e materiali', testo: 'Scelgo colori, materiali e finiture in armonia con l’architettura e con l’ambiente, preferendo materiali naturali a basso impatto ambientale.' },
+  { titolo: 'Progetto definitivo ed esecutivo', testo: 'Sviluppo il progetto in ogni dettaglio, dalla distribuzione degli spazi agli arredi su misura, coordinando gli altri professionisti coinvolti.' },
+  { titolo: 'Pratiche e autorizzazioni', testo: 'Seguo le pratiche edilizie e il dialogo con gli enti e gli uffici tecnici necessari all’avvio dei lavori.' },
+  { titolo: 'Direzione lavori e direzione artistica', testo: 'Seguo il cantiere e la realizzazione, controllando qualità, tempi e costi e curando la coerenza del progetto in ogni dettaglio.' },
+  { titolo: 'Consegna', testo: 'Chiudo l’intervento con la consegna dell’opera e della documentazione, restando un riferimento anche dopo la fine dei lavori.' },
+];

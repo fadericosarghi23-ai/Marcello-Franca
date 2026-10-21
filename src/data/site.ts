@@ -1,81 +1,87 @@
 // Identità dello studio: unica fonte per header, footer, contatti, SEO, JSON-LD, robots, llms.txt.
 
 export const site = {
-  nome: '[[DA COMPILARE: nome dello studio, 2 parole]]',
+  nome: 'Marcello Franca',
   /** Nome corto (manifest) */
-  nomeBreve: '[[DA COMPILARE: nome corto]]',
-  ragioneSociale: '[[DA COMPILARE: ragione sociale]]',
-  altriNomi: ['[[DA COMPILARE: variante del nome]]'],
+  nomeBreve: 'M. Franca',
+  ragioneSociale: 'Studio di Architettura Marcello Franca',
+  altriNomi: ['Marcello Franca architetto', 'Studio di Architettura Marcello Franca'],
   /** Sigla in grassetto nei testi di presentazione */
-  sigla: '[[DA COMPILARE: nome o sigla in grassetto]]',
-  slogan: '[[DA COMPILARE: slogan, 3-4 parole]]',
+  sigla: 'Marcello Franca',
+  slogan: 'Il colore è luce.',
   /** Descrizione lunga (JSON-LD, llms.txt) */
-  descrizione: '[[DA COMPILARE: descrizione dello studio, 1 frase di circa 230 caratteri: chi è, dove, cosa fa]]',
+  descrizione:
+    'Lo Studio di Architettura Marcello Franca a Pesaro si occupa da oltre trent’anni di architettura, arredamento d’interni, allestimenti, disegno industriale, urbanistica e Piani del Colore, con una visione progettuale globale.',
   /** Descrizione breve (manifest) */
-  descrizioneBreve: '[[DA COMPILARE: attività e città, 5-6 parole]]',
+  descrizioneBreve: 'Architetto a Pesaro: architettura, interni e colore',
   /** Riga sotto il logo nel footer */
-  descrizioneFooter: '[[DA COMPILARE: presentazione nel footer, 2 frasi brevi]]',
-  /** Dominio canonico, senza slash finale. [[DA COMPILARE: dominio definitivo]] */
-  dominio: 'https://www.example.com',
+  descrizioneFooter: 'Architetto a Pesaro dal 1985: architettura, interni, allestimenti, design e Piani del Colore. Il colore è luce.',
+  /** Dominio canonico, senza slash finale */
+  dominio: 'https://www.marcellofranca.it',
   lingua: 'it',
   locale: 'it_IT',
   indirizzo: {
     /** Via e civico, CAP, zona: lasciare '' se non pubblicati (le righe relative spariscono) */
-    via: '[[DA COMPILARE: via e numero civico]]',
+    via: '',
     /** Forma breve (titoli, mappa) */
-    viaBreve: '[[DA COMPILARE: via breve]]',
-    cap: '[[DA COMPILARE: CAP]]',
-    citta: '[[DA COMPILARE: città]]',
-    provincia: '[[DA COMPILARE: sigla provincia]]',
-    /** Codice ISO 3166-2 della provincia, es. IT-RE. [[DA COMPILARE: codice ISO provincia]] */
-    regioneIso: 'IT',
+    viaBreve: '',
+    cap: '',
+    citta: 'Pesaro',
+    provincia: 'PU',
+    /** Codice ISO 3166-2 della provincia */
+    regioneIso: 'IT-PU',
     paese: 'IT',
     /** Completa la frase "Lo studio si trova in <via>, ..." */
-    zona: '[[DA COMPILARE: quartiere o zona, es. nel quartiere ...]]',
+    zona: '',
   },
-  /** [[DA COMPILARE: coordinate della sede (mappa, geo meta, JSON-LD)]] */
-  geo: { lat: 41.9028, lng: 12.4964 },
-  /** Link "Indicazioni stradali". [[DA COMPILARE: link Google Maps della sede]] */
-  mapsUrl: 'https://www.google.com/maps',
-  /** [[DA COMPILARE: telefono in formato internazionale per href, es. +390000000000]] */
-  telefono: { testo: '[[DA COMPILARE: telefono]]', href: '+390000000000' },
-  /** [[DA COMPILARE: email]] (deve restare un indirizzo valido per i link mailto) */
-  email: 'info@example.com',
+  /** Centro di Pesaro: l'indirizzo dello studio non è pubblicato. [[DA COMPILARE: coordinate della sede se si pubblica l'indirizzo]] */
+  geo: { lat: 43.9098, lng: 12.9131 },
+  /** Link "Indicazioni stradali" */
+  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Pesaro%20PU',
+  telefono: { testo: '347 338 8121', href: '+393473388121' },
+  email: 'architetto@marcellofranca.it',
   /** Vuoti = non mostrati */
-  pec: '[[DA COMPILARE: PEC]]',
-  piva: '[[DA COMPILARE: P.IVA]]',
-  /** nome = chiave dell'icona in icone.ts (es. Facebook). [[DA COMPILARE: profili social]] */
-  social: [{ nome: 'Facebook', url: 'https://www.facebook.com/' }],
-  ricevimento: '[[DA COMPILARE: orari o modalità di ricevimento, 1 frase]]',
+  pec: '',
+  piva: '00998090419',
+  /** nome = chiave dell'icona in icone.ts (es. Facebook) */
+  social: [{ nome: 'Facebook', url: 'https://www.facebook.com/architettomarcellofranca/' }],
+  ricevimento: 'Contattami per fissare un incontro.',
   logo: {
     scuro: '/img/logo/logo.png',
     chiaro: '/img/logo/logo-chiaro.png',
     w: 882,
     h: 182,
-    alt: 'DA COMPILARE: nome dello studio e attività',
-    didascalia: 'DA COMPILARE: logo dello studio',
+    alt: 'Marcello Franca architetto — architettura, interni, allestimenti, design e colore',
+    didascalia: 'Logo Marcello Franca architetto',
   },
   /** Colore della barra del browser (= --accent in global.css) */
-  themeColor: '#931a1d',
+  themeColor: '#a24a2a',
   areeServite: [
-    { tipo: 'City', nome: '[[DA COMPILARE: città]]' },
-    { tipo: 'AdministrativeArea', nome: '[[DA COMPILARE: provincia]]' },
-    { tipo: 'AdministrativeArea', nome: '[[DA COMPILARE: provincia]]' },
-    { tipo: 'AdministrativeArea', nome: '[[DA COMPILARE: provincia]]' },
-    { tipo: 'AdministrativeArea', nome: '[[DA COMPILARE: provincia]]' },
-    { tipo: 'State', nome: '[[DA COMPILARE: regione]]' },
+    { tipo: 'City', nome: 'Pesaro' },
+    { tipo: 'AdministrativeArea', nome: 'Provincia di Pesaro e Urbino' },
+    { tipo: 'AdministrativeArea', nome: 'Provincia di Rimini' },
+    { tipo: 'State', nome: 'Marche' },
+    { tipo: 'State', nome: 'Emilia-Romagna' },
   ],
   competenze: [
-    '[[DA COMPILARE: competenza 1]]',
-    '[[DA COMPILARE: competenza 2]]',
-    '[[DA COMPILARE: competenza 3]]',
-    '[[DA COMPILARE: competenza 4]]',
-    '[[DA COMPILARE: competenza 5]]',
-    '[[DA COMPILARE: competenza 6]]',
+    'progettazione architettonica',
+    'architettura d’interni',
+    'arredamento',
+    'allestimenti museali',
+    'allestimenti fieristici',
+    'scenografie',
+    'Piani del Colore',
+    'restyling cromatico',
+    'colore nell’ambiente costruito',
+    'urbanistica',
+    'arredo urbano',
+    'disegno industriale',
+    'segnaletica',
+    'direzione lavori',
   ],
   /** Immagine Open Graph predefinita (1200×630) */
-  og: { src: '/img/og/sito.jpg', alt: 'DA COMPILARE: nome dello studio e attività' },
-  /** Modulo contatti: con attivo=false non invia nulla. [[DA COMPILARE: collegare il modulo (Netlify Forms)]] */
+  og: { src: '/img/og/sito.jpg', alt: 'Marcello Franca, architetto a Pesaro: architettura, interni e colore' },
+  /** Modulo contatti: con attivo=false non invia nulla. Attivare quando il sito è pubblicato su Netlify. */
   form: { attivo: false, netlify: true, nome: 'contatti', grazie: '/grazie/' },
 };
 

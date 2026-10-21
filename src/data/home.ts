@@ -4,46 +4,80 @@ const sezione = (nome: string, w: number, h: number, alt: string): Img => ({ bas
 
 /** Slide dell'hero in home: progetto collegato (titolo e luogo in didascalia) + foto a tutta pagina. */
 export const slides: { progetto: string; img: Img }[] = [
-  { progetto: 'progetto-01', img: sezione('home-slide-1', 2400, 1577, 'DA COMPILARE: descrizione foto slide 1') },
-  { progetto: 'progetto-03', img: sezione('home-slide-2', 2400, 1800, 'DA COMPILARE: descrizione foto slide 2') },
-  { progetto: 'progetto-04', img: sezione('home-slide-3', 2400, 2107, 'DA COMPILARE: descrizione foto slide 3') },
-  { progetto: 'progetto-11', img: sezione('home-slide-4', 2400, 1802, 'DA COMPILARE: descrizione foto slide 4') },
-  { progetto: 'progetto-01', img: sezione('home-slide-5', 2400, 1189, 'DA COMPILARE: descrizione foto slide 5') },
+  { progetto: 'ingresso-onore-fiera-pesaro', img: sezione('home-slide-1', 2000, 1199, 'Ingresso d’Onore del Quartiere Fieristico di Pesaro: facciata curva con vetrate e portico') },
+  { progetto: 'motomuseo-morbidelli', img: sezione('home-slide-2', 2400, 1598, 'Le moto d’epoca sulle pedane del Motomuseo Morbidelli a Pesaro') },
+  { progetto: 'piazza-gradara', img: sezione('home-slide-3', 2400, 1800, 'La piazza del Municipio di Gradara con il borgo e la rocca') },
+  { progetto: 'stabilimento-balneare-ponente', img: sezione('home-slide-4', 2044, 1363, 'Piscina e pergolato dello stabilimento balneare Baronciani a Pesaro') },
+  { progetto: 'bocciodromo-pesaro', img: sezione('home-slide-5', 2400, 1350, 'Il nuovo Bocciodromo della Città di Pesaro') },
 ];
 
 /** Foto verticale accanto alla presentazione in home */
-export const fotoStudio: Img = sezione('home-studio', 2400, 3200, 'DA COMPILARE: descrizione foto accanto alla presentazione');
+export const fotoStudio: Img = sezione('home-studio', 1536, 2048, 'Villa a Pesaro ristrutturata da Marcello Franca');
 
 /** Numeri della home. auto = calcolato (persone del team / progetti in portfolio). */
 export const numeriHome: { n: string | null; label: string; auto?: 'team' | 'progetti' }[] = [
-  { n: null, auto: 'team', label: 'Professionisti' },
+  { n: '1985', label: 'Architetto dal' },
   { n: null, auto: 'progetti', label: 'Progetti in portfolio' },
-  { n: '[[N3]]', label: '[[DA COMPILARE: cosa conta il numero 3]]' },
-  { n: '[[N4]]', label: '[[DA COMPILARE: cosa conta il numero 4]]' },
+  { n: '6', label: 'Ambiti di progetto' },
+  { n: '40+', label: 'Committenti pubblici e privati' },
 ];
 
 /** Progetti in evidenza in home (slug) */
-export const inEvidenza = ['progetto-01', 'progetto-02', 'progetto-03', 'progetto-04', 'progetto-07', 'progetto-06'];
+export const inEvidenza = [
+  'ingresso-onore-fiera-pesaro',
+  'motomuseo-morbidelli',
+  'piazza-gradara',
+  'piano-del-colore-pesaro',
+  'bocciodromo-pesaro',
+  'restyling-cromatico-palazzo-ajmonino',
+];
 
 /** Aree di lavoro (sezione scura in home) */
 export const aree: { conteggio: string; nome: string; luoghi: string }[] = [
-  { conteggio: '[[DA COMPILARE: n progetti]]', nome: '[[DA COMPILARE: area 1, es. Provincia di ...]]', luoghi: '[[DA COMPILARE: comuni dell’area 1, elenco di 8-10 nomi separati da virgola]]' },
-  { conteggio: '[[DA COMPILARE: n progetti]]', nome: '[[DA COMPILARE: area 2]]', luoghi: '[[DA COMPILARE: comuni dell’area 2, 3-4 nomi]]' },
-  { conteggio: '[[DA COMPILARE: n progetti]]', nome: '[[DA COMPILARE: area 3]]', luoghi: '[[DA COMPILARE: comuni dell’area 3, 2 nomi]]' },
-  { conteggio: '[[DA COMPILARE: n progetti]]', nome: '[[DA COMPILARE: area 4]]', luoghi: '[[DA COMPILARE: comune]]' },
-  { conteggio: '[[DA COMPILARE: n progetti]]', nome: '[[DA COMPILARE: area 5]]', luoghi: '[[DA COMPILARE: comune]]' },
-  { conteggio: '[[DA COMPILARE: n progetti]]', nome: '[[DA COMPILARE: area 6]]', luoghi: '[[DA COMPILARE: comune]]' },
+  { conteggio: 'Sede dello studio', nome: 'Pesaro', luoghi: 'Centro storico, Campanara, Santa Veneranda, Borgo Santa Maria, Pantano, Montegranaro, Zona Porto, spiaggia di Ponente' },
+  { conteggio: 'Progetti e consulenze', nome: 'Provincia di Pesaro e Urbino', luoghi: 'Gradara, Montelabbate, Fano, Fratterosa, Fermignano, Mondolfo, Cartoceto, Monteciccardo' },
+  { conteggio: 'Consulenze sul colore', nome: 'Romagna', luoghi: 'Santarcangelo di Romagna, Rimini, Forlì' },
+  { conteggio: '1 concorso', nome: 'Repubblica di San Marino', luoghi: 'Concorso di idee “Risalire la Città”, 1994' },
+  { conteggio: '1 allestimento', nome: 'Stati Uniti', luoghi: 'Birmingham (Alabama), Barber Vintage Motorsports Museum' },
+  { conteggio: '1 progetto d’interni', nome: 'Emirati Arabi Uniti', luoghi: 'Dubai' },
 ];
 
 /** Domande frequenti (home + JSON-LD FAQPage). Metà nella colonna sinistra, la prima aperta. */
 export const faq: { d: string; r: string }[] = [
-  { d: '[[DA COMPILARE: domanda 1 — di cosa si occupa lo studio?]]', r: '[[DA COMPILARE: risposta 1, 2 frasi lunghe (circa 380 caratteri)]]' },
-  { d: '[[DA COMPILARE: domanda 2 — dove si trova lo studio?]]', r: '[[DA COMPILARE: risposta 2 con indirizzo, telefono ed email, 2 frasi]]' },
-  { d: '[[DA COMPILARE: domanda 3 — in quali zone lavorate?]]', r: '[[DA COMPILARE: risposta 3, 1 frase lunga]]' },
-  { d: '[[DA COMPILARE: domanda 4 — chi fa parte del team?]]', r: '[[DA COMPILARE: risposta 4, 1 frase con i nomi principali]]' },
-  { d: '[[DA COMPILARE: domanda 5 — privati o enti pubblici?]]', r: '[[DA COMPILARE: risposta 5, 2 frasi]]' },
-  { d: '[[DA COMPILARE: domanda 6, su un servizio specialistico]]', r: '[[DA COMPILARE: risposta 6, 2 frasi]]' },
-  { d: '[[DA COMPILARE: domanda 7 — seguite tutto dal progetto al cantiere?]]', r: '[[DA COMPILARE: risposta 7, 2 frasi]]' },
-  { d: '[[DA COMPILARE: domanda 8, su un altro servizio]]', r: '[[DA COMPILARE: risposta 8, 1 frase lunga]]' },
-  { d: '[[DA COMPILARE: domanda 9 — come richiedere un preventivo?]]', r: '[[DA COMPILARE: risposta 9, 1 frase lunga]]' },
+  {
+    d: 'Di cosa si occupa lo Studio di Architettura Marcello Franca?',
+    r: 'Da oltre trent’anni lo studio si occupa di architettura, arredamento d’interni, allestimenti museali e fieristici, disegno industriale, urbanistica e Piani del Colore, con una visione progettuale globale e una grande attenzione al processo di sviluppo delle idee e alle esigenze della committenza.',
+  },
+  {
+    d: 'Dove si trova lo studio?',
+    r: 'Lo studio ha sede a Pesaro (PU). Puoi contattare l’architetto Marcello Franca al numero 347 338 8121 o all’indirizzo architetto@marcellofranca.it per fissare un incontro.',
+  },
+  {
+    d: 'In quali zone lavori?',
+    r: 'Principalmente a Pesaro e nella provincia di Pesaro e Urbino, con consulenze in Romagna e progetti a San Marino, a Dubai e a Birmingham, in Alabama, dove ho progettato il “Morbidelli Corner” del Barber Vintage Motorsports Museum.',
+  },
+  {
+    d: 'Chi è Marcello Franca?',
+    r: 'Sono nato a Pesaro nel 1959 e lavoro come architetto dal 1985, dopo la laurea al Politecnico di Torino con una tesi sul colore nel paesaggio urbano lungo il mare; il mio maestro è stato Michele Provinciali.',
+  },
+  {
+    d: 'Lavori per privati o per enti pubblici?',
+    r: 'Entrambi. Ho lavorato per Comuni come Pesaro, Gradara, Montelabbate e Santarcangelo di Romagna, per la CCIAA di Pesaro e Urbino, i Musei Civici e il Rossini Opera Festival, per aziende come Berloni, Akzo Nobel Sikkens e Biesse e per molti committenti privati.',
+  },
+  {
+    d: 'Che cos’è un Piano del Colore?',
+    r: 'È uno strumento che crea un quadro di riferimento unitario per le tinteggiature delle facciate, in relazione alla storia, allo stile e ai materiali delle diverse epoche, per salvaguardare la memoria cromatica della città. Ho curato il Piano del Colore del centro storico di Pesaro.',
+  },
+  {
+    d: 'Ti occupi anche di allestimenti?',
+    r: 'Sì: musei, mostre, stand fieristici, palchi e scenografie, dal Motomuseo Morbidelli al Museo della Bicicletta di Pesaro, dagli eventi del Quartiere Fieristico di Campanara alle edizioni del Rossini Opera Festival.',
+  },
+  {
+    d: 'Collabori con altri professionisti?',
+    r: 'Sì, a seconda del progetto coordino gruppi di lavoro con architetti, ingegneri e geometri: da anni collaboro con gli architetti Massimo D’Agnillo e Andrea Pagnetti e con lo Studio di Design e Architettura d’interni Telemaco di Pesaro.',
+  },
+  {
+    d: 'Come posso richiedere un preventivo?',
+    r: 'Puoi compilare il modulo nella pagina Contatti, scrivere ad architetto@marcellofranca.it o chiamare il 347 338 8121, descrivendo lo spazio e il tipo di intervento: ti ricontatterò per fissare un primo incontro.',
+  },
 ];

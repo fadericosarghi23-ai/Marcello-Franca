@@ -1,6 +1,5 @@
 ---
-// Marchio grafico decorativo (fondo della CTA). Disegno su viewBox 64×64, tratto currentColor.
-// [[DA COMPILARE: tracciato del marchio dello studio (sostituire il segnaposto qui sotto)]]
+// Marchio grafico decorativo (fondo della CTA): la squadra del logo, disegnata su viewBox 64×64, tratto currentColor.
 interface Props {
   class?: string;
   size?: number;
@@ -8,5 +7,5 @@ interface Props {
 const { class: cls, size = 416 } = Astro.props;
 ---
 <svg class={cls} width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true">
-  <path d="M1.5 1.5h61v61h-61zM1.5 1.5l61 61M62.5 1.5l-61 61" stroke="currentColor" stroke-width="3" stroke-linecap="square"></path>
+  <path d="M6 2.5v59h55zM16 27v24.5h24zM6 14h5M6 24h3M6 34h5M6 44h3M6 54h5M30 61.5v-4M40 61.5v-6M50 61.5v-4" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="round"></path>
 </svg>

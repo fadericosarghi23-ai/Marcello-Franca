@@ -9,8 +9,8 @@ import { portfolio } from '../../lib/progetti';
 import { pagina, briciole, titolo } from '../../lib/seo';
 
 const n = progetti.length;
-const title = titolo('[[DA COMPILARE: meta title portfolio, max 45 caratteri]]');
-const description = `Portfolio di ${site.nome}: ${n} [[DA COMPILARE: progetti di ... a ..., completa fino a 150 caratteri]]`;
+const title = titolo('Progetti di architettura, allestimento e colore');
+const description = `Portfolio di ${site.nome}: ${n} progetti di architettura, interni, allestimenti, design, urbanistica e Piani del Colore a Pesaro e non solo.`;
 const ld = [
   pagina({ tipo: 'CollectionPage', path: '/progetti/', titolo: title, descrizione: description, og: site.og.src, briciole: true }),
   briciole('/progetti/', [
@@ -29,7 +29,7 @@ const ld = [
   <PageHead
     briciole={[{ nome: 'Progetti' }]}
     eyebrow="Portfolio"
-    lead={`${n} [[DA COMPILARE: progetti realizzati da ... tra ...: tipologie di lavori, 1 frase (circa 200 caratteri)]]`}
+    lead={`${n} progetti di Marcello Franca: musei e allestimenti, edifici pubblici e residenze, piazze e quartieri, Piani del Colore, interni e design, a Pesaro, nelle Marche e all’estero.`}
   >
     Progetti
   </PageHead>
