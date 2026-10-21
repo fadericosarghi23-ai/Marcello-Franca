@@ -118,10 +118,18 @@ const grafo = { '@context': 'https://schema.org', '@graph': [organizzazione(), s
       const ridotto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       // Elementi di griglie e gallerie: compaiono uno dopo l'altro (ritardo a cascata per colonna)
-      document.querySelectorAll('.projects-grid, [data-gallery], .services, .areas').forEach((gruppo) => {
+      document.querySelectorAll('.projects-grid, [data-gallery]').forEach((gruppo) => {
         [...gruppo.children].forEach((el, i) => {
           el.classList.add('reveal');
           (el as HTMLElement).style.transitionDelay = `${(i % 3) * 90}ms`;
+        });
+      });
+      // Griglie a riquadri (servizi, aree): la griglia resta ferma e visibile, si anima il contenuto di ogni riquadro
+      document.querySelectorAll('.services, .areas').forEach((gruppo) => {
+        gruppo.classList.remove('reveal');
+        [...gruppo.children].forEach((el, i) => {
+          el.classList.add('reveal-contenuto');
+          (el as HTMLElement).style.setProperty('--ritardo', `${(i % 3) * 90}ms`);
         });
       });
 
@@ -136,7 +144,7 @@ const grafo = { '@context': 'https://schema.org', '@graph': [organizzazione(), s
           }),
         { rootMargin: '0px 0px -8% 0px' },
       );
-      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+      document.querySelectorAll('.reveal, .reveal-contenuto').forEach((el) => io.observe(el));
 
       if (!ridotto) {
         // Parallax leggero delle foto di testata (la foto scorre più lenta della pagina)

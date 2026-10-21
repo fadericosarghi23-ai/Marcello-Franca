@@ -1858,3 +1858,23 @@ body.menu-open .site-header .logo-light {
   translate: 0 var(--parallax, 0px);
   will-change: translate;
 }
+
+/* Riquadri di servizi e aree: il riquadro resta visibile, il contenuto sale a cascata */
+.reveal-contenuto > * {
+  opacity: 0;
+  translate: 0 14px;
+  transition:
+    opacity 0.8s var(--ease) var(--ritardo, 0ms),
+    translate 0.8s var(--ease) var(--ritardo, 0ms);
+}
+.reveal-contenuto > :nth-child(2) {
+  transition-delay: calc(var(--ritardo, 0ms) + 70ms);
+}
+.reveal-contenuto > :nth-child(n + 3) {
+  transition-delay: calc(var(--ritardo, 0ms) + 140ms);
+}
+.reveal-contenuto.is-in > *,
+.no-js .reveal-contenuto > * {
+  opacity: 1;
+  translate: 0 0;
+}
