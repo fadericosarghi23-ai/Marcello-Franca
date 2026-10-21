@@ -28,7 +28,10 @@ const { slides, fotoStudio } = await imp('src/data/home.ts');
 const { processo } = await imp('src/data/metodo.ts');
 const sezioni = await imp('src/data/sezioni.ts');
 const { ogPagine } = sezioni;
-const reputazione = existsSync(path.join(ROOT, 'src/data/reputazione.ts')) ? await imp('src/data/reputazione.ts') : {};
+const opzionale = async (f) => (existsSync(path.join(ROOT, f)) ? imp(f) : {});
+const reputazione = await opzionale('src/data/reputazione.ts');
+const scrittiMod = await opzionale('src/data/scritti.ts');
+const pagineMod = await opzionale('src/data/pagine.ts');
 const { site } = await imp('src/data/site.ts');
 
 // ---------- slot ----------
@@ -39,12 +42,12 @@ team.forEach((m) => add(m.foto));
 slides.forEach((s) => add(s.img));
 add(fotoStudio);
 processo.forEach((s) => add(s.img));
-// tutte le immagini esportate (anche annidate) da sezioni.ts e reputazione.ts
+// tutte le immagini esportate (anche annidate) da sezioni.ts, reputazione.ts, scritti.ts, pagine.ts
 const raccogli = (v) => {
   if (Array.isArray(v)) v.forEach(raccogli);
   else if (v && typeof v === 'object') v.base && v.w && v.h ? add(v) : Object.values(v).forEach(raccogli);
 };
-[sezioni, reputazione].forEach((modulo) => Object.values(modulo).forEach(raccogli));
+[sezioni, reputazione, scrittiMod, pagineMod, { video: progetti.map((p) => p.video).filter(Boolean) }].forEach((modulo) => Object.values(modulo).forEach(raccogli));
 
 // ---------- utilità ----------
 const EXT = ['jpg', 'jpeg', 'png', 'webp', 'tif', 'tiff', 'svg'];
@@ -174,7 +177,7 @@ for (const img of lista) for (const w of larghezze(img)) {
 async function* walk(d) { if (!existsSync(d)) return; for (const e of await fs.readdir(d, { withFileTypes: true })) { const p = path.join(d, e.name); if (e.isDirectory()) yield* walk(p); else yield p; } }
 for (const p of progetti) attesi.add(path.join(PUB, 'img', 'og', `${p.slug}.jpg`));
 for (const n of ogPagine) attesi.add(path.join(PUB, 'img', 'og', `${n}.jpg`));
-for (const dir of ['progetti', 'team', 'sezioni', 'og']) {
+for (const dir of ['progetti', 'team', 'sezioni', 'og', 'scritti', 'pagine']) {
   for await (const f of walk(path.join(PUB, 'img', dir))) if (!attesi.has(path.normalize(f))) { await fs.rm(f); orfani++; }
 }
 

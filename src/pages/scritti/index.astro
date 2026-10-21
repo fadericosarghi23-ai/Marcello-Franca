@@ -1,0 +1,126 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHead from '../../components/PageHead.astro';
+import Picture from '../../components/Picture.astro';
+import Cta from '../../components/Cta.astro';
+import { site, url } from '../../data/site';
+import { scritti } from '../../data/scritti';
+import { pagina, briciole, titolo } from '../../lib/seo';
+import { dataEstesa } from '../../lib/date';
+
+const title = titolo('Scritti: la città, il colore, il maestro');
+const description = `Gli scritti di ${site.nome}: l’immagine della città, il colore e la memoria dei luoghi, i ricordi di Michele Provinciali.`;
+const ld = [
+  pagina({ tipo: 'CollectionPage', path: '/scritti/', titolo: title, descrizione: description, og: site.og.src, briciole: true }),
+  briciole('/scritti/', [
+    { nome: 'Home', path: '/' },
+    { nome: 'Scritti', path: '/scritti/' },
+  ]),
+  {
+    '@type': 'ItemList',
+    name: 'Scritti',
+    numberOfItems: scritti.length,
+    itemListElement: scritti.map((s, i) => ({ '@type': 'ListItem', position: i + 1, url: url(`/scritti/${s.slug}/`), name: s.titolo })),
+  },
+];
+---
+<Layout title={title} description={description} path="/scritti/" ld={ld}>
+  <PageHead
+    briciole={[{ nome: 'Scritti' }]}
+    eyebrow="Scritti"
+    lead="Riflessioni sull’immagine della città e sul colore, e i ricordi del maestro Michele Provinciali."
+  >
+    Scritti
+  </PageHead>
+
+  <section class="section">
+    <div class="container">
+      <ol class="elenco">
+        {
+          scritti.map((s) => (
+            <li class="reveal">
+              <a href={`/scritti/${s.slug}/`} class="voce">
+                <div class="testo">
+                  <p class="data">{dataEstesa(s.data)}</p>
+                  <h2 class="h3">{s.titolo}</h2>
+                  <p class="estratto">{s.estratto}</p>
+                  <span class="text-link link-underline">Leggi</span>
+                </div>
+                {s.img && (
+                  <div class="immagine">
+                    <Picture img={s.img} sizes="(min-width: 900px) 28vw, 92vw" />
+                  </div>
+                )}
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <Cta />
+</Layout>
+
+<style>
+  .elenco {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .elenco li {
+    border-top: 1px solid var(--line);
+  }
+  .elenco li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+  .voce {
+    display: grid;
+    gap: 1.5rem;
+    padding: 2rem 0;
+    color: inherit;
+    text-decoration: none;
+  }
+  @media (width >= 900px) {
+    .voce {
+      grid-template-columns: 1fr 22rem;
+      gap: 4rem;
+      align-items: center;
+    }
+  }
+  .data {
+    color: var(--grey);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .voce h2 {
+    margin-bottom: 0.75rem;
+    transition: color 0.3s;
+  }
+  .voce:hover h2 {
+    color: var(--grey);
+  }
+  .estratto {
+    max-width: 44rem;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .immagine {
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    background: var(--grey-light);
+  }
+  .immagine :global(picture),
+  .immagine :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

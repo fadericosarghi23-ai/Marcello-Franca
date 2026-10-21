@@ -3,6 +3,7 @@ export const nav = [
   { label: 'Servizi', href: '/servizi/' },
   { label: 'Metodo', href: '/metodo/' },
   { label: 'Progetti', href: '/progetti/' },
+  { label: 'Scritti', href: '/scritti/' },
   { label: 'Contatti', href: '/contatti/' },
 ];
 

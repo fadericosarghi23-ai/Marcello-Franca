@@ -10,6 +10,8 @@ export type Img = {
   /** Altezza corrispondente (px) */
   h: number;
   alt: string;
+  /** Testo alternativo in inglese (versione /en/) */
+  altEn?: string;
   /** Serie di larghezze: 'std' (foto) o 'team' (ritratti) */
   serie?: 'std' | 'team';
 };

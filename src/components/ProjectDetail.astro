@@ -4,6 +4,7 @@ import PageHead from './PageHead.astro';
 import Picture from './Picture.astro';
 import ProjectCard from './ProjectCard.astro';
 import Lightbox from './Lightbox.astro';
+import Video from './Video.astro';
 import Cta from './Cta.astro';
 import type { Progetto } from '../data/progetti';
 import { membro } from '../data/team';
@@ -93,6 +94,7 @@ const { prev, next } = vicini(p);
       }
       <h2 class="h3 mb-3">Il progetto</h2>
       <div class="prose lead" style="font-size: 1.1rem" set:html={p.testo} />
+      {p.video && <div class="mt-4 mb-3"><Video video={p.video} /></div>}
       <div class="gallery" data-gallery>
         {
           p.galleria.map((g, i) => (

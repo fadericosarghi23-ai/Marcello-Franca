@@ -1,0 +1,162 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHead from '../../components/PageHead.astro';
+import Picture from '../../components/Picture.astro';
+import Cta from '../../components/Cta.astro';
+import { site, url } from '../../data/site';
+import { scritti, type Scritto } from '../../data/scritti';
+import { pagina, briciole, titolo, tronca } from '../../lib/seo';
+import { dataEstesa } from '../../lib/date';
+
+export function getStaticPaths() {
+  return scritti.map((s) => ({ params: { slug: s.slug }, props: { s } }));
+}
+const { s } = Astro.props as { s: Scritto };
+const path = `/scritti/${s.slug}/`;
+const title = titolo(s.titolo);
+const description = tronca(s.estratto.replace(/\n/g, ' '));
+const altri = scritti.filter((x) => x !== s);
+const ld = [
+  pagina({ tipo: 'WebPage', path, titolo: title, descrizione: description, og: site.og.src, briciole: true }),
+  briciole(path, [
+    { nome: 'Home', path: '/' },
+    { nome: 'Scritti', path: '/scritti/' },
+    { nome: s.titolo, path },
+  ]),
+  {
+    '@type': 'Article',
+    '@id': url(`${path}#articolo`),
+    headline: s.titolo,
+    datePublished: s.data,
+    inLanguage: 'it-IT',
+    author: { '@id': `${site.dominio}/#organizzazione`, name: site.nome },
+    mainEntityOfPage: url(path),
+    ...(s.img ? { image: url(`${s.img.base}-${Math.min(s.img.w, 1200)}.jpg`) } : {}),
+  },
+];
+---
+<Layout title={title} description={description} path={path} ogType="article" ld={ld}>
+  <PageHead
+    briciole={[{ nome: 'Scritti', path: '/scritti/' }, { nome: s.titolo }]}
+    eyebrow={dataEstesa(s.data)}
+    lead={s.sottotitolo}
+    leadClass="lead mt-2"
+    h1Style="max-width: 24ch"
+  >
+    {s.titolo}
+  </PageHead>
+
+  <article class="section">
+    <div class="container articolo">
+      {
+        s.img && (
+          <figure class="figura reveal">
+            <Picture img={s.img} sizes="(min-width: 900px) 640px, 92vw" eager />
+            {s.img.alt && <figcaption class="xs muted mt-1">{s.img.alt}</figcaption>}
+          </figure>
+        )
+      }
+      <div class="prose corpo">
+        {
+          s.blocchi.map((b) =>
+            b.tipo === 'h' ? (
+              <h2>{b.testo}</h2>
+            ) : b.tipo === 'citazione' ? (
+              <blockquote>
+                <p>{b.testo}</p>
+                <cite>{b.fonte}</cite>
+              </blockquote>
+            ) : b.tipo === 'firma' ? (
+              <p class="firma">{b.testo}</p>
+            ) : (
+              <p>{b.testo}</p>
+            ),
+          )
+        }
+      </div>
+    </div>
+  </article>
+
+  <section class="section bg-sand">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Scritti</p>
+          <h2 class="h2">Continua a leggere</h2>
+        </div>
+        <a href="/scritti/" class="text-link link-underline">Tutti gli scritti</a>
+      </div>
+      <ul class="altri">
+        {
+          altri.map((a) => (
+            <li>
+              <a href={`/scritti/${a.slug}/`} class="link-underline">{a.titolo}</a>
+              <span class="muted small"> — {dataEstesa(a.data)}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <Cta />
+</Layout>
+
+<style>
+  .articolo {
+    max-width: 46rem;
+  }
+  .figura {
+    margin: 0 0 2.5rem;
+  }
+  .figura :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .corpo p {
+    white-space: pre-line;
+    font-size: 1.1rem;
+    line-height: 1.75;
+  }
+  .corpo h2 {
+    margin-top: 2.5rem;
+  }
+  .corpo blockquote {
+    margin: 0 0 2rem;
+    padding: 0.25rem 0 0.25rem 1.5rem;
+    border-left: 2px solid var(--ink);
+  }
+  .corpo blockquote p {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.3rem;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .corpo cite {
+    display: block;
+    margin-top: 0.75rem;
+    font-style: normal;
+    font-size: 0.85rem;
+    color: var(--grey);
+  }
+  .corpo .firma {
+    margin-top: 2rem;
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--ink);
+  }
+  .altri {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .altri a {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    color: var(--ink);
+  }
+</style>

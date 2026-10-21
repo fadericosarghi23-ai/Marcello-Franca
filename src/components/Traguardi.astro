@@ -4,7 +4,7 @@ import Picture from './Picture.astro';
 import type { Img } from '../lib/img';
 
 interface Props {
-  voci: { anno: string; titolo: string; testo: string }[];
+  voci: { anno: string; titolo: string; testo: string; link?: { testo: string; href: string } }[];
   copertine?: Img[];
 }
 const { voci, copertine = [] } = Astro.props;
@@ -29,6 +29,7 @@ const { voci, copertine = [] } = Astro.props;
           <div>
             <h3>{v.titolo}</h3>
             <p>{v.testo}</p>
+            {v.link && <a href={v.link.href} class="text-link link-underline" download>{v.link.testo}</a>}
           </div>
         </li>
       ))

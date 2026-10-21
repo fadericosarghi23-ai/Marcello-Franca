@@ -6,6 +6,7 @@ import { nav } from '../data/nav';
 import { servizi } from '../data/servizi';
 import { categorie } from '../data/progetti';
 import { diCategoria } from '../lib/progetti';
+import { scritti } from '../data/scritti';
 import { pagina, briciole, titolo } from '../lib/seo';
 
 const title = titolo('Mappa del sito');
@@ -30,6 +31,10 @@ const ld = [
           {nav.map((v) => <li><a href={v.href}>{v.label}</a></li>)}
           <li><a href="/privacy-policy/">Privacy policy</a></li>
           <li><a href="/cookie-policy/">Cookie policy</a></li>
+        </ul>
+        <h2>Scritti</h2>
+        <ul>
+          {scritti.map((s) => <li><a href={`/scritti/${s.slug}/`}>{s.titolo}</a></li>)}
         </ul>
         <h2>Servizi</h2>
         <ul>

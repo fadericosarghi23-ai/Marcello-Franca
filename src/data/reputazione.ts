@@ -81,7 +81,7 @@ export const committentiInEvidenza = [
 ];
 
 /** Pubblicazioni, mostre e riconoscimenti, in ordine di tempo (anno vuoto = non indicato sul sito) */
-export const traguardi: { anno: string; titolo: string; testo: string }[] = [
+export const traguardi: { anno: string; titolo: string; testo: string; link?: { testo: string; href: string } }[] = [
   {
     anno: '1983',
     titolo: '“Ricerca Colore”, prima mostra fotografica personale',
@@ -136,6 +136,7 @@ export const traguardi: { anno: string; titolo: string; testo: string }[] = [
     anno: '2011',
     titolo: 'Incontro con i Giovani Architetti di A+',
     testo: 'Oltre all’intervista sul colore per “Blog d’O”, promosso da OIKOS industria colori e vernici.',
+    link: { testo: 'Scarica il resoconto (PDF)', href: '/file/marcello-franca-incontra-giovani-architetti-a-piu-2011.pdf' },
   },
 ];
 
@@ -165,4 +166,12 @@ export const arte = {
     '“Rimini allo Specchio”, Castel Sismondo, Rimini',
     '“La Città dell’Uomo”, Olomouc, Brno e Praga',
   ],
+};
+
+/** Video (pagina studio): solo quelli ancora disponibili su YouTube */
+export const video = {
+  tipo: 'youtube' as const,
+  id: '1W6QnraA-48',
+  titolo: '“I colori sono come figli”: intervista sul colore per Blog d’O (OIKOS)',
+  poster: sezione('video-blogdo', 480, 360, 'Anteprima dell’intervista a Marcello Franca per Blog d’O'),
 };
