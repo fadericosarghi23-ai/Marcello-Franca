@@ -1,8 +1,9 @@
 ---
-// Le fasi come percorso: una linea curva che passa per i numeri e si disegna con lo scroll. Ogni fase è una
-// riga con testo e immagine ai due lati del percorso, alternati (testo a sinistra e foto a destra, poi il
-// contrario); la riga compare quando la linea raggiunge il suo numero, così le fasi arrivano una alla volta.
-// Su mobile la linea corre lungo il bordo sinistro e la foto sta sotto il testo.
+// Le fasi come percorso immersivo (da usare su fondo scuro, .bg-ink): una linea curva passa per i numeri e si
+// disegna con lo scroll; ogni fase occupa quasi uno schermo, con testo e foto ai lati della linea, alternati.
+// Quando la linea raggiunge un numero la fase si accende: la foto si svela con una tendina dal lato della linea,
+// il testo entra a cascata, un grande numero in controluce scorre più lento dietro al testo e la foto si muove
+// in parallax dentro la cornice. Su mobile la linea corre lungo il bordo sinistro e la foto sta sotto il testo.
 import Picture from './Picture.astro';
 import type { Img } from '../lib/img';
 
@@ -10,6 +11,7 @@ interface Props {
   fasi: { titolo: string; testo: string; foto?: { img: Img; disegno: boolean } }[];
 }
 const { fasi } = Astro.props;
+const nn = (i: number) => String(i + 1).padStart(2, '0');
 ---
 <div class="percorso" data-percorso>
   <svg class="tracciato" aria-hidden="true" focusable="false">
@@ -20,15 +22,16 @@ const { fasi } = Astro.props;
     {
       fasi.map((f, i) => (
         <li id={`fase-${i + 1}`} class:list={['tappa', i % 2 ? 'destra' : 'sinistra']}>
-          <span class="nodo" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <span class="nodo" aria-hidden="true">{nn(i)}</span>
           <div class="testo">
-            <p class="fase">Fase {String(i + 1).padStart(2, '0')}</p>
-            <h3 class="h3">{f.titolo}</h3>
-            <p>{f.testo}</p>
+            <span class="numero" aria-hidden="true">{nn(i)}</span>
+            <p class="fase">Fase {nn(i)} di {nn(fasi.length - 1)}</p>
+            <h3 class="h2">{f.titolo}</h3>
+            <p class="descrizione">{f.testo}</p>
           </div>
           {f.foto && (
             <div class:list={['foto', { disegno: f.foto.disegno }]}>
-              <Picture img={f.foto.img} sizes="(min-width: 900px) 40vw, 85vw" />
+              <Picture img={f.foto.img} sizes="(min-width: 900px) 46vw, 85vw" />
             </div>
           )}
         </li>
@@ -39,7 +42,9 @@ const { fasi } = Astro.props;
 
 <style>
   .percorso {
-    --nodo: 3rem;
+    --nodo: 3.25rem;
+    --chiaro: #fff;
+    --tenue: #ffffffa6;
     position: relative;
     margin-top: 3rem;
   }
@@ -57,15 +62,15 @@ const { fasi } = Astro.props;
     stroke-linecap: round;
   }
   .tracciato .base {
-    stroke: #dddddd;
+    stroke: #ffffff26;
   }
   .tracciato .avanzamento {
-    stroke: var(--ink);
+    stroke: var(--chiaro);
   }
   .tappe {
     position: relative;
     display: grid;
-    gap: 3.5rem;
+    gap: 4.5rem;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -74,9 +79,10 @@ const { fasi } = Astro.props;
   /* mobile: numero a sinistra (alternato di poco per far ondeggiare la linea), testo e poi foto */
   .tappa {
     --x: 1.5rem;
+    --p: 0;
     position: relative;
     display: grid;
-    gap: 1.25rem;
+    gap: 1.5rem;
     padding-left: 5rem;
   }
   .tappa.destra {
@@ -87,46 +93,79 @@ const { fasi } = Astro.props;
     top: 0;
     left: var(--x);
     translate: -50% 0;
+    z-index: 2;
     width: var(--nodo);
     height: var(--nodo);
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background: var(--white);
-    border: 1.5px solid #dddddd;
-    color: var(--grey);
+    background: var(--ink);
+    border: 1.5px solid #ffffff40;
+    color: var(--tenue);
     font-family: var(--font-serif);
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     transition:
-      background 0.5s var(--ease),
-      color 0.5s var(--ease),
-      border-color 0.5s var(--ease),
-      scale 0.5s var(--ease);
+      background 0.6s var(--ease),
+      color 0.6s var(--ease),
+      border-color 0.6s var(--ease),
+      scale 0.6s var(--ease),
+      box-shadow 0.6s var(--ease);
   }
   .tappa.is-attiva .nodo {
-    background: var(--ink);
-    border-color: var(--ink);
-    color: var(--white);
-    scale: 1.08;
+    background: var(--chiaro);
+    border-color: var(--chiaro);
+    color: var(--ink);
+    scale: 1.1;
+    box-shadow: 0 0 0 10px #ffffff14;
+  }
+
+  .testo {
+    position: relative;
+    isolation: isolate;
+  }
+  .numero {
+    position: absolute;
+    z-index: -1;
+    top: -0.35em;
+    left: -0.06em;
+    font-family: var(--font-serif);
+    font-size: clamp(7rem, 16vw, 15rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px #ffffff2e;
+    pointer-events: none;
+    user-select: none;
+    translate: 0 calc(var(--p) * 70px);
+    opacity: 0;
+    transition: opacity 1.2s var(--ease);
   }
   .fase {
-    color: var(--grey);
+    color: var(--tenue);
     font-size: 0.72rem;
     font-weight: 600;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.9rem;
   }
   .testo h3 {
-    margin-bottom: 0.75rem;
+    color: var(--chiaro);
+    margin-bottom: 1rem;
   }
-  .testo p:last-child {
+  .descrizione {
+    color: #ffffffc7;
+    font-size: 1.075rem;
+    line-height: 1.65;
     max-width: 30rem;
   }
+
   .foto {
+    position: relative;
     aspect-ratio: 4/3;
     overflow: hidden;
-    background: var(--grey-light);
+    background: #ffffff0f;
+    /* la tendina parte dal lato della linea (a sinistra su mobile) */
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 1.3s var(--ease) 0.1s;
   }
   .foto :global(picture) {
     display: block;
@@ -137,61 +176,73 @@ const { fasi } = Astro.props;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    scale: 1.08;
-    transition: scale 1.6s var(--ease);
+    scale: 1.18;
+    translate: 0 calc(var(--p) * -36px);
+    transition: scale 1.8s var(--ease);
   }
   .foto.disegno {
-    background: var(--white);
-    border: 1px solid var(--line);
+    background: #fff;
   }
   .foto.disegno :global(img) {
     object-fit: contain;
-    padding: 0.75rem;
+    padding: 1rem;
+    scale: 1.04;
   }
 
-  /* entrata: testo e foto arrivano dai rispettivi lati, la foto poco dopo il testo */
-  .testo,
-  .foto {
+  /* entrata: tendina sulla foto, testo a cascata, numero in controluce */
+  .testo > :not(.numero) {
     opacity: 0;
+    translate: 0 22px;
     transition:
       opacity 0.9s var(--ease),
       translate 0.9s var(--ease);
   }
-  .testo {
-    translate: 0 18px;
+  .testo > h3 {
+    transition-delay: 0.12s;
   }
-  .foto {
-    translate: 0 28px;
-    transition-delay: 0.15s;
+  .testo > .descrizione {
+    transition-delay: 0.24s;
   }
-  .tappa.is-attiva .testo,
-  .tappa.is-attiva .foto {
+  .tappa.is-attiva .testo > :not(.numero) {
     opacity: 1;
     translate: 0 0;
   }
+  .tappa.is-attiva .numero {
+    opacity: 1;
+  }
+  .tappa.is-attiva .foto {
+    clip-path: inset(0 0 0 0);
+  }
   .tappa.is-attiva .foto :global(img) {
+    scale: 1.1;
+  }
+  .tappa.is-attiva .foto.disegno :global(img) {
     scale: 1;
   }
-  :global(.no-js) .testo,
-  :global(.no-js) .foto {
+  :global(.no-js) .testo > *,
+  :global(.no-js) .numero {
     opacity: 1;
     translate: none;
   }
+  :global(.no-js) .foto {
+    clip-path: none;
+  }
 
-  /* schermi larghi: testo e foto ai lati del percorso, alternati */
+  /* schermi larghi: una fase per schermata, testo e foto ai lati del percorso, alternati */
   @media (width >= 900px) {
     .tappe {
-      gap: 6rem;
+      gap: 0;
     }
     .tappa {
-      --x: calc(50% - 1.75rem);
+      --x: calc(50% - 2rem);
+      min-height: min(78vh, 46rem);
       grid-template-columns: 1fr 9rem 1fr;
       align-items: center;
       gap: 0;
       padding-left: 0;
     }
     .tappa.destra {
-      --x: calc(50% + 1.75rem);
+      --x: calc(50% + 2rem);
     }
     .nodo {
       top: 50%;
@@ -201,35 +252,44 @@ const { fasi } = Astro.props;
       grid-column: 1;
       text-align: right;
       justify-self: end;
-      translate: -32px 0;
+      padding-right: 1rem;
     }
-    .sinistra .testo p:last-child {
+    .sinistra .numero {
+      left: auto;
+      right: -0.06em;
+    }
+    .sinistra .descrizione {
       margin-left: auto;
     }
     .sinistra .foto {
       grid-column: 3;
-      translate: 32px 0;
     }
     .destra .foto {
       grid-column: 1;
       grid-row: 1;
-      translate: -32px 0;
+      clip-path: inset(0 0 0 100%);
     }
     .destra .testo {
       grid-column: 3;
       grid-row: 1;
-      translate: 32px 0;
+      padding-left: 1rem;
     }
-    .tappa.is-attiva .testo,
+    .foto {
+      aspect-ratio: 4/5;
+    }
+    .foto.disegno {
+      aspect-ratio: 4/3;
+    }
     .tappa.is-attiva .foto {
-      translate: 0 0;
+      clip-path: inset(0 0 0 0);
     }
   }
 </style>
 
 <script>
   // Disegna una curva morbida che passa per il centro di ogni numero e la "srotola" fino a una linea
-  // immaginaria al 60% dello schermo; le fasi sopra quella linea si accendono.
+  // immaginaria al 78% dello schermo; le fasi sopra quella linea si accendono. Ogni fase riceve anche --p
+  // (da -1 a 1, la sua posizione rispetto al centro dello schermo) per il parallax di foto e numero.
   document.querySelectorAll<HTMLElement>('[data-percorso]').forEach((percorso) => {
     const tappe = [...percorso.querySelectorAll<HTMLElement>('.tappa')];
     const nodi = tappe.map((t) => t.querySelector<HTMLElement>('.nodo')!);
@@ -249,22 +309,22 @@ const { fasi } = Astro.props;
       if (!punti.length) return;
       const primo = punti[0];
       const ultimo = punti[punti.length - 1];
-      let d = `M ${primo.x} ${Math.max(primo.y - 80, 0)} L ${primo.x} ${primo.y}`;
+      let d = `M ${primo.x} ${Math.max(primo.y - 120, 0)} L ${primo.x} ${primo.y}`;
       for (let i = 1; i < punti.length; i++) {
         const a = punti[i - 1];
         const b = punti[i];
         const dy = (b.y - a.y) / 2;
         d += ` C ${a.x} ${a.y + dy}, ${b.x} ${b.y - dy}, ${b.x} ${b.y}`;
       }
-      d += ` L ${ultimo.x} ${Math.min(ultimo.y + 80, r.height)}`;
+      d += ` L ${ultimo.x} ${Math.min(ultimo.y + 120, r.height)}`;
       svg.setAttribute('viewBox', `0 0 ${r.width} ${r.height}`);
       base.setAttribute('d', d);
       traccia.setAttribute('d', d);
       lunghezza = traccia.getTotalLength();
       traccia.style.strokeDasharray = `${lunghezza}`;
       campioni = [];
-      for (let i = 0; i <= 400; i++) {
-        const l = (lunghezza * i) / 400;
+      for (let i = 0; i <= 500; i++) {
+        const l = (lunghezza * i) / 500;
         campioni.push({ y: traccia.getPointAtLength(l).y, l });
       }
     };
@@ -277,16 +337,20 @@ const { fasi } = Astro.props;
         return;
       }
       const r = percorso.getBoundingClientRect();
-      const soglia = window.innerHeight * 0.6 - r.top;
+      const vh = window.innerHeight;
+      const soglia = vh * 0.78 - r.top;
       let l = 0;
       for (const c of campioni) {
         if (c.y <= soglia) l = c.l;
         else break;
       }
       traccia.style.strokeDashoffset = `${lunghezza - l}`;
-      nodi.forEach((n, i) => {
-        const b = n.getBoundingClientRect();
-        tappe[i].classList.toggle('is-attiva', b.top + b.height / 2 - r.top <= soglia);
+      tappe.forEach((t, i) => {
+        const b = nodi[i].getBoundingClientRect();
+        t.classList.toggle('is-attiva', b.top + b.height / 2 - r.top <= soglia);
+        const rt = t.getBoundingClientRect();
+        const p = (rt.top + rt.height / 2 - vh / 2) / vh;
+        t.style.setProperty('--p', Math.max(-1, Math.min(1, p)).toFixed(3));
       });
     };
 
