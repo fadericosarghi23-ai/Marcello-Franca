@@ -1,0 +1,260 @@
+---
+// Le fasi come percorso: una linea curva che passa da una tappa all'altra e si disegna con lo scroll;
+// ogni tappa si accende quando la linea la raggiunge. Su schermi larghi le schede si alternano a destra e a
+// sinistra e i numeri ondeggiano attorno al centro; su mobile la linea serpeggia lungo il bordo sinistro.
+interface Props {
+  fasi: { titolo: string; testo: string }[];
+}
+const { fasi } = Astro.props;
+---
+<div class="percorso" data-percorso>
+  <svg class="tracciato" aria-hidden="true" focusable="false">
+    <path class="base" />
+    <path class="avanzamento" />
+  </svg>
+  <ol class="tappe">
+    {
+      fasi.map((f, i) => (
+        <li id={`fase-${i + 1}`} class:list={['tappa', i % 2 ? 'destra' : 'sinistra']}>
+          <span class="nodo" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <div class="scheda">
+            <p class="fase">Fase {String(i + 1).padStart(2, '0')}</p>
+            <h3 class="h4">{f.titolo}</h3>
+            <p>{f.testo}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<style>
+  .percorso {
+    --nodo: 3rem;
+    position: relative;
+    margin-top: 2.5rem;
+  }
+  .tracciato {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .tracciato path {
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+  .tracciato .base {
+    stroke: var(--grey-light);
+    stroke-width: 2;
+  }
+  .tracciato .avanzamento {
+    stroke: var(--ink);
+  }
+  .tappe {
+    position: relative;
+    display: grid;
+    gap: 1.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  /* mobile: numeri a sinistra, alternati di poco per far ondeggiare la linea */
+  .tappa {
+    --x: 1.5rem;
+    position: relative;
+    padding-left: 5rem;
+  }
+  .tappa.destra {
+    --x: 3.25rem;
+  }
+  .nodo {
+    position: absolute;
+    top: 1.25rem;
+    left: var(--x);
+    translate: -50% 0;
+    width: var(--nodo);
+    height: var(--nodo);
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--white);
+    border: 1.5px solid var(--grey-light);
+    color: var(--grey);
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    transition:
+      background 0.5s var(--ease),
+      color 0.5s var(--ease),
+      border-color 0.5s var(--ease),
+      scale 0.5s var(--ease);
+  }
+  .tappa.is-attiva .nodo {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--white);
+    scale: 1.08;
+  }
+  .scheda {
+    background: var(--white);
+    border: 1px solid var(--line);
+    padding: 1.4rem 1.5rem 1.5rem;
+    opacity: 0;
+    translate: 0 16px;
+    transition:
+      opacity 0.8s var(--ease),
+      translate 0.8s var(--ease),
+      border-color 0.5s var(--ease),
+      box-shadow 0.5s var(--ease);
+  }
+  .tappa.is-attiva .scheda {
+    opacity: 1;
+    translate: 0 0;
+    border-color: #22222233;
+    box-shadow: 0 14px 30px -24px #22222259;
+  }
+  .fase {
+    color: var(--grey);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .scheda h3 {
+    margin-bottom: 0.5rem;
+  }
+  .scheda p:last-child {
+    font-size: 0.975rem;
+  }
+  :global(.no-js) .scheda {
+    opacity: 1;
+    translate: none;
+  }
+
+  /* schermi larghi: schede alternate, numeri che ondeggiano attorno al centro */
+  @media (width >= 900px) {
+    .tappe {
+      gap: 0;
+    }
+    .tappa {
+      width: 50%;
+      padding-left: 0;
+      padding-right: 7rem;
+      margin-top: -1.5rem;
+    }
+    .tappa:first-child {
+      margin-top: 0;
+    }
+    .tappa.destra {
+      margin-left: 50%;
+      padding-right: 0;
+      padding-left: 7rem;
+    }
+    .nodo {
+      left: auto;
+      right: 3rem;
+      translate: 50% 0;
+    }
+    .tappa.destra .nodo {
+      right: auto;
+      left: 3rem;
+      translate: -50% 0;
+    }
+    .sinistra .scheda {
+      translate: -24px 0;
+      text-align: right;
+    }
+    .destra .scheda {
+      translate: 24px 0;
+    }
+    .tappa.is-attiva .scheda {
+      translate: 0 0;
+    }
+  }
+</style>
+
+<script>
+  // Disegna una curva morbida che passa per il centro di ogni numero e la "srotola" fino a una linea
+  // immaginaria al 60% dello schermo; le tappe sopra quella linea si accendono.
+  document.querySelectorAll<HTMLElement>('[data-percorso]').forEach((percorso) => {
+    const tappe = [...percorso.querySelectorAll<HTMLElement>('.tappa')];
+    const nodi = tappe.map((t) => t.querySelector<HTMLElement>('.nodo')!);
+    const svg = percorso.querySelector('svg')!;
+    const base = svg.querySelector<SVGPathElement>('.base')!;
+    const traccia = svg.querySelector<SVGPathElement>('.avanzamento')!;
+    const ridotto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let lunghezza = 0;
+    let campioni: { y: number; l: number }[] = [];
+
+    const costruisci = () => {
+      const r = percorso.getBoundingClientRect();
+      const punti = nodi.map((n) => {
+        const b = n.getBoundingClientRect();
+        return { x: b.left + b.width / 2 - r.left, y: b.top + b.height / 2 - r.top };
+      });
+      if (!punti.length) return;
+      // ingresso e uscita morbidi sopra la prima e sotto l'ultima tappa
+      const primo = punti[0];
+      const ultimo = punti[punti.length - 1];
+      let d = `M ${primo.x} ${Math.max(primo.y - 60, 0)} L ${primo.x} ${primo.y}`;
+      for (let i = 1; i < punti.length; i++) {
+        const a = punti[i - 1];
+        const b = punti[i];
+        const dy = (b.y - a.y) / 2;
+        d += ` C ${a.x} ${a.y + dy}, ${b.x} ${b.y - dy}, ${b.x} ${b.y}`;
+      }
+      d += ` L ${ultimo.x} ${Math.min(ultimo.y + 60, r.height)}`;
+      svg.setAttribute('viewBox', `0 0 ${r.width} ${r.height}`);
+      base.setAttribute('d', d);
+      traccia.setAttribute('d', d);
+      lunghezza = traccia.getTotalLength();
+      traccia.style.strokeDasharray = `${lunghezza}`;
+      campioni = [];
+      for (let i = 0; i <= 300; i++) {
+        const l = (lunghezza * i) / 300;
+        campioni.push({ y: traccia.getPointAtLength(l).y, l });
+      }
+    };
+
+    const aggiorna = () => {
+      attesa = false;
+      if (ridotto) {
+        traccia.style.strokeDashoffset = '0';
+        tappe.forEach((t) => t.classList.add('is-attiva'));
+        return;
+      }
+      const r = percorso.getBoundingClientRect();
+      const soglia = window.innerHeight * 0.6 - r.top;
+      // lunghezza del tratto la cui y è sopra la soglia
+      let l = 0;
+      for (const c of campioni) {
+        if (c.y <= soglia) l = c.l;
+        else break;
+      }
+      traccia.style.strokeDashoffset = `${lunghezza - l}`;
+      nodi.forEach((n, i) => {
+        const b = n.getBoundingClientRect();
+        tappe[i].classList.toggle('is-attiva', b.top + b.height / 2 - r.top <= soglia);
+      });
+    };
+
+    let attesa = false;
+    const richiedi = () => {
+      if (!attesa) {
+        attesa = true;
+        requestAnimationFrame(aggiorna);
+      }
+    };
+    costruisci();
+    aggiorna();
+    new ResizeObserver(() => {
+      costruisci();
+      aggiorna();
+    }).observe(percorso);
+    window.addEventListener('scroll', richiedi, { passive: true });
+  });
+</script>
