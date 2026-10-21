@@ -1,9 +1,13 @@
 ---
-// Le fasi come percorso: una linea curva che passa da una tappa all'altra e si disegna con lo scroll;
-// ogni tappa si accende quando la linea la raggiunge. Su schermi larghi le schede si alternano a destra e a
-// sinistra e i numeri ondeggiano attorno al centro; su mobile la linea serpeggia lungo il bordo sinistro.
+// Le fasi come percorso: una linea curva che passa per i numeri e si disegna con lo scroll. Ogni fase è una
+// riga con testo e immagine ai due lati del percorso, alternati (testo a sinistra e foto a destra, poi il
+// contrario); la riga compare quando la linea raggiunge il suo numero, così le fasi arrivano una alla volta.
+// Su mobile la linea corre lungo il bordo sinistro e la foto sta sotto il testo.
+import Picture from './Picture.astro';
+import type { Img } from '../lib/img';
+
 interface Props {
-  fasi: { titolo: string; testo: string }[];
+  fasi: { titolo: string; testo: string; foto?: { img: Img; disegno: boolean } }[];
 }
 const { fasi } = Astro.props;
 ---
@@ -17,11 +21,16 @@ const { fasi } = Astro.props;
       fasi.map((f, i) => (
         <li id={`fase-${i + 1}`} class:list={['tappa', i % 2 ? 'destra' : 'sinistra']}>
           <span class="nodo" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-          <div class="scheda">
+          <div class="testo">
             <p class="fase">Fase {String(i + 1).padStart(2, '0')}</p>
-            <h3 class="h4">{f.titolo}</h3>
+            <h3 class="h3">{f.titolo}</h3>
             <p>{f.testo}</p>
           </div>
+          {f.foto && (
+            <div class:list={['foto', { disegno: f.foto.disegno }]}>
+              <Picture img={f.foto.img} sizes="(min-width: 900px) 40vw, 85vw" />
+            </div>
+          )}
         </li>
       ))
     }
@@ -32,7 +41,7 @@ const { fasi } = Astro.props;
   .percorso {
     --nodo: 3rem;
     position: relative;
-    margin-top: 2.5rem;
+    margin-top: 3rem;
   }
   .tracciato {
     position: absolute;
@@ -48,8 +57,7 @@ const { fasi } = Astro.props;
     stroke-linecap: round;
   }
   .tracciato .base {
-    stroke: var(--grey-light);
-    stroke-width: 2;
+    stroke: #dddddd;
   }
   .tracciato .avanzamento {
     stroke: var(--ink);
@@ -57,15 +65,18 @@ const { fasi } = Astro.props;
   .tappe {
     position: relative;
     display: grid;
-    gap: 1.75rem;
+    gap: 3.5rem;
     margin: 0;
     padding: 0;
     list-style: none;
   }
-  /* mobile: numeri a sinistra, alternati di poco per far ondeggiare la linea */
+
+  /* mobile: numero a sinistra (alternato di poco per far ondeggiare la linea), testo e poi foto */
   .tappa {
     --x: 1.5rem;
     position: relative;
+    display: grid;
+    gap: 1.25rem;
     padding-left: 5rem;
   }
   .tappa.destra {
@@ -73,7 +84,7 @@ const { fasi } = Astro.props;
   }
   .nodo {
     position: absolute;
-    top: 1.25rem;
+    top: 0;
     left: var(--x);
     translate: -50% 0;
     width: var(--nodo);
@@ -82,7 +93,7 @@ const { fasi } = Astro.props;
     place-items: center;
     border-radius: 50%;
     background: var(--white);
-    border: 1.5px solid var(--grey-light);
+    border: 1.5px solid #dddddd;
     color: var(--grey);
     font-family: var(--font-serif);
     font-size: 1.05rem;
@@ -98,80 +109,119 @@ const { fasi } = Astro.props;
     color: var(--white);
     scale: 1.08;
   }
-  .scheda {
-    background: var(--white);
-    border: 1px solid var(--line);
-    padding: 1.4rem 1.5rem 1.5rem;
-    opacity: 0;
-    translate: 0 16px;
-    transition:
-      opacity 0.8s var(--ease),
-      translate 0.8s var(--ease),
-      border-color 0.5s var(--ease),
-      box-shadow 0.5s var(--ease);
-  }
-  .tappa.is-attiva .scheda {
-    opacity: 1;
-    translate: 0 0;
-    border-color: #22222233;
-    box-shadow: 0 14px 30px -24px #22222259;
-  }
   .fase {
     color: var(--grey);
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.6rem;
   }
-  .scheda h3 {
-    margin-bottom: 0.5rem;
+  .testo h3 {
+    margin-bottom: 0.75rem;
   }
-  .scheda p:last-child {
-    font-size: 0.975rem;
+  .testo p:last-child {
+    max-width: 30rem;
   }
-  :global(.no-js) .scheda {
+  .foto {
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    background: var(--grey-light);
+  }
+  .foto :global(picture) {
+    display: block;
+    height: 100%;
+  }
+  .foto :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    scale: 1.08;
+    transition: scale 1.6s var(--ease);
+  }
+  .foto.disegno {
+    background: var(--white);
+    border: 1px solid var(--line);
+  }
+  .foto.disegno :global(img) {
+    object-fit: contain;
+    padding: 0.75rem;
+  }
+
+  /* entrata: testo e foto arrivano dai rispettivi lati, la foto poco dopo il testo */
+  .testo,
+  .foto {
+    opacity: 0;
+    transition:
+      opacity 0.9s var(--ease),
+      translate 0.9s var(--ease);
+  }
+  .testo {
+    translate: 0 18px;
+  }
+  .foto {
+    translate: 0 28px;
+    transition-delay: 0.15s;
+  }
+  .tappa.is-attiva .testo,
+  .tappa.is-attiva .foto {
+    opacity: 1;
+    translate: 0 0;
+  }
+  .tappa.is-attiva .foto :global(img) {
+    scale: 1;
+  }
+  :global(.no-js) .testo,
+  :global(.no-js) .foto {
     opacity: 1;
     translate: none;
   }
 
-  /* schermi larghi: schede alternate, numeri che ondeggiano attorno al centro */
+  /* schermi larghi: testo e foto ai lati del percorso, alternati */
   @media (width >= 900px) {
     .tappe {
-      gap: 0;
+      gap: 6rem;
     }
     .tappa {
-      width: 50%;
+      --x: calc(50% - 1.75rem);
+      grid-template-columns: 1fr 9rem 1fr;
+      align-items: center;
+      gap: 0;
       padding-left: 0;
-      padding-right: 7rem;
-      margin-top: -1.5rem;
-    }
-    .tappa:first-child {
-      margin-top: 0;
     }
     .tappa.destra {
-      margin-left: 50%;
-      padding-right: 0;
-      padding-left: 7rem;
+      --x: calc(50% + 1.75rem);
     }
     .nodo {
-      left: auto;
-      right: 3rem;
-      translate: 50% 0;
+      top: 50%;
+      translate: -50% -50%;
     }
-    .tappa.destra .nodo {
-      right: auto;
-      left: 3rem;
-      translate: -50% 0;
-    }
-    .sinistra .scheda {
-      translate: -24px 0;
+    .sinistra .testo {
+      grid-column: 1;
       text-align: right;
+      justify-self: end;
+      translate: -32px 0;
     }
-    .destra .scheda {
-      translate: 24px 0;
+    .sinistra .testo p:last-child {
+      margin-left: auto;
     }
-    .tappa.is-attiva .scheda {
+    .sinistra .foto {
+      grid-column: 3;
+      translate: 32px 0;
+    }
+    .destra .foto {
+      grid-column: 1;
+      grid-row: 1;
+      translate: -32px 0;
+    }
+    .destra .testo {
+      grid-column: 3;
+      grid-row: 1;
+      translate: 32px 0;
+    }
+    .tappa.is-attiva .testo,
+    .tappa.is-attiva .foto {
       translate: 0 0;
     }
   }
@@ -179,7 +229,7 @@ const { fasi } = Astro.props;
 
 <script>
   // Disegna una curva morbida che passa per il centro di ogni numero e la "srotola" fino a una linea
-  // immaginaria al 60% dello schermo; le tappe sopra quella linea si accendono.
+  // immaginaria al 60% dello schermo; le fasi sopra quella linea si accendono.
   document.querySelectorAll<HTMLElement>('[data-percorso]').forEach((percorso) => {
     const tappe = [...percorso.querySelectorAll<HTMLElement>('.tappa')];
     const nodi = tappe.map((t) => t.querySelector<HTMLElement>('.nodo')!);
@@ -197,25 +247,24 @@ const { fasi } = Astro.props;
         return { x: b.left + b.width / 2 - r.left, y: b.top + b.height / 2 - r.top };
       });
       if (!punti.length) return;
-      // ingresso e uscita morbidi sopra la prima e sotto l'ultima tappa
       const primo = punti[0];
       const ultimo = punti[punti.length - 1];
-      let d = `M ${primo.x} ${Math.max(primo.y - 60, 0)} L ${primo.x} ${primo.y}`;
+      let d = `M ${primo.x} ${Math.max(primo.y - 80, 0)} L ${primo.x} ${primo.y}`;
       for (let i = 1; i < punti.length; i++) {
         const a = punti[i - 1];
         const b = punti[i];
         const dy = (b.y - a.y) / 2;
         d += ` C ${a.x} ${a.y + dy}, ${b.x} ${b.y - dy}, ${b.x} ${b.y}`;
       }
-      d += ` L ${ultimo.x} ${Math.min(ultimo.y + 60, r.height)}`;
+      d += ` L ${ultimo.x} ${Math.min(ultimo.y + 80, r.height)}`;
       svg.setAttribute('viewBox', `0 0 ${r.width} ${r.height}`);
       base.setAttribute('d', d);
       traccia.setAttribute('d', d);
       lunghezza = traccia.getTotalLength();
       traccia.style.strokeDasharray = `${lunghezza}`;
       campioni = [];
-      for (let i = 0; i <= 300; i++) {
-        const l = (lunghezza * i) / 300;
+      for (let i = 0; i <= 400; i++) {
+        const l = (lunghezza * i) / 400;
         campioni.push({ y: traccia.getPointAtLength(l).y, l });
       }
     };
@@ -229,7 +278,6 @@ const { fasi } = Astro.props;
       }
       const r = percorso.getBoundingClientRect();
       const soglia = window.innerHeight * 0.6 - r.top;
-      // lunghezza del tratto la cui y è sopra la soglia
       let l = 0;
       for (const c of campioni) {
         if (c.y <= soglia) l = c.l;

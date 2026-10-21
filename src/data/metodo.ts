@@ -1,4 +1,11 @@
 import type { Img } from '../lib/img';
+import { progetti } from './progetti.ts';
+
+/** Foto n (da 1) della galleria di un progetto; disegno = da mostrare intera su fondo chiaro */
+const foto = (slug: string, n: number) => {
+  const g = progetti.find((p) => p.slug === slug)!.galleria[n - 1];
+  return { img: g.img, disegno: g.classe.includes('drawing') };
+};
 
 /** Le 4 card del processo (home + /metodo/). La foto della card 4 è anche la testata di /metodo/. */
 export const processo: { titolo: string; testo: string; img: Img }[] = [
@@ -28,15 +35,15 @@ export const processo: { titolo: string; testo: string; img: Img }[] = [
   },
 ];
 
-/** Le fasi nel dettaglio (/metodo/, JSON-LD HowTo) */
-export const fasi: { titolo: string; testo: string }[] = [
-  { titolo: 'Primo incontro', testo: 'Mi racconti lo spazio, l’edificio o l’evento, le tue esigenze, i tempi e il budget: capiamo insieme quale intervento è possibile.' },
-  { titolo: 'Sopralluogo e rilievo', testo: 'Un’ampia ripresa fotografica dei luoghi e un’analisi metrica e ottico-percettiva dello stato di fatto, raccogliendo il materiale grafico esistente.' },
-  { titolo: 'Analisi del contesto', testo: 'Studio la storia, la tradizione e la cultura del luogo, i vincoli e le cromie storiche, per un progetto in dialogo con il paesaggio e con la memoria.' },
-  { titolo: 'Ipotesi e simulazioni', testo: 'Elaboro ipotesi progettuali, rendering e simulazioni che permettono di valutare il risultato, i costi di realizzazione e i tempi di costruzione.' },
-  { titolo: 'Colore e materiali', testo: 'Scelgo colori, materiali e finiture in armonia con l’architettura e con l’ambiente, preferendo materiali naturali a basso impatto ambientale.' },
-  { titolo: 'Progetto definitivo ed esecutivo', testo: 'Sviluppo il progetto in ogni dettaglio, dalla distribuzione degli spazi agli arredi su misura, coordinando gli altri professionisti coinvolti.' },
-  { titolo: 'Pratiche e autorizzazioni', testo: 'Seguo le pratiche edilizie e il dialogo con gli enti e gli uffici tecnici necessari all’avvio dei lavori.' },
-  { titolo: 'Direzione lavori e direzione artistica', testo: 'Seguo il cantiere e la realizzazione, controllando qualità, tempi e costi e curando la coerenza del progetto in ogni dettaglio.' },
-  { titolo: 'Consegna', testo: 'Chiudo l’intervento con la consegna dell’opera e della documentazione, restando un riferimento anche dopo la fine dei lavori.' },
+/** Le fasi nel dettaglio (/metodo/, JSON-LD HowTo), ognuna con una foto */
+export const fasi: { titolo: string; testo: string; foto?: { img: Img; disegno: boolean } }[] = [
+  { titolo: 'Primo incontro', testo: 'Mi racconti lo spazio, l’edificio o l’evento, le tue esigenze, i tempi e il budget: capiamo insieme quale intervento è possibile.', foto: foto('spazio-vissuto-interni', 3) },
+  { titolo: 'Sopralluogo e rilievo', testo: 'Un’ampia ripresa fotografica dei luoghi e un’analisi metrica e ottico-percettiva dello stato di fatto, raccogliendo il materiale grafico esistente.', foto: foto('piazza-gradara', 5) },
+  { titolo: 'Analisi del contesto', testo: 'Studio la storia, la tradizione e la cultura del luogo, i vincoli e le cromie storiche, per un progetto in dialogo con il paesaggio e con la memoria.', foto: foto('piano-del-colore-pesaro', 2) },
+  { titolo: 'Ipotesi e simulazioni', testo: 'Elaboro ipotesi progettuali, rendering e simulazioni che permettono di valutare il risultato, i costi di realizzazione e i tempi di costruzione.', foto: foto('ipotesi-progettuali', 1) },
+  { titolo: 'Colore e materiali', testo: 'Scelgo colori, materiali e finiture in armonia con l’architettura e con l’ambiente, preferendo materiali naturali a basso impatto ambientale.', foto: foto('restyling-cromatico-palazzo-ajmonino', 1) },
+  { titolo: 'Progetto definitivo ed esecutivo', testo: 'Sviluppo il progetto in ogni dettaglio, dalla distribuzione degli spazi agli arredi su misura, coordinando gli altri professionisti coinvolti.', foto: foto('villa-dubai', 5) },
+  { titolo: 'Pratiche e autorizzazioni', testo: 'Seguo le pratiche edilizie e il dialogo con gli enti e gli uffici tecnici necessari all’avvio dei lavori.', foto: foto('piazza-gradara', 7) },
+  { titolo: 'Direzione lavori e direzione artistica', testo: 'Seguo il cantiere e la realizzazione, controllando qualità, tempi e costi e curando la coerenza del progetto in ogni dettaglio.', foto: foto('ingresso-onore-fiera-pesaro', 2) },
+  { titolo: 'Consegna', testo: 'Chiudo l’intervento con la consegna dell’opera e della documentazione, restando un riferimento anche dopo la fine dei lavori.', foto: foto('ingresso-onore-fiera-pesaro', 1) },
 ];
