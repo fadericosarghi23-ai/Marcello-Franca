@@ -55,7 +55,7 @@ export const site = {
     didascalia: 'Logo Marcello Franca architetto',
   },
   /** Colore della barra del browser (= --accent in global.css) */
-  themeColor: '#a24a2a',
+  themeColor: '#222222',
   areeServite: [
     { tipo: 'City', nome: 'Pesaro' },
     { tipo: 'AdministrativeArea', nome: 'Provincia di Pesaro e Urbino' },

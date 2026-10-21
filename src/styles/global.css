@@ -1,16 +1,16 @@
 /* Design system: token (palette, font, ritmo) in :root. Font caricati da @fontsource-variable nel Layout. */
 :root {
-  --accent: #a24a2a; /* terracotta dei Piani del Colore di Pesaro */
-  --accent-dark: #7f3820;
-  --accent-soft: #f5e6df;
-  --accent-on-dark: #eaa284;
-  --ink: #1c1a19;
-  --ink-2: #2a2725;
-  --text: #3a3735;
-  --grey: #6d6863;
-  --grey-light: #ece8e4;
-  --sand: #f5f2ee;
-  --line: #1c1a191a;
+  --accent: #222222; /* palette del sito attuale (tema chiaro): antracite, grigi, bianco */
+  --accent-dark: #000000;
+  --accent-soft: #eeeeee;
+  --accent-on-dark: #bbbbbb;
+  --ink: #222222;
+  --ink-2: #333333;
+  --text: #333333;
+  --grey: #6b6b6b;
+  --grey-light: #eeeeee;
+  --sand: #f7f7f7;
+  --line: #2222221a;
   --white: #fff;
   --header-h: 5.5rem;
   --font-sans: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -1790,4 +1790,71 @@ body.menu-open .site-header .logo-light {
 }
 .steps p {
   font-size: 0.975rem;
+}
+
+/* ---------- Animazioni allo scroll (leggere). Con prefers-reduced-motion le durate vanno a ~0 (regola in alto) ---------- */
+
+/* Testate: i testi entrano a cascata al caricamento */
+@keyframes sale {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.hero-content > *,
+.page-hero .inner > *,
+.page-head .container > * {
+  animation: sale 1s var(--ease) both;
+}
+.hero-content > :nth-child(2),
+.page-hero .inner > :nth-child(2),
+.page-head .container > :nth-child(2) {
+  animation-delay: 0.1s;
+}
+.hero-content > :nth-child(3),
+.page-hero .inner > :nth-child(3),
+.page-head .container > :nth-child(3) {
+  animation-delay: 0.2s;
+}
+.hero-content > :nth-child(n + 4),
+.page-hero .inner > :nth-child(n + 4),
+.page-head .container > :nth-child(n + 4) {
+  animation-delay: 0.3s;
+}
+
+/* Foto: lieve zoom che si assesta quando il blocco entra in vista (scale non tocca l'effetto hover su transform) */
+.reveal .card .media img,
+.card.reveal .media img,
+.reveal .ratio-45 img,
+.reveal.ratio-45 img,
+.reveal.ratio-32 img,
+.reveal .photo img,
+.process-card.reveal img,
+.gallery .reveal img {
+  scale: 1.06;
+  transition:
+    transform 0.8s var(--ease),
+    scale 1.6s var(--ease);
+}
+.reveal.is-in .card .media img,
+.card.reveal.is-in .media img,
+.reveal.is-in .ratio-45 img,
+.reveal.ratio-45.is-in img,
+.reveal.ratio-32.is-in img,
+.reveal.is-in .photo img,
+.process-card.reveal.is-in img,
+.gallery .reveal.is-in img,
+.no-js .reveal img {
+  scale: 1;
+}
+
+/* Parallax delle testate: lo spostamento lo imposta lo script del layout */
+.page-hero > picture,
+.hero-slides {
+  translate: 0 var(--parallax, 0px);
+  will-change: translate;
 }

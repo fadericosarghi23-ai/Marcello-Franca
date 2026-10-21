@@ -18,8 +18,8 @@ attuale https://www.marcellofranca.it/ (WordPress), riscritti in italiano.
 - Un solo professionista: la sezione team della home non compare (meno di 2 persone); in /studio/ i
   numeri sono `numeriStudio` in `src/data/sezioni.ts`.
 - Logo: marchio originale (squadra e voluta) ricolorato + nome in Georgia, alla misura 882×182.
-  Favicon "MF" su terracotta. Marchio decorativo della CTA ridisegnato in vettoriale dalla squadra.
-- Palette: accento terracotta `#a24a2a` (tema dei Piani del Colore), contrasto AA su bianco (5,9:1).
+  Favicon "MF" su antracite. Marchio decorativo della CTA ridisegnato in vettoriale dalla squadra.
+- Palette: quella del sito attuale (tema chiaro): antracite #222, grigi #6b6b6b/#bbb/#eee/#f7f7f7 su bianco. Il grigio è #6b6b6b invece di #767676 per restare AA anche su fondo grigio chiaro.
 - Progetti con soli disegni o rendering piccoli: pagina senza foto grande in testa (`hero: false`).
 
 ## Dati da chiedere al cliente

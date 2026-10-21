@@ -115,6 +115,16 @@ const grafo = { '@context': 'https://schema.org', '@graph': [organizzazione(), s
         });
       }
 
+      const ridotto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Elementi di griglie e gallerie: compaiono uno dopo l'altro (ritardo a cascata per colonna)
+      document.querySelectorAll('.projects-grid, [data-gallery], .services, .areas').forEach((gruppo) => {
+        [...gruppo.children].forEach((el, i) => {
+          el.classList.add('reveal');
+          (el as HTMLElement).style.transitionDelay = `${(i % 3) * 90}ms`;
+        });
+      });
+
       // Comparsa degli elementi .reveal all'ingresso nel viewport
       const io = new IntersectionObserver(
         (entries) =>
@@ -127,6 +137,53 @@ const grafo = { '@context': 'https://schema.org', '@graph': [organizzazione(), s
         { rootMargin: '0px 0px -8% 0px' },
       );
       document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+      if (!ridotto) {
+        // Parallax leggero delle foto di testata (la foto scorre più lenta della pagina)
+        const testate = [...document.querySelectorAll<HTMLElement>('.page-hero > picture, .hero-slides')];
+        if (testate.length) {
+          let attesa = false;
+          const sposta = () => {
+            attesa = false;
+            const y = Math.min(window.scrollY, window.innerHeight);
+            testate.forEach((el) => el.style.setProperty('--parallax', `${(y * 0.18).toFixed(1)}px`));
+          };
+          window.addEventListener(
+            'scroll',
+            () => {
+              if (!attesa) {
+                attesa = true;
+                requestAnimationFrame(sposta);
+              }
+            },
+            { passive: true },
+          );
+        }
+
+        // Numeri delle statistiche: contano fino al valore quando entrano in vista (gli anni restano fissi)
+        const contatori = new IntersectionObserver(
+          (entries) =>
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              contatori.unobserve(entry.target);
+              const el = entry.target as HTMLElement;
+              const [, n, coda] = el.textContent!.trim().match(/^(\d+)(\D*)$/)!;
+              const fine = Number(n);
+              const t0 = performance.now();
+              const passo = (t: number) => {
+                const k = Math.min((t - t0) / 1400, 1);
+                el.textContent = `${Math.round(fine * (1 - (1 - k) ** 3))}${coda}`;
+                if (k < 1) requestAnimationFrame(passo);
+              };
+              requestAnimationFrame(passo);
+            }),
+          { threshold: 0.6 },
+        );
+        document.querySelectorAll<HTMLElement>('.stat strong').forEach((el) => {
+          const m = el.textContent!.trim().match(/^(\d+)(\D*)$/);
+          if (m && Number(m[1]) > 1 && Number(m[1]) < 1000) contatori.observe(el);
+        });
+      }
     </script>
   </body>
 </html>
