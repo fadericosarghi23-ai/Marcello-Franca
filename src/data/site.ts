@@ -49,6 +49,8 @@ export const site = {
   logo: {
     scuro: '/img/logo/logo.png',
     chiaro: '/img/logo/logo-chiaro.png',
+    /** Marchio da solo, chiaro (intro all'apertura del sito). Vuoto = niente intro */
+    marchio: '/img/logo/marchio-chiaro.png',
     w: 882,
     h: 182,
     alt: 'Marcello Franca architetto — architettura, interni, allestimenti, design e colore',
