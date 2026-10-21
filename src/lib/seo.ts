@@ -48,8 +48,8 @@ export function organizzazione() {
     telephone: site.telefono.href,
     address: {
       '@type': 'PostalAddress',
-      streetAddress: site.indirizzo.via,
-      postalCode: site.indirizzo.cap,
+      ...(site.indirizzo.via ? { streetAddress: site.indirizzo.via } : {}),
+      ...(site.indirizzo.cap ? { postalCode: site.indirizzo.cap } : {}),
       addressLocality: site.indirizzo.citta,
       addressRegion: site.indirizzo.provincia,
       addressCountry: site.indirizzo.paese,

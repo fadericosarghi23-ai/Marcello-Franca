@@ -12,3 +12,11 @@ export const serviziTestata = sezione('servizi-testata', 2400, 3200, 'DA COMPILA
 
 /** Immagini Open Graph (1200×630) delle pagine principali, oltre a quelle dei progetti (/img/og/<slug>.jpg) */
 export const ogPagine = ['sito', 'studio', 'servizi', 'metodo'];
+
+/** Numeri di /studio/. auto: 'team' (persone), 'progetti', oppure un ruolo del team ('Architetto'…) da contare. */
+export const numeriStudio: { n?: string; label: string; auto?: string }[] = [
+  { auto: 'team', label: 'Professionisti' },
+  { auto: 'Architetto', label: 'Architetti' },
+  { auto: 'Ingegnere', label: 'Ingegneri' },
+  { auto: 'Geometra', label: 'Geometri' },
+];

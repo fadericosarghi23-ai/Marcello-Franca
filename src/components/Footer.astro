@@ -46,7 +46,7 @@ const anno = new Date().getFullYear();
       <address style="font-style: normal">
         <p><strong style="color:#fff; font-weight:500">{site.nome}</strong></p>
         <p>
-          <span itemprop="streetAddress">{site.indirizzo.via}</span><br /><span itemprop="postalCode">{site.indirizzo.cap}</span>
+          {site.indirizzo.via && <Fragment><span itemprop="streetAddress">{site.indirizzo.via}</span><br /></Fragment>}{site.indirizzo.cap && <span itemprop="postalCode">{site.indirizzo.cap}</span>}
           <span itemprop="addressLocality">{site.indirizzo.citta}</span> (<span itemprop="addressRegion">{site.indirizzo.provincia}</span>)
         </p>
         <p class="mt-2"><a href={telHref}>Tel. {site.telefono.testo}</a></p>

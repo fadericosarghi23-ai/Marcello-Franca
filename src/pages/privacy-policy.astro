@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
-import { site, mailHref } from '../data/site';
+import { site, mailHref, indirizzoRiga } from '../data/site';
 import { pagina, briciole, titolo } from '../lib/seo';
 
 const title = titolo('Privacy policy');
@@ -24,7 +24,7 @@ const { indirizzo: a } = site;
     <div class="container narrow prose">
       <h2>Titolare del trattamento</h2>
       <p>
-        {site.nome}, {a.via}, {a.cap} {a.citta} ({a.provincia}){site.piva && `, P.IVA ${site.piva}`} — email
+        {site.nome}, {indirizzoRiga} ({a.provincia}){site.piva && `, P.IVA ${site.piva}`} — email
         <a href={mailHref}>{site.email}</a>, tel. {site.telefono.testo}{site.pec && `, PEC ${site.pec}`}.
       </p>
       <h2>Dati trattati</h2>

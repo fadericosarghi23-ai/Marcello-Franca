@@ -7,7 +7,7 @@ import { fasi } from '../data/metodo';
 import { categorie, progetti, type Progetto } from '../data/progetti';
 import { diCategoria, nomiCategorie, testoPiano } from './progetti';
 
-const sedeRiga = `${site.indirizzo.via}, ${site.indirizzo.cap} ${site.indirizzo.citta} (${site.indirizzo.provincia}), Italia`;
+const sedeRiga = `${indirizzoRiga} (${site.indirizzo.provincia}), Italia`;
 
 const schedaBreve = (p: Progetto) =>
   `- [${p.titolo}](${url(`/progetti/${p.slug}/`)}): ${p.intervento}. ${p.luogo}.${p.importo ? ` Importo lavori: ${p.importo}.` : ''}`;

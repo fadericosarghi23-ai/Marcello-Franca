@@ -6,20 +6,18 @@ import Cta from '../components/Cta.astro';
 import { site } from '../data/site';
 import { team } from '../data/team';
 import { pagina, briciole, titolo } from '../lib/seo';
-import { studioTestata, studioFoto } from '../data/sezioni';
+import { studioTestata, studioFoto, numeriStudio } from '../data/sezioni';
+import { progetti } from '../data/progetti';
 
 const title = titolo('[[DA COMPILARE: meta title pagina studio, max 45 caratteri]]');
 const description = '[[DA COMPILARE: meta description pagina studio, 140-155 caratteri]]';
 const og = '/img/og/studio.jpg';
 const heroImg = studioTestata;
 const foto = studioFoto;
-const conta = (ruolo: string) => team.filter((m) => m.ruolo === ruolo).length;
-const numeri = [
-  { n: team.length, label: 'Professionisti' },
-  { n: conta('Architetto'), label: 'Architetti' },
-  { n: conta('Ingegnere'), label: 'Ingegneri' },
-  { n: conta('Geometra'), label: 'Geometri' },
-];
+const numeri = numeriStudio.map((x) => ({
+  label: x.label,
+  n: x.auto === 'team' ? team.length : x.auto === 'progetti' ? progetti.length : x.auto ? team.filter((m) => m.ruolo === x.auto).length : x.n,
+}));
 const approccio = [
   {
     titolo: '[[DA COMPILARE: punto di forza 1, 1-3 parole]]',
@@ -146,8 +144,8 @@ const ld = [
     <div class="container grid-2">
       <div class="reveal">
         <p class="eyebrow mb-2">La sede</p>
-        <h2 class="h2">{site.indirizzo.via}, {site.indirizzo.citta}</h2>
-        <p class="lead mt-3">Lo studio si trova a {site.indirizzo.citta}, {site.indirizzo.zona}. [[DA COMPILARE: come si viene ricevuti, 1 frase breve]]</p>
+        <h2 class="h2">{[site.indirizzo.via, site.indirizzo.citta].filter(Boolean).join(', ')}</h2>
+        <p class="lead mt-3">Lo studio si trova a {[site.indirizzo.citta, site.indirizzo.zona].filter(Boolean).join(', ')}. [[DA COMPILARE: come si viene ricevuti, 1 frase breve]]</p>
         <div class="btn-row mt-4">
           <a href="/contatti/" class="btn btn-primary">Contatti e orari</a>
           <a href={site.mapsUrl} target="_blank" rel="noopener" class="btn btn-outline">Indicazioni stradali</a>

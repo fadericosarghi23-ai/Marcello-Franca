@@ -20,6 +20,7 @@ export const site = {
   lingua: 'it',
   locale: 'it_IT',
   indirizzo: {
+    /** Via e civico, CAP, zona: lasciare '' se non pubblicati (le righe relative spariscono) */
     via: '[[DA COMPILARE: via e numero civico]]',
     /** Forma breve (titoli, mappa) */
     viaBreve: '[[DA COMPILARE: via breve]]',
@@ -80,5 +81,8 @@ export const site = {
 
 export const telHref = `tel:${site.telefono.href}`;
 export const mailHref = `mailto:${site.email}`;
-export const indirizzoRiga = `${site.indirizzo.via}, ${site.indirizzo.cap} ${site.indirizzo.citta}`;
+/** Via (se c'è), CAP e città: "Via Roma 1, 00100 Città" o solo "Città" */
+export const indirizzoRiga = [site.indirizzo.via, [site.indirizzo.cap, site.indirizzo.citta].filter(Boolean).join(' ')].filter(Boolean).join(', ');
+/** CAP, città e provincia: "00100 Città (PR)" */
+export const localitaRiga = `${[site.indirizzo.cap, site.indirizzo.citta].filter(Boolean).join(' ')} (${site.indirizzo.provincia})`;
 export const url = (path = '/') => site.dominio + path;
