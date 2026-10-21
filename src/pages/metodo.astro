@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import ProcessCards from '../components/ProcessCards.astro';
+import Cta from '../components/Cta.astro';
+import { site, url } from '../data/site';
+import { ctaPrincipale } from '../data/nav';
+import { processo, fasi } from '../data/metodo';
+import { pagina, briciole, titolo } from '../lib/seo';
+
+const title = titolo('[[DA COMPILARE: meta title pagina metodo, max 45 caratteri]]');
+const description = '[[DA COMPILARE: meta description pagina metodo, 140-155 caratteri]]';
+const og = '/img/og/metodo.jpg';
+const ld = [
+  pagina({ path: '/metodo/', titolo: title, descrizione: description, og, briciole: true }),
+  briciole('/metodo/', [
+    { nome: 'Home', path: '/' },
+    { nome: 'Metodo', path: '/metodo/' },
+  ]),
+  {
+    '@type': 'HowTo',
+    '@id': url('/metodo/#metodo'),
+    name: `Come lavora ${site.nome}`,
+    description: '[[DA COMPILARE: descrizione del metodo, 1 frase]]',
+    step: fasi.map((f, i) => ({ '@type': 'HowToStep', position: i + 1, name: f.titolo, text: f.testo, url: url(`/metodo/#fase-${i + 1}`) })),
+  },
+];
+---
+<Layout title={title} description={description} path="/metodo/" og={og} transparent ld={ld}>
+  <PageHero
+    img={processo[3].img}
+    briciole={[{ nome: 'Metodo' }]}
+    eyebrow="Metodo"
+    lead="[[DA COMPILARE: sottotitolo pagina metodo, 1 frase breve]]"
+  >
+    [[DA COMPILARE: titolo pagina metodo, 5-6 parole]]
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <ProcessCards h="h2" />
+    </div>
+  </section>
+
+  <section class="section bg-sand">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow mb-2">Le fasi nel dettaglio</p>
+          <h2 class="h2">[[DA COMPILARE: titolo delle fasi, 5 parole]]</h2>
+          <p class="lead mt-2">[[DA COMPILARE: sottotitolo delle fasi, 1 frase (circa 110 caratteri)]]</p>
+        </div>
+        <a href={ctaPrincipale.href} class="btn btn-primary">Fissa un primo incontro</a>
+      </div>
+      <ol class="steps">
+        {
+          fasi.map((f, i) => (
+            <li id={`fase-${i + 1}`} class="reveal" style={`transition-delay: ${(i % 3) * 60}ms`}>
+              <span class="n">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="h4">{f.titolo}</h3>
+              <p>{f.testo}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <Cta titolo="[[DA COMPILARE: titolo invito finale, 4 parole]]" />
+</Layout>

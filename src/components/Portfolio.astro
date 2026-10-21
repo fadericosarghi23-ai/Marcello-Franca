@@ -1,0 +1,29 @@
+---
+// Elenco progetti con filtri per categoria (pagina /progetti/ e pagine categoria)
+import ProjectCard from './ProjectCard.astro';
+import { categorie, progetti, type Progetto, type CategoriaId } from '../data/progetti';
+import { diCategoria } from '../lib/progetti';
+
+interface Props {
+  lista: Progetto[];
+  attiva?: CategoriaId;
+}
+const { lista, attiva } = Astro.props;
+---
+<section class="section-sm">
+  <div class="container">
+    <nav class="filters" aria-label="Filtra per categoria">
+      <a href="/progetti/" aria-current={attiva ? undefined : 'page'}>Tutti <sup>{progetti.length}</sup></a>
+      {
+        categorie.map((c) => (
+          <a href={`/progetti/${c.id}/`} aria-current={attiva === c.id ? 'page' : undefined}>
+            {c.nome} <sup>{diCategoria(c.id).length}</sup>
+          </a>
+        ))
+      }
+    </nav>
+    <div class="projects-grid">
+      {lista.map((p, i) => <ProjectCard p={p} h="h2" eager={i < 3} />)}
+    </div>
+  </div>
+</section>

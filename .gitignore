@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+.netlify/
+.DS_Store
+*.log
+.env*
+# foto sorgente (pesanti): restano in locale, in public/img vanno le versioni web
+media/

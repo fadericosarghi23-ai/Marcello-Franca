@@ -1,0 +1,15 @@
+---
+interface Props {
+  /** Voci intermedie (Home è implicita); l'ultima è la pagina corrente */
+  voci: { nome: string; path?: string }[];
+}
+const { voci } = Astro.props;
+const corrente = voci[voci.length - 1];
+---
+<nav aria-label="Percorso">
+  <ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    {voci.slice(0, -1).map((v) => <li><a href={v.path}>{v.nome}</a></li>)}
+    <li><span aria-current="page">{corrente.nome}</span></li>
+  </ol>
+</nav>

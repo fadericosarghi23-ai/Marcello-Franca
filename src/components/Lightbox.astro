@@ -1,0 +1,69 @@
+---
+import Icon from './Icon.astro';
+---
+<div class="lightbox" hidden role="dialog" aria-modal="true" aria-label="Galleria immagini" data-lightbox>
+  <div class="lb-top">
+    <span data-lb-count></span>
+    <button type="button" data-lb-close aria-label="Chiudi galleria"><Icon name="chiudi" /></button>
+  </div>
+  <div class="lb-stage">
+    <button type="button" class="lb-nav lb-prev" data-lb-prev aria-label="Immagine precedente"><Icon name="indietro" /></button>
+    <img data-lb-img alt="" />
+    <button type="button" class="lb-nav lb-next" data-lb-next aria-label="Immagine successiva"><Icon name="avanti" /></button>
+  </div>
+  <p class="lb-cap" data-lb-cap></p>
+</div>
+
+<script>
+  // Lightbox della galleria: frecce, tastiera (←/→/Esc), swipe, clic fuori per chiudere
+  const box = document.querySelector<HTMLElement>('[data-lightbox]');
+  const items = [...document.querySelectorAll<HTMLButtonElement>('[data-gallery] button')];
+  if (box && items.length) {
+    const img = box.querySelector<HTMLImageElement>('[data-lb-img]')!;
+    const cap = box.querySelector('[data-lb-cap]')!;
+    const count = box.querySelector('[data-lb-count]')!;
+    let current = 0;
+    let lastFocus: Element | null = null;
+    const show = (i: number) => {
+      current = (i + items.length) % items.length;
+      const b = items[current];
+      img.src = b.dataset.full!;
+      img.alt = b.dataset.alt!;
+      cap.textContent = b.dataset.alt!;
+      count.textContent = `${current + 1} / ${items.length}`;
+    };
+    const open = (i: number) => {
+      lastFocus = document.activeElement;
+      show(i);
+      box.hidden = false;
+      document.body.style.overflow = 'hidden';
+      box.querySelector<HTMLElement>('[data-lb-close]')!.focus();
+    };
+    const close = () => {
+      box.hidden = true;
+      document.body.style.overflow = '';
+      (lastFocus as HTMLElement | null)?.focus();
+    };
+    items.forEach((b, i) => b.addEventListener('click', () => open(i)));
+    document.querySelector('[data-open-all]')?.addEventListener('click', () => open(0));
+    box.querySelector('[data-lb-close]')!.addEventListener('click', close);
+    box.querySelector('[data-lb-prev]')!.addEventListener('click', () => show(current - 1));
+    box.querySelector('[data-lb-next]')!.addEventListener('click', () => show(current + 1));
+    box.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      if (t === box || t.classList.contains('lb-stage')) close();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (box.hidden) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') show(current - 1);
+      if (e.key === 'ArrowRight') show(current + 1);
+    });
+    let x0 = 0;
+    box.addEventListener('touchstart', (e) => (x0 = e.touches[0].clientX), { passive: true });
+    box.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 50) show(current + (dx < 0 ? 1 : -1));
+    });
+  }
+</script>

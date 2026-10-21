@@ -1,0 +1,103 @@
+---
+// /progetti/<categoria>/ e /progetti/<progetto>/ condividono lo stesso livello di URL
+import Layout from '../../layouts/Layout.astro';
+import PageHead from '../../components/PageHead.astro';
+import Portfolio from '../../components/Portfolio.astro';
+import ProjectDetail from '../../components/ProjectDetail.astro';
+import Cta from '../../components/Cta.astro';
+import { site, url } from '../../data/site';
+import { progetti, categorie, type Progetto, type Categoria } from '../../data/progetti';
+import { diCategoria, nomiCategorie, testoPiano } from '../../lib/progetti';
+import { membro } from '../../data/team';
+import { pagina, briciole, titolo, tronca, ogPath } from '../../lib/seo';
+import { fallbackSrc } from '../../lib/img';
+
+export function getStaticPaths() {
+  return [
+    ...categorie.map((c) => ({ params: { slug: c.id }, props: { categoria: c } })),
+    ...progetti.map((p) => ({ params: { slug: p.slug }, props: { progetto: p } })),
+  ];
+}
+
+const { categoria, progetto } = Astro.props as { categoria?: Categoria; progetto?: Progetto };
+const path = `/progetti/${Astro.params.slug}/`;
+
+let title: string, description: string, og: string, ogAlt: string | undefined, ld: object[];
+const lista = categoria ? diCategoria(categoria.id) : [];
+
+if (categoria) {
+  title = titolo(categoria.metaTitle);
+  description = categoria.metaDescription;
+  og = lista[0] ? ogPath(lista[0].slug) : site.og.src;
+  ld = [
+    pagina({ tipo: 'CollectionPage', path, titolo: title, descrizione: description, og, briciole: true }),
+    briciole(path, [
+      { nome: 'Home', path: '/' },
+      { nome: 'Progetti', path: '/progetti/' },
+      { nome: categoria.nome, path },
+    ]),
+    {
+      '@type': 'ItemList',
+      name: categoria.nome,
+      numberOfItems: lista.length,
+      itemListElement: lista.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: url(`/progetti/${p.slug}/`), name: p.titolo })),
+    },
+  ];
+} else {
+  const p = progetto!;
+  const cat = categorie.find((c) => c.id === p.categorie[0])!;
+  title = titolo(`${p.titolo} – ${p.luogo}`, p.titolo);
+  description = tronca(`${p.titolo}, ${p.luogo}: ${testoPiano(p.testo)}`);
+  og = ogPath(p.slug);
+  ogAlt = p.copertina.alt;
+  const ref = membro(p.referente);
+  ld = [
+    pagina({ tipo: 'ItemPage', path, titolo: title, descrizione: description, og, briciole: true }),
+    briciole(path, [
+      { nome: 'Home', path: '/' },
+      { nome: 'Progetti', path: '/progetti/' },
+      { nome: cat.nome, path: `/progetti/${cat.id}/` },
+      { nome: p.titolo, path },
+    ]),
+    {
+      '@type': 'CreativeWork',
+      '@id': url(`${path}#progetto`),
+      name: p.titolo,
+      alternativeHeadline: p.intervento,
+      description: testoPiano(p.testo),
+      url: url(path),
+      inLanguage: 'it-IT',
+      genre: nomiCategorie(p),
+      keywords: [...p.tag, p.luogo, site.nome].join(', '),
+      image: p.galleria.map((g) => ({ '@type': 'ImageObject', contentUrl: url(fallbackSrc(g.img)), caption: g.img.alt, width: g.img.w, height: g.img.h })),
+      locationCreated: { '@type': 'Place', name: p.luogo, address: { '@type': 'PostalAddress', addressLocality: p.luogo, addressCountry: 'IT' } },
+      creator: [{ '@id': `${site.dominio}/#organizzazione` }, ...(ref ? [{ '@id': url(`/studio/#${ref.id}`) }] : [])],
+      isPartOf: { '@id': url('/progetti/#pagina') },
+    },
+  ];
+}
+---
+<Layout
+  title={title}
+  description={description}
+  path={path}
+  og={og}
+  ogAlt={ogAlt}
+  ogType={progetto ? 'article' : 'website'}
+  transparent={!!progetto?.hero}
+  ld={ld}
+>
+  {
+    categoria ? (
+      <Fragment>
+        <PageHead briciole={[{ nome: 'Progetti', path: '/progetti/' }, { nome: categoria.nome }]} eyebrow="Portfolio" lead={categoria.intro}>
+          {categoria.nome}
+        </PageHead>
+        <Portfolio lista={lista} attiva={categoria.id} />
+        <Cta />
+      </Fragment>
+    ) : (
+      <ProjectDetail p={progetto!} />
+    )
+  }
+</Layout>

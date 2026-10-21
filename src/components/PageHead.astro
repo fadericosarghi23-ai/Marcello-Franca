@@ -1,0 +1,22 @@
+---
+// Testata senza foto, su fondo sabbia
+import Breadcrumb from './Breadcrumb.astro';
+
+interface Props {
+  briciole: { nome: string; path?: string }[];
+  eyebrow?: string;
+  lead?: string;
+  /** Classi del paragrafo introduttivo */
+  leadClass?: string;
+  h1Style?: string;
+}
+const { briciole, eyebrow, lead, leadClass = 'lead mt-3 narrow', h1Style } = Astro.props;
+---
+<section class="page-head bg-sand">
+  <div class="container">
+    <Breadcrumb voci={briciole} />
+    {eyebrow && <p class="eyebrow mb-2">{eyebrow}</p>}
+    <h1 class="h1-page" style={h1Style}><slot /></h1>
+    {lead && <p class={leadClass}>{lead}</p>}
+  </div>
+</section>

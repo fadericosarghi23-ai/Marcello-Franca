@@ -1,0 +1,132 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/newsreader/wght.css';
+import '@fontsource-variable/newsreader/wght-italic.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site, url } from '../data/site';
+import { organizzazione, sitoWeb } from '../lib/seo';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Percorso della pagina (canonical), es. /studio/ */
+  path: string;
+  /** Immagine Open Graph (percorso in public/) */
+  og?: string;
+  ogAlt?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+  /** Header trasparente sopra una foto a tutta larghezza */
+  transparent?: boolean;
+  /** Nodi JSON-LD aggiuntivi (dopo organizzazione e sito) */
+  ld?: object[];
+}
+const {
+  title,
+  description,
+  path,
+  og = site.og.src,
+  ogAlt = site.og.alt,
+  ogType = 'website',
+  noindex = false,
+  transparent = false,
+  ld = [],
+} = Astro.props;
+const canonical = url(path);
+const ogUrl = url(og);
+const grafo = { '@context': 'https://schema.org', '@graph': [organizzazione(), sitoWeb(), ...ld] };
+---
+<!doctype html>
+<html lang={site.lingua} class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
+    <meta name="theme-color" content={site.themeColor} />
+    <meta name="author" content={site.nome} />
+    <meta name="geo.region" content={site.indirizzo.regioneIso} />
+    <meta name="geo.placename" content={site.indirizzo.citta} />
+    <meta name="geo.position" content={`${site.geo.lat};${site.geo.lng}`} />
+    <meta name="ICBM" content={`${site.geo.lat}, ${site.geo.lng}`} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content={site.locale} />
+    <meta property="og:site_name" content={site.nome} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogUrl} />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
+    <script type="application/ld+json" set:html={JSON.stringify(grafo)} />
+    <script is:inline>document.documentElement.classList.remove('no-js');</script>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Salta al contenuto</a>
+    <Header transparent={transparent} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      // Header: trasparente sopra l'hero, solido dopo 40px di scroll
+      const header = document.querySelector<HTMLElement>('.site-header');
+      if (header) {
+        const transparent = header.dataset.transparent === 'true';
+        const update = () => {
+          const solid = !transparent || window.scrollY > 40;
+          header.classList.toggle('is-solid', solid);
+          header.classList.toggle('is-transparent', !solid);
+        };
+        update();
+        window.addEventListener('scroll', update, { passive: true });
+      }
+
+      // Menu mobile
+      const toggle = document.querySelector('.menu-toggle');
+      const menu = document.getElementById('mobile-menu');
+      if (toggle && menu) {
+        const set = (open: boolean) => {
+          toggle.setAttribute('aria-expanded', String(open));
+          toggle.setAttribute('aria-label', open ? 'Chiudi il menu' : 'Apri il menu');
+          menu.hidden = !open;
+          document.body.classList.toggle('menu-open', open);
+          document.body.style.overflow = open ? 'hidden' : '';
+        };
+        toggle.addEventListener('click', () => set(menu.hidden));
+        menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => set(false)));
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && !menu.hidden) set(false);
+        });
+      }
+
+      // Comparsa degli elementi .reveal all'ingresso nel viewport
+      const io = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-in');
+              io.unobserve(entry.target);
+            }
+          }),
+        { rootMargin: '0px 0px -8% 0px' },
+      );
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,57 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import { site } from '../data/site';
+import { nav } from '../data/nav';
+import { servizi } from '../data/servizi';
+import { categorie } from '../data/progetti';
+import { diCategoria } from '../lib/progetti';
+import { pagina, briciole, titolo } from '../lib/seo';
+
+const title = titolo('Mappa del sito');
+const description = `Tutte le pagine del sito di ${site.nome}: studio, servizi, metodo, progetti e contatti.`;
+const path = '/mappa-del-sito/';
+const ld = [
+  pagina({ path, titolo: title, descrizione: description, og: site.og.src, briciole: true }),
+  briciole(path, [
+    { nome: 'Home', path: '/' },
+    { nome: 'Mappa del sito', path },
+  ]),
+];
+---
+<Layout title={title} description={description} path={path} ld={ld}>
+  <PageHead briciole={[{ nome: 'Mappa del sito' }]}>Mappa del sito</PageHead>
+  <section class="section">
+    <div class="container grid-2 prose">
+      <div>
+        <h2>Pagine</h2>
+        <ul>
+          <li><a href="/">Home</a></li>
+          {nav.map((v) => <li><a href={v.href}>{v.label}</a></li>)}
+          <li><a href="/privacy-policy/">Privacy policy</a></li>
+          <li><a href="/cookie-policy/">Cookie policy</a></li>
+        </ul>
+        <h2>Servizi</h2>
+        <ul>
+          {servizi.map((s) => <li><a href={`/servizi/#${s.id}`}>{s.nome}</a></li>)}
+        </ul>
+      </div>
+      <div>
+        {
+          categorie.map((c) => (
+            <Fragment>
+              <h2><a href={`/progetti/${c.id}/`} style="text-decoration: none; color: inherit">{c.nome}</a></h2>
+              <ul>
+                {diCategoria(c.id).map((p) => (
+                  <li>
+                    <a href={`/progetti/${p.slug}/`}>{p.titolo}</a> <span class="muted small">— {p.luogo}</span>
+                  </li>
+                ))}
+              </ul>
+            </Fragment>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Layout>

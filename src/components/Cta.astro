@@ -1,0 +1,26 @@
+---
+import Marchio from './Marchio.astro';
+import { site, telHref } from '../data/site';
+import { ctaPrincipale } from '../data/nav';
+
+interface Props {
+  titolo?: string;
+}
+const { titolo = 'Hai un progetto in mente?' } = Astro.props;
+---
+<section class="cta section-sm">
+  <Marchio class="gmark" />
+  <div class="container">
+    <div class="narrow reveal">
+      <p class="eyebrow-light mb-2">Contatti</p>
+      <h2 class="h2">{titolo}</h2>
+      <p class="lead mt-2" style="color: rgb(255 255 255 / 0.88)">
+        [[DA COMPILARE: invito a contattare lo studio, 1 frase (circa 150 caratteri)]]
+      </p>
+      <div class="btn-row mt-4">
+        <a href={ctaPrincipale.href} class="btn btn-primary">{ctaPrincipale.label}</a>
+        <a href={telHref} class="btn btn-outline-light">Chiama lo {site.telefono.testo}</a>
+      </div>
+    </div>
+  </div>
+</section>

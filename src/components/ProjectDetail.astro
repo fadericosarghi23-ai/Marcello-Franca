@@ -1,0 +1,139 @@
+---
+import PageHero from './PageHero.astro';
+import PageHead from './PageHead.astro';
+import Picture from './Picture.astro';
+import ProjectCard from './ProjectCard.astro';
+import Lightbox from './Lightbox.astro';
+import Cta from './Cta.astro';
+import type { Progetto } from '../data/progetti';
+import { membro } from '../data/team';
+import { categoria, vicini, simili, nomiCategorie } from '../lib/progetti';
+import { fullSrc, sizedSrc } from '../lib/img';
+
+interface Props {
+  p: Progetto;
+}
+const { p } = Astro.props;
+const cat = categoria(p.categorie[0]);
+const briciole = [
+  { nome: 'Progetti', path: '/progetti/' },
+  { nome: cat.nome, path: `/progetti/${cat.id}/` },
+  { nome: p.titolo },
+];
+const ref = membro(p.referente);
+const { prev, next } = vicini(p);
+---
+{
+  p.hero ? (
+    <PageHero img={p.copertina} briciole={briciole} eyebrow={nomiCategorie(p).join(' · ')} lead={p.luogo}>
+      {p.titolo}
+    </PageHero>
+  ) : (
+    <PageHead briciole={briciole} eyebrow={nomiCategorie(p).join(' · ')} lead={p.luogo} leadClass="lead mt-2" h1Style="max-width: 24ch">
+      {p.titolo}
+    </PageHead>
+  )
+}
+<article class="section">
+  <div class="container project-layout">
+    <aside class="facts" aria-label="Scheda del progetto">
+      <dl>
+        <div class="row"><dt>Intervento</dt><dd>{p.intervento}</dd></div>
+        <div class="row"><dt>Luogo</dt><dd>{p.luogo}</dd></div>
+        <div class="row">
+          <dt>Categoria</dt>
+          <dd>
+            {
+              p.categorie.map((c, i) => (
+                <Fragment>
+                  {i > 0 && ', '}
+                  <a href={`/progetti/${c}/`} class="link-underline">{categoria(c).nome}</a>
+                </Fragment>
+              ))
+            }
+          </dd>
+        </div>
+        {
+          p.progettisti && (
+            <div class="row">
+              <dt>Progettisti e ruoli</dt>
+              <dd><ul>{p.progettisti.map((r) => <li>{r}</li>)}</ul></dd>
+            </div>
+          )
+        }
+        {p.importo && <div class="row"><dt>Importo lavori</dt><dd>{p.importo}</dd></div>}
+        <div class="row">
+          <dt>Temi</dt>
+          <dd><ul class="tags" style="margin-top:0">{p.tag.map((t) => <li>{t}</li>)}</ul></dd>
+        </div>
+        {
+          ref && (
+            <div class="row">
+              <dt>Referente</dt>
+              <dd>
+                <a href={`/studio/#${ref.id}`} class="lead-person">
+                  <img src={sizedSrc(ref.foto, 400)} alt="" width="52" height="52" loading="lazy" />
+                  <span><strong style="font-weight:500">{ref.nome}</strong><br /><span class="muted small">{ref.ruolo}</span></span>
+                </a>
+              </dd>
+            </div>
+          )
+        }
+      </dl>
+      <a href="/contatti/#richiesta" class="btn btn-primary mt-4" style="width: 100%">Parliamo del tuo progetto</a>
+    </aside>
+    <div>
+      {
+        !p.hero && (
+          <figure class="mb-3">
+            <Picture img={p.copertina} sizes="(min-width: 1024px) 60vw, 92vw" eager class="full-img" />
+            <figcaption class="xs muted mt-1">{p.copertina.alt}</figcaption>
+          </figure>
+        )
+      }
+      <h2 class="h3 mb-3">Il progetto</h2>
+      <div class="prose lead" style="font-size: 1.1rem" set:html={p.testo} />
+      <div class="gallery" data-gallery>
+        {
+          p.galleria.map((g, i) => (
+            <figure class={g.classe || undefined} style={p.hero && i === 0 ? 'display:none' : undefined}>
+              <button type="button" data-index={i} data-full={fullSrc(g.img)} data-alt={g.img.alt} aria-label={`Ingrandisci: ${g.img.alt}`}>
+                <Picture img={g.img} sizes="(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw" />
+              </button>
+              <figcaption>{g.img.alt}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+      {
+        p.hero && (
+          <button type="button" class="text-link link-underline mt-3" data-open-all>
+            Vedi tutte le {p.galleria.length} immagini
+          </button>
+        )
+      }
+    </div>
+  </div>
+</article>
+<nav class="container" aria-label="Altri progetti">
+  <div class="pager">
+    <a href={`/progetti/${prev.slug}/`} rel="prev"><small>← Progetto precedente</small><span>{prev.titolo}</span></a>
+    <a href={`/progetti/${next.slug}/`} rel="next"><small>Progetto successivo →</small><span>{next.titolo}</span></a>
+  </div>
+</nav>
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Progetti simili</p>
+        <h2 class="h2">Potrebbe interessarti anche</h2>
+      </div>
+      <a href={`/progetti/${cat.id}/`} class="text-link link-underline">{cat.nome}</a>
+    </div>
+    <div class="projects-grid">
+      {simili(p).map((s) => <ProjectCard p={s} />)}
+    </div>
+  </div>
+</section>
+<Cta />
+<Lightbox />

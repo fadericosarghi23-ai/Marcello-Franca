@@ -1,0 +1,55 @@
+---
+import { site, telHref, mailHref, indirizzoRiga } from '../data/site';
+import { nav, ctaPrincipale } from '../data/nav';
+
+interface Props {
+  transparent?: boolean;
+}
+const { transparent = false } = Astro.props;
+const attivo = (href: string) => (Astro.url.pathname.startsWith(href) ? 'page' : undefined);
+---
+<header class:list={['site-header', transparent ? 'is-transparent' : 'is-solid']} data-transparent={String(transparent)}>
+  <div class="container">
+    <a href="/" class="brand" aria-label={`${site.nome} — home`}>
+      <img
+        src={site.logo.scuro}
+        width={site.logo.w}
+        height={site.logo.h}
+        alt={site.logo.alt}
+        class="logo-dark"
+        fetchpriority={transparent ? 'auto' : 'high'}
+        decoding="async"
+      />
+      <img
+        src={site.logo.chiaro}
+        width={site.logo.w}
+        height={site.logo.h}
+        alt={site.logo.alt}
+        class="logo-light"
+        fetchpriority={transparent ? 'high' : 'auto'}
+        decoding="async"
+      />
+    </a>
+    <nav class="main-nav" aria-label="Menu principale">
+      {nav.map((v) => <a href={v.href} class="link-underline" aria-current={attivo(v.href)}>{v.label}</a>)}
+      <a href={ctaPrincipale.href} class="btn btn-primary btn-sm nav-cta">{ctaPrincipale.label}</a>
+    </nav>
+    <button type="button" class="menu-toggle" aria-label="Apri il menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+<div id="mobile-menu" class="mobile-menu" hidden>
+  <div class="container section-sm">
+    <nav aria-label="Menu principale mobile">
+      <a href="/">Home</a>
+      {nav.map((v) => <a href={v.href}>{v.label}</a>)}
+    </nav>
+    <a href={ctaPrincipale.href} class="btn btn-primary mt-4">{ctaPrincipale.label}</a>
+    <div class="contacts">
+      <p>{indirizzoRiga}</p>
+      <a href={mailHref}>{site.email}</a>
+      <a href={telHref}>{site.telefono.testo}</a>
+    </div>
+  </div>
+</div>

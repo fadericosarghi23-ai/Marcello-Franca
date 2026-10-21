@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { site } from '../data/site';
+import { pagina, titolo } from '../lib/seo';
+
+const title = titolo('Pagina non trovata');
+const description = `La pagina che cerchi non esiste o è stata spostata. Torna alla home di ${site.nome}.`;
+const ld = [pagina({ path: '/404/', titolo: title, descrizione: description, og: site.og.src })];
+---
+<Layout title={title} description={description} path="/404/" noindex ld={ld}>
+  <section class="page-head bg-sand" style="min-height: 70svh">
+    <div class="container narrow">
+      <p class="eyebrow mb-2">Errore 404</p>
+      <h1 class="h1-page">Questa pagina non esiste</h1>
+      <p class="lead mt-3">Il sito di {site.nome} è stato rinnovato e alcuni indirizzi sono cambiati. Riparti dalla home o dal portfolio.</p>
+      <div class="btn-row mt-4">
+        <a href="/" class="btn btn-primary">Vai alla home</a>
+        <a href="/progetti/" class="btn btn-outline">Progetti</a>
+        <a href="/contatti/" class="btn btn-outline">Contatti</a>
+      </div>
+    </div>
+  </section>
+</Layout>

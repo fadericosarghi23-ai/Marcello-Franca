@@ -1,0 +1,101 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import Picture from '../components/Picture.astro';
+import Icon from '../components/Icon.astro';
+import Cta from '../components/Cta.astro';
+import { site, url } from '../data/site';
+import { servizi } from '../data/servizi';
+import { perSlug, categoria } from '../lib/progetti';
+import { pagina, briciole, titolo } from '../lib/seo';
+import { serviziTestata } from '../data/sezioni';
+
+const title = titolo('[[DA COMPILARE: meta title pagina servizi, max 45 caratteri]]');
+const description =
+  '[[DA COMPILARE: meta description pagina servizi, 140-155 caratteri]]';
+const og = '/img/og/servizi.jpg';
+const heroImg = serviziTestata;
+const ld = [
+  pagina({ path: '/servizi/', titolo: title, descrizione: description, og, briciole: true }),
+  briciole('/servizi/', [
+    { nome: 'Home', path: '/' },
+    { nome: 'Servizi', path: '/servizi/' },
+  ]),
+  ...servizi.map((s) => ({
+    '@type': 'Service',
+    '@id': url(`/servizi/#${s.id}`),
+    name: s.nome,
+    serviceType: s.nome,
+    description: [s.breve, ...s.testo].join(' '),
+    provider: { '@id': `${site.dominio}/#organizzazione` },
+    areaServed: site.areeServite.filter((a) => a.tipo !== 'AdministrativeArea').map((a) => ({ '@type': a.tipo, name: a.nome })),
+    url: url(`/servizi/#${s.id}`),
+  })),
+];
+---
+<Layout title={title} description={description} path="/servizi/" og={og} transparent ld={ld}>
+  <PageHero
+    img={heroImg}
+    briciole={[{ nome: 'Servizi' }]}
+    eyebrow="Servizi"
+    lead="[[DA COMPILARE: sottotitolo pagina servizi, 1 frase breve]]"
+  >
+    [[DA COMPILARE: titolo pagina servizi, 7-8 parole]]
+  </PageHero>
+
+  <nav class="bg-sand" aria-label="Indice dei servizi">
+    <div class="container" style="padding-block: 1.25rem">
+      <ul class="filters" style="margin: 0">
+        {servizi.map((s) => <li><a href={`#${s.id}`}>{s.nome}</a></li>)}
+      </ul>
+    </div>
+  </nav>
+
+  {
+    servizi.map((s, i) => {
+      const foto = perSlug(s.foto);
+      const pari = i % 2 === 1;
+      return (
+        <section id={s.id} class:list={['section', { 'bg-sand': pari }]}>
+          <div class:list={['container split', { 'split-rev': pari }]}>
+            <div class="reveal" style={pari ? 'order: 2' : undefined}>
+              <a href={`/progetti/${foto.slug}/`} class="card">
+                <div class="media" style="aspect-ratio: 4/5">
+                  <Picture img={foto.copertina} sizes="(min-width: 1024px) 38vw, 92vw" />
+                </div>
+                <p class="loc mt-1">Nella foto: {foto.titolo}, {foto.luogo}</p>
+              </a>
+            </div>
+            <div class="reveal">
+              <Icon name={s.icona} class="service-icon" />
+              <p class="eyebrow mt-3 mb-2">Servizio {String(i + 1).padStart(2, '0')}</p>
+              <h2 class="h2">{s.nome}</h2>
+              <div class="prose mt-3">
+                {s.testo.map((t) => <p>{t}</p>)}
+              </div>
+              <ul class="checklist mt-4">
+                {s.voci.map((v) => <li>{v}</li>)}
+              </ul>
+              <div class="mt-4">
+                <p class="xs muted" style="text-transform: uppercase; letter-spacing: .16em; font-weight: 600">Progetti correlati</p>
+                <ul class="mt-1" style="display: grid; gap: .35rem">
+                  {s.correlati.map(perSlug).map((p) => (
+                    <li>
+                      <a href={`/progetti/${p.slug}/`} class="link-underline" style="color: var(--ink)">{p.titolo}</a>{' '}
+                      <span class="muted small">— {p.luogo}</span>
+                    </li>
+                  ))}
+                </ul>
+                <a href={`/progetti/${s.categoria}/`} class="text-link link-underline mt-3" style="display: inline-block">
+                  Vedi {categoria(s.categoria).nome.toLowerCase()}
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    })
+  }
+
+  <Cta />
+</Layout>

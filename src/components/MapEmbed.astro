@@ -1,0 +1,18 @@
+---
+// Mappa OpenStreetMap centrata sulle coordinate dello studio (nessun cookie)
+import { site } from '../data/site';
+
+interface Props {
+  /** Semi-ampiezza del riquadro in gradi di longitudine (latitudine = metà) */
+  delta?: number;
+}
+const { delta = 0.01 } = Astro.props;
+const { lat, lng } = site.geo;
+const bbox = [lng - delta, lat - delta / 2, lng + delta, lat + delta / 2].join('%2C');
+const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat}%2C${lng}`;
+---
+<iframe
+  title={`Mappa: ${site.nome}, ${site.indirizzo.viaBreve}, ${site.indirizzo.citta}`}
+  loading="lazy"
+  referrerpolicy="no-referrer"
+  src={src}></iframe>

@@ -1,0 +1,165 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import Picture from '../components/Picture.astro';
+import Cta from '../components/Cta.astro';
+import { site } from '../data/site';
+import { team } from '../data/team';
+import { pagina, briciole, titolo } from '../lib/seo';
+import { studioTestata, studioFoto } from '../data/sezioni';
+
+const title = titolo('[[DA COMPILARE: meta title pagina studio, max 45 caratteri]]');
+const description = '[[DA COMPILARE: meta description pagina studio, 140-155 caratteri]]';
+const og = '/img/og/studio.jpg';
+const heroImg = studioTestata;
+const foto = studioFoto;
+const conta = (ruolo: string) => team.filter((m) => m.ruolo === ruolo).length;
+const numeri = [
+  { n: team.length, label: 'Professionisti' },
+  { n: conta('Architetto'), label: 'Architetti' },
+  { n: conta('Ingegnere'), label: 'Ingegneri' },
+  { n: conta('Geometra'), label: 'Geometri' },
+];
+const approccio = [
+  {
+    titolo: '[[DA COMPILARE: punto di forza 1, 1-3 parole]]',
+    testo: '[[DA COMPILARE: punto di forza 1, 1 frase (circa 180 caratteri)]]',
+  },
+  {
+    titolo: '[[DA COMPILARE: punto di forza 2, 1-3 parole]]',
+    testo: '[[DA COMPILARE: punto di forza 2, 1 frase (circa 190 caratteri)]]',
+  },
+  {
+    titolo: '[[DA COMPILARE: punto di forza 3, 1-3 parole]]',
+    testo: '[[DA COMPILARE: punto di forza 3, 1 frase (circa 160 caratteri)]]',
+  },
+];
+const competenze = [
+  '[[DA COMPILARE: competenza 1, 4-6 parole]]',
+  '[[DA COMPILARE: competenza 2, 4-6 parole]]',
+  '[[DA COMPILARE: competenza 3, 4-6 parole]]',
+  '[[DA COMPILARE: competenza 4, 4-6 parole]]',
+  '[[DA COMPILARE: competenza 5, 4-6 parole]]',
+  '[[DA COMPILARE: competenza 6, 4-6 parole]]',
+  '[[DA COMPILARE: competenza 7, 4-6 parole]]',
+];
+const ld = [
+  pagina({ tipo: 'AboutPage', path: '/studio/', titolo: title, descrizione: description, og, briciole: true }),
+  briciole('/studio/', [
+    { nome: 'Home', path: '/' },
+    { nome: 'Lo studio', path: '/studio/' },
+  ]),
+];
+---
+<Layout title={title} description={description} path="/studio/" og={og} ogType="article" transparent ld={ld}>
+  <PageHero
+    img={heroImg}
+    briciole={[{ nome: 'Lo studio' }]}
+    eyebrow="Lo studio"
+    lead="[[DA COMPILARE: sottotitolo pagina studio, 1 frase (circa 130 caratteri)]]"
+  >
+    [[DA COMPILARE: titolo pagina studio, 3 parole]] <em style="color: var(--accent-on-dark)">[[DA COMPILARE: chiusa in corsivo, 3 parole]]</em>
+  </PageHero>
+
+  <section class="section">
+    <div class="container split">
+      <div class="reveal">
+        <p class="eyebrow mb-2">Chi siamo</p>
+        <h2 class="h2">{site.ragioneSociale}</h2>
+      </div>
+      <div class="prose lead reveal">
+        <p>
+          <strong>{site.sigla}</strong> [[DA COMPILARE: chi è lo studio e dove ha sede, 2 frasi (circa 210 caratteri)]]
+        </p>
+        <p>
+          [[DA COMPILARE: come lavora, 1 frase (circa 200 caratteri)]]
+        </p>
+        <p>
+          [[DA COMPILARE: elenco discorsivo dei servizi, 1 frase (circa 230 caratteri)]]
+        </p>
+      </div>
+    </div>
+    <div class="container mt-4">
+      <div class="stats reveal">
+        {numeri.map((n) => <div class="stat"><strong>{n.n}</strong><span>{n.label}</span></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-sand">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">Approccio</p>
+          <h2 class="h2">[[DA COMPILARE: titolo punti di forza, 3 parole]]</h2>
+        </div>
+      </div>
+      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 2.5rem">
+        {
+          approccio.map((a, i) => (
+            <div class="reveal border-top" style={`padding-top: 1.5rem; transition-delay: ${i * 80}ms`}>
+              <p class="eyebrow mb-2">{String(i + 1).padStart(2, '0')}</p>
+              <h3 class="h3 mb-2">{a.titolo}</h3>
+              <p>{a.testo}</p>
+            </div>
+          ))
+        }
+      </div>
+      <div class="grid-2 mt-4">
+        {
+          foto.map((f) => (
+            <div class="ratio-32 reveal">
+              <Picture img={f} sizes="(min-width: 1024px) 45vw, 92vw" />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="team">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">Il team</p>
+          <h2 class="h2">[[DA COMPILARE: titolo team, 4-5 parole]]</h2>
+          <p class="lead mt-2">[[DA COMPILARE: presentazione del team, 1 frase (circa 100 caratteri)]]</p>
+        </div>
+      </div>
+      <ul class="team-grid">
+        {
+          team.map((m, i) => (
+            <li class="member reveal" id={m.id} style={`transition-delay: ${(i % 4) * 60}ms`}>
+              <div class="photo">
+                <Picture img={m.foto} sizes="(min-width: 1100px) 22vw, (min-width: 768px) 30vw, 46vw" />
+              </div>
+              <h3>{m.nome}</h3>
+              <p>{m.ruolo}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section bg-sand">
+    <div class="container grid-2">
+      <div class="reveal">
+        <p class="eyebrow mb-2">La sede</p>
+        <h2 class="h2">{site.indirizzo.via}, {site.indirizzo.citta}</h2>
+        <p class="lead mt-3">Lo studio si trova a {site.indirizzo.citta}, {site.indirizzo.zona}. [[DA COMPILARE: come si viene ricevuti, 1 frase breve]]</p>
+        <div class="btn-row mt-4">
+          <a href="/contatti/" class="btn btn-primary">Contatti e orari</a>
+          <a href={site.mapsUrl} target="_blank" rel="noopener" class="btn btn-outline">Indicazioni stradali</a>
+        </div>
+      </div>
+      <div class="reveal">
+        <ul class="checklist lead">
+          {competenze.map((c) => <li>{c}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <Cta />
+</Layout>

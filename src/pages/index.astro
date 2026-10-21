@@ -1,0 +1,286 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Picture from '../components/Picture.astro';
+import Icon from '../components/Icon.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import ProcessCards from '../components/ProcessCards.astro';
+import MapEmbed from '../components/MapEmbed.astro';
+import Cta from '../components/Cta.astro';
+import { site, telHref, mailHref } from '../data/site';
+import { ctaPrincipale } from '../data/nav';
+import { servizi } from '../data/servizi';
+import { team } from '../data/team';
+import { slides, fotoStudio, numeriHome, inEvidenza, aree, faq } from '../data/home';
+import { progetti } from '../data/progetti';
+import { perSlug } from '../lib/progetti';
+import { pagina } from '../lib/seo';
+
+const title = `${site.nome} | [[DA COMPILARE: attività e città, 5-6 parole]]`;
+const description =
+  '[[DA COMPILARE: meta description della home, 140-155 caratteri]]';
+const hero = slides.map((s) => ({ ...s, p: perSlug(s.progetto) }));
+const numeri = numeriHome.map((n) => ({
+  ...n,
+  n: n.auto === 'team' ? String(team.length) : n.auto === 'progetti' ? String(progetti.length) : n.n,
+}));
+const metaFaq = Math.ceil(faq.length / 2);
+const ld = [
+  pagina({ path: '/', titolo: title, descrizione: description, og: site.og.src }),
+  {
+    '@type': 'FAQPage',
+    '@id': `${site.dominio}/#faq`,
+    mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.d, acceptedAnswer: { '@type': 'Answer', text: f.r } })),
+  },
+];
+---
+<Layout title={title} description={description} path="/" transparent ld={ld}>
+  <section class="hero" aria-label="Progetti in evidenza">
+    <div class="hero-slides" data-hero>
+      {
+        hero.map((s, i) => (
+          <figure
+            class:list={['hero-slide', { 'is-active': i === 0 }]}
+            data-title={s.p.titolo}
+            data-location={s.p.luogo}
+            data-href={`/progetti/${s.p.slug}/`}
+          >
+            <Picture img={s.img} sizes="100vw" eager={i === 0} class="full-img" />
+          </figure>
+        ))
+      }
+    </div>
+    <div class="container hero-content">
+      <p class="eyebrow-light mb-3">{site.nome} · [[DA COMPILARE: attività, 2-3 parole]] · {site.indirizzo.citta}</p>
+      <h1 class="h1">[[DA COMPILARE: headline, 3 parole]] <em>[[DA COMPILARE: chiusa in corsivo, 3 parole]]</em></h1>
+      <div class="hero-meta">
+        <div>
+          <p class="lead">
+            [[DA COMPILARE: sottotitolo dell’hero, 1 frase di circa 190 caratteri]]
+          </p>
+          <div class="btn-row">
+            <a href="/progetti/" class="btn btn-primary">Guarda i progetti</a>
+            <a href={ctaPrincipale.href} class="btn btn-outline-light">{ctaPrincipale.label}</a>
+          </div>
+        </div>
+        <div class="hero-caption" aria-live="polite">
+          <span class="label">Nella foto</span>
+          <a href={`/progetti/${hero[0].p.slug}/`} class="link-underline" data-hero-caption>{hero[0].p.titolo} · {hero[0].p.luogo}</a>
+          <div class="hero-dots" role="group" aria-label="Scegli immagine">
+            {hero.map((s, i) => <button type="button" aria-label={`Mostra ${s.p.titolo}`} aria-current={String(i === 0)} data-dot={i} />)}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split">
+      <div class="reveal">
+        <div class="ratio-45">
+          <Picture img={fotoStudio} sizes="(min-width: 1024px) 38vw, 92vw" />
+        </div>
+      </div>
+      <div class="reveal">
+        <p class="eyebrow mb-2">Lo studio</p>
+        <h2 class="h2">[[DA COMPILARE: titolo presentazione, 7-9 parole]]</h2>
+        <div class="prose mt-3 lead">
+          <p>
+            <strong>{site.sigla}</strong> [[DA COMPILARE: chi è lo studio e di cosa si occupa, 2 frasi (circa 200 caratteri)]]
+          </p>
+          <p>
+            [[DA COMPILARE: come lavora lo studio, 2 frasi (circa 230 caratteri)]]
+          </p>
+        </div>
+        <div class="stats mt-4">
+          {numeri.map((n) => <div class="stat"><strong>{n.n}</strong><span>{n.label}</span></div>)}
+        </div>
+        <a href="/studio/" class="btn btn-outline mt-4">Conosci lo studio</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-sand">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow mb-2">Servizi</p>
+          <h2 class="h2">[[DA COMPILARE: titolo sezione servizi, 6 parole]]</h2>
+          <p class="lead mt-2">[[DA COMPILARE: sottotitolo servizi, 1 frase breve]]</p>
+        </div>
+        <a href="/servizi/" class="btn btn-outline">Scopri tutti i servizi</a>
+      </div>
+      <ul class="services services-3 reveal">
+        {
+          servizi.map((s) => (
+            <li class="service">
+              <Icon name={s.icona} class="icon" />
+              <h3 class="h4"><a href={`/servizi/#${s.id}`} class="link-underline">{s.nome}</a></h3>
+              <p>{s.breve}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">Metodo</p>
+          <h2 class="h2">[[DA COMPILARE: titolo metodo, 2 parole]]</h2>
+        </div>
+        <a href="/metodo/" class="text-link link-underline">Il metodo completo</a>
+      </div>
+      <ProcessCards />
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">Progetti</p>
+          <h2 class="h2">[[DA COMPILARE: titolo sezione progetti, 7-9 parole]]</h2>
+        </div>
+        <a href="/progetti/" class="text-link link-underline">Tutti i {progetti.length} progetti</a>
+      </div>
+      <div class="projects-grid">
+        {inEvidenza.map((slug) => <ProjectCard p={perSlug(slug)} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-ink">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">Dove lavoriamo</p>
+          <h2 class="h2">[[DA COMPILARE: titolo zone di lavoro, 7-8 parole]]</h2>
+          <p class="lead mt-2" style="color: rgb(255 255 255 / 0.72)">
+            [[DA COMPILARE: dove ha sede e dove lavora lo studio, 1 frase (circa 120 caratteri)]]
+          </p>
+        </div>
+      </div>
+      <ul class="areas reveal">
+        {
+          aree.map((a) => (
+            <li class="area">
+              <span>{a.conteggio}</span>
+              <strong>{a.nome}</strong>
+              <p>{a.luoghi}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">Il team</p>
+          <h2 class="h2">[[DA COMPILARE: titolo team, 4 parole]]</h2>
+          <p class="lead mt-2">{team.length} [[DA COMPILARE: chi sono e come lavorano, 9-10 parole]]</p>
+        </div>
+        <a href="/studio/#team" class="text-link link-underline">Conosci il team</a>
+      </div>
+      <div class="team-strip reveal">
+        {
+          team.slice(0, 7).map((m) => (
+            <a href={`/studio/#${m.id}`} title={`${m.nome}, ${m.ruolo}`}>
+              <Picture img={{ ...m.foto, alt: `${m.nome}, ${m.ruolo.toLowerCase()} di ${site.nome}` }} sizes="(min-width: 768px) 14vw, 33vw" />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-sand">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow mb-2">FAQ</p>
+          <h2 class="h2">Domande frequenti</h2>
+          <p class="lead mt-2">Non trovi la risposta che cerchi? Scrivici o chiamaci.</p>
+        </div>
+        <a href="/contatti/" class="btn btn-outline">Contattaci</a>
+      </div>
+      <div class="faq-cols reveal">
+        <div class="faq">
+          {faq.slice(0, metaFaq).map((f, i) => <details open={i === 0}><summary>{f.d}</summary><p>{f.r}</p></details>)}
+        </div>
+        <div class="faq">
+          {faq.slice(metaFaq).map((f) => <details><summary>{f.d}</summary><p>{f.r}</p></details>)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container grid-2">
+      <div class="reveal">
+        <p class="eyebrow mb-2">Dove siamo</p>
+        <h2 class="h2">{site.nome} a {site.indirizzo.citta}</h2>
+        <p class="lead mt-3">Lo studio si trova in {site.indirizzo.via}, {site.indirizzo.zona}. Riceviamo su appuntamento.</p>
+        <div class="contact-cards mt-4">
+          <div class="contact-card">
+            <h3>Indirizzo</h3>
+            <p>{site.indirizzo.via}<br />{site.indirizzo.cap} {site.indirizzo.citta} ({site.indirizzo.provincia})</p>
+            <a href={site.mapsUrl} target="_blank" rel="noopener" class="text-link link-underline mt-1" style="display:inline-block">Apri in Google Maps</a>
+          </div>
+          <div class="contact-card">
+            <h3>Contatti</h3>
+            <p><a href={telHref}>{site.telefono.testo}</a></p>
+            <p><a href={mailHref}>{site.email}</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="map reveal">
+        <MapEmbed delta={0.012} />
+      </div>
+    </div>
+  </section>
+
+  <Cta />
+</Layout>
+
+<script>
+  // Slideshow dell'hero: cambio ogni 6 s, puntini cliccabili, didascalia aggiornata
+  const root = document.querySelector('[data-hero]');
+  if (root) {
+    const slides = [...root.querySelectorAll<HTMLElement>('.hero-slide')];
+    const dots = [...document.querySelectorAll('[data-dot]')];
+    const caption = document.querySelector<HTMLAnchorElement>('[data-hero-caption]');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let current = 0;
+    let timer: number | undefined;
+    const show = (i: number) => {
+      slides[current].classList.remove('is-active');
+      dots[current].setAttribute('aria-current', 'false');
+      current = (i + slides.length) % slides.length;
+      const s = slides[current];
+      s.querySelectorAll('img').forEach((img) => img.setAttribute('loading', 'eager'));
+      s.classList.add('is-active');
+      dots[current].setAttribute('aria-current', 'true');
+      if (caption) {
+        caption.textContent = `${s.dataset.title} · ${s.dataset.location}`;
+        caption.href = s.dataset.href || '#';
+      }
+    };
+    const start = () => {
+      if (!reduced) timer = window.setInterval(() => show(current + 1), 6000);
+    };
+    dots.forEach((d, i) =>
+      d.addEventListener('click', () => {
+        window.clearInterval(timer);
+        show(i);
+        start();
+      }),
+    );
+    window.addEventListener('load', () => slides.forEach((s) => s.querySelectorAll('img').forEach((img) => img.setAttribute('loading', 'eager'))));
+    start();
+  }
+</script>
