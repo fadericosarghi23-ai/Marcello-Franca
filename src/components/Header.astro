@@ -1,12 +1,21 @@
 ---
 import { site, telHref, mailHref, indirizzoRiga } from '../data/site';
 import { nav, ctaPrincipale } from '../data/nav';
+import { lingua, percorsoIn, traduttore } from '../lib/lingua';
 
 interface Props {
   transparent?: boolean;
 }
 const { transparent = false } = Astro.props;
-const attivo = (href: string) => (Astro.url.pathname.startsWith(href) ? 'page' : undefined);
+const L = lingua(Astro.url);
+const tr = traduttore(L);
+const percorsoIt = percorsoIn(Astro.url.pathname, 'it');
+const attivo = (href: string) => (percorsoIt.startsWith(href) ? 'page' : undefined);
+const voce = (v: { label: string; labelEn: string }) => (L === 'en' ? v.labelEn : v.label);
+// Selettore di lingua: la stessa pagina nell'altra lingua (data-lingua: il middleware non lo riscrive)
+// La 404 è unica (Netlify serve /404.html ovunque): il selettore porta alla home dell'altra lingua
+const qui = Astro.url.pathname.startsWith('/404') ? '/' : Astro.url.pathname;
+const altra = L === 'en' ? { href: percorsoIn(qui, 'it'), sigla: 'IT', nome: 'Italiano', lang: 'it' } : { href: percorsoIn(qui, 'en'), sigla: 'EN', nome: 'English', lang: 'en' };
 ---
 <header class:list={['site-header', transparent ? 'is-transparent' : 'is-solid']} data-transparent={String(transparent)}>
   <div class="container">
@@ -15,7 +24,7 @@ const attivo = (href: string) => (Astro.url.pathname.startsWith(href) ? 'page' :
         src={site.logo.scuro}
         width={site.logo.w}
         height={site.logo.h}
-        alt={site.logo.alt}
+        alt={L === 'en' ? site.logo.altEn : site.logo.alt}
         class="logo-dark"
         fetchpriority={transparent ? 'auto' : 'high'}
         decoding="async"
@@ -24,28 +33,30 @@ const attivo = (href: string) => (Astro.url.pathname.startsWith(href) ? 'page' :
         src={site.logo.chiaro}
         width={site.logo.w}
         height={site.logo.h}
-        alt={site.logo.alt}
+        alt={L === 'en' ? site.logo.altEn : site.logo.alt}
         class="logo-light"
         fetchpriority={transparent ? 'high' : 'auto'}
         decoding="async"
       />
     </a>
-    <nav class="main-nav" aria-label="Menu principale">
-      {nav.map((v) => <a href={v.href} class="link-underline" aria-current={attivo(v.href)}>{v.label}</a>)}
-      <a href={ctaPrincipale.href} class="btn btn-primary btn-sm nav-cta">{ctaPrincipale.label}</a>
+    <nav class="main-nav" aria-label={tr('Menu principale', 'Main menu')}>
+      {nav.map((v) => <a href={v.href} class="link-underline" aria-current={attivo(v.href)}>{voce(v)}</a>)}
+      <a href={altra.href} class="lingua link-underline" data-lingua hreflang={altra.lang} lang={altra.lang} aria-label={altra.nome}>{altra.sigla}</a>
+      <a href={ctaPrincipale.href} class="btn btn-primary btn-sm nav-cta">{voce(ctaPrincipale)}</a>
     </nav>
-    <button type="button" class="menu-toggle" aria-label="Apri il menu" aria-expanded="false" aria-controls="mobile-menu">
+    <button type="button" class="menu-toggle" aria-label={tr('Apri il menu', 'Open the menu')} data-chiudi={tr('Chiudi il menu', 'Close the menu')} aria-expanded="false" aria-controls="mobile-menu">
       <span></span><span></span><span></span>
     </button>
   </div>
 </header>
 <div id="mobile-menu" class="mobile-menu" hidden>
   <div class="container section-sm">
-    <nav aria-label="Menu principale mobile">
+    <nav aria-label={tr('Menu principale mobile', 'Mobile main menu')}>
       <a href="/">Home</a>
-      {nav.map((v) => <a href={v.href}>{v.label}</a>)}
+      {nav.map((v) => <a href={v.href}>{voce(v)}</a>)}
+      <a href={altra.href} data-lingua hreflang={altra.lang} lang={altra.lang}>{altra.nome}</a>
     </nav>
-    <a href={ctaPrincipale.href} class="btn btn-primary mt-4">{ctaPrincipale.label}</a>
+    <a href={ctaPrincipale.href} class="btn btn-primary mt-4">{voce(ctaPrincipale)}</a>
     <div class="contacts">
       <p>{indirizzoRiga}</p>
       <a href={mailHref}>{site.email}</a>

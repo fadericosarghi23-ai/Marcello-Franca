@@ -2,24 +2,30 @@
 import Marchio from './Marchio.astro';
 import { site, telHref } from '../data/site';
 import { ctaPrincipale } from '../data/nav';
+import { lingua, traduttore } from '../lib/lingua';
 
 interface Props {
   titolo?: string;
 }
-const { titolo = 'Hai un progetto in mente?' } = Astro.props;
+const L = lingua(Astro.url);
+const tr = traduttore(L);
+const { titolo = tr('Hai un progetto in mente?', 'Have a project in mind?') } = Astro.props;
 ---
 <section class="cta section-sm">
   <Marchio class="gmark" />
   <div class="container">
     <div class="narrow reveal">
-      <p class="eyebrow-light mb-2">Contatti</p>
+      <p class="eyebrow-light mb-2">{tr('Contatti', 'Contact')}</p>
       <h2 class="h2">{titolo}</h2>
       <p class="lead mt-2" style="color: rgb(255 255 255 / 0.88)">
-        Raccontami lo spazio, l’edificio o l’evento su cui vuoi intervenire: insieme cercheremo la soluzione più adatta, dall’idea alla realizzazione.
+        {tr(
+          'Raccontami lo spazio, l’edificio o l’evento su cui vuoi intervenire: insieme cercheremo la soluzione più adatta, dall’idea alla realizzazione.',
+          'Tell me about the space, building or event you have in mind: together we will find the best solution, from the first idea to completion.',
+        )}
       </p>
       <div class="btn-row mt-4">
-        <a href={ctaPrincipale.href} class="btn btn-primary">{ctaPrincipale.label}</a>
-        <a href={telHref} class="btn btn-outline-light">Chiama lo {site.telefono.testo}</a>
+        <a href={ctaPrincipale.href} class="btn btn-primary">{L === 'en' ? ctaPrincipale.labelEn : ctaPrincipale.label}</a>
+        <a href={telHref} class="btn btn-outline-light">{tr('Chiama lo', 'Call')} {L === 'en' ? site.telefono.testoEn : site.telefono.testo}</a>
       </div>
     </div>
   </div>

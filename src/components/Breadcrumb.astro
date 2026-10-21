@@ -3,10 +3,12 @@ interface Props {
   /** Voci intermedie (Home è implicita); l'ultima è la pagina corrente */
   voci: { nome: string; path?: string }[];
 }
+import { lingua } from '../lib/lingua';
 const { voci } = Astro.props;
+const en = lingua(Astro.url) === 'en';
 const corrente = voci[voci.length - 1];
 ---
-<nav aria-label="Percorso">
+<nav aria-label={en ? 'Breadcrumb' : 'Percorso'}>
   <ol class="breadcrumb">
     <li><a href="/">Home</a></li>
     {voci.slice(0, -1).map((v) => <li><a href={v.path}>{v.nome}</a></li>)}

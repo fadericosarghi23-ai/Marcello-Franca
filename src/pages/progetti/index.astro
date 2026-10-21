@@ -7,31 +7,42 @@ import { site, url } from '../../data/site';
 import { progetti } from '../../data/progetti';
 import { portfolio } from '../../lib/progetti';
 import { pagina, briciole, titolo } from '../../lib/seo';
+import { lingua, loc, percorsoIn, traduttore } from '../../lib/lingua';
 
 const n = progetti.length;
-const title = titolo('Progetti di architettura, allestimento e colore');
-const description = `Portfolio di ${site.nome}: ${n} progetti di architettura, interni, allestimenti, design, urbanistica e Piani del Colore a Pesaro e non solo.`;
+const L = lingua(Astro.url);
+const tr = traduttore(L);
+const pre = L === 'en' ? '/en' : '';
+const path = percorsoIn('/progetti/', L);
+const title = titolo(tr('Progetti di architettura, allestimento e colore', 'Architecture, exhibition and colour projects'));
+const description = tr(
+  `Portfolio di ${site.nome}: ${n} progetti di architettura, interni, allestimenti, design, urbanistica e Piani del Colore a Pesaro e non solo.`,
+  `Portfolio of ${site.nome}: ${n} projects in architecture, interiors, exhibition design, industrial design, urban planning and Colour Plans, in Pesaro and beyond.`,
+);
 const ld = [
-  pagina({ tipo: 'CollectionPage', path: '/progetti/', titolo: title, descrizione: description, og: site.og.src, briciole: true }),
-  briciole('/progetti/', [
-    { nome: 'Home', path: '/' },
-    { nome: 'Progetti', path: '/progetti/' },
+  pagina({ tipo: 'CollectionPage', path, titolo: title, descrizione: description, og: site.og.src, briciole: true }),
+  briciole(path, [
+    { nome: 'Home', path: percorsoIn('/', L) },
+    { nome: tr('Progetti', 'Projects'), path },
   ]),
   {
     '@type': 'ItemList',
-    name: 'Progetti',
+    name: tr('Progetti', 'Projects'),
     numberOfItems: n,
-    itemListElement: portfolio.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: url(`/progetti/${p.slug}/`), name: p.titolo })),
+    itemListElement: portfolio.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: url(`${pre}/progetti/${p.slug}/`), name: loc(p, L).titolo })),
   },
 ];
 ---
 <Layout title={title} description={description} path="/progetti/" ld={ld}>
   <PageHead
-    briciole={[{ nome: 'Progetti' }]}
+    briciole={[{ nome: tr('Progetti', 'Projects') }]}
     eyebrow="Portfolio"
-    lead={`${n} progetti di Marcello Franca: musei e allestimenti, edifici pubblici e residenze, piazze e quartieri, Piani del Colore, interni e design, a Pesaro, nelle Marche e all’estero.`}
+    lead={tr(
+      `${n} progetti di Marcello Franca: musei e allestimenti, edifici pubblici e residenze, piazze e quartieri, Piani del Colore, interni e design, a Pesaro, nelle Marche e all’estero.`,
+      `${n} projects by Marcello Franca: museums and exhibitions, public buildings and homes, squares and neighbourhoods, Colour Plans, interiors and design, in Pesaro, the Marche and abroad.`,
+    )}
   >
-    Progetti
+    {tr('Progetti', 'Projects')}
   </PageHead>
   <Portfolio lista={portfolio} />
   <Cta />

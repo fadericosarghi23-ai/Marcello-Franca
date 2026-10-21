@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Marcello Franca — il nuovo sito: correzioni e miglioramenti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  /* Palette del sito (src/styles/global.css) */
+  :root {
+    --ink: #222222; --ink-2: #333333; --text: #333333; --grey: #6b6b6b;
+    --on-dark: #bbbbbb; --grey-light: #eeeeee; --sand: #f7f7f7; --line: #2222221a; --white: #ffffff;
+    --ok: #2f6b45; --ko: #9b2c2c;
+  }
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--white); color: var(--text); font: 400 9.6pt/1.5 Inter, system-ui, sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .pagina { width: 210mm; height: 297mm; padding: 16mm 17mm 14mm; position: relative; overflow: hidden; page-break-after: always; }
+  .pagina:last-child { page-break-after: auto; }
+  .piede { position: absolute; left: 17mm; right: 17mm; bottom: 9mm; display: flex; justify-content: space-between; font-size: 7.5pt; color: var(--grey); border-top: 1px solid var(--line); padding-top: 2.5mm; letter-spacing: .04em; }
+  h1, h2, h3 { font-family: Newsreader, Georgia, serif; font-weight: 400; color: var(--ink); margin: 0; letter-spacing: -.01em; }
+  h1 { font-size: 34pt; line-height: 1.05; }
+  h1 em, h2 em { font-style: italic; color: var(--grey); }
+  h2 { font-size: 19pt; line-height: 1.15; margin-bottom: 4mm; }
+  h3 { font-size: 12pt; margin-bottom: 1.5mm; }
+  p { margin: 0 0 2.5mm; }
+  .eyebrow { font: 600 7.2pt/1 Inter, sans-serif; letter-spacing: .18em; text-transform: uppercase; color: var(--grey); margin-bottom: 3mm; }
+  .lead { font-size: 11pt; line-height: 1.5; color: var(--ink-2); }
+  .scuro { background: var(--ink); color: #ffffffd9; margin: -16mm -17mm 9mm; padding: 16mm 17mm 12mm; }
+  .scuro h1 { color: #fff; }
+  .scuro h1 em { color: var(--on-dark); }
+  .scuro .eyebrow { color: var(--on-dark); }
+  .scuro .lead { color: #ffffffcc; }
+  .marchio { font: 500 10pt/1 Newsreader, serif; color: #fff; letter-spacing: .02em; margin-bottom: 14mm; }
+  .marchio small { display: block; font: 600 6.5pt/1 Inter, sans-serif; letter-spacing: .3em; color: var(--on-dark); margin-top: 1.5mm; }
+  .numeri { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 9mm; border-top: 1px solid #ffffff26; }
+  .numeri div { padding: 4mm 3mm 0 0; }
+  .numeri strong { display: block; font: 400 22pt/1 Newsreader, serif; color: #fff; }
+  .numeri span { font-size: 7.5pt; color: var(--on-dark); letter-spacing: .03em; }
+  .palette { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin: 4mm 0 6mm; }
+  .sw { border: 1px solid var(--line); }
+  .sw i { display: block; height: 15mm; }
+  .sw b { display: block; font: 600 8pt/1.2 Inter, sans-serif; color: var(--ink); padding: 2mm 2.5mm 0; }
+  .sw code { display: block; font: 500 8pt/1.2 ui-monospace, Consolas, monospace; color: var(--grey); padding: 1mm 2.5mm 0; }
+  .sw small { display: block; font-size: 7.2pt; color: var(--grey); padding: 1mm 2.5mm 2.5mm; line-height: 1.35; }
+  .font { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+  .font div { background: var(--sand); padding: 4mm 5mm; }
+  .font .serif { font: 400 21pt/1.1 Newsreader, serif; color: var(--ink); }
+  .font .sans { font: 500 15pt/1.2 Inter, sans-serif; color: var(--ink); }
+  .font small { display: block; margin-top: 2mm; font-size: 7.5pt; color: var(--grey); }
+  table { width: 100%; border-collapse: collapse; }
+  .errori td { vertical-align: top; padding: 2.4mm 2.5mm 2.4mm 0; border-top: 1px solid var(--line); font-size: 8.6pt; line-height: 1.42; }
+  .errori tr:last-child td { border-bottom: 1px solid var(--line); }
+  .errori th { text-align: left; font: 600 7pt/1 Inter, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: var(--grey); padding: 0 2.5mm 2mm 0; }
+  .errori td:first-child { width: 6mm; font: 400 11pt/1.1 Newsreader, serif; color: var(--grey); }
+  .errori td.prima { width: 44%; color: var(--ink-2); }
+  .errori td.prima b { color: var(--ko); font-weight: 600; }
+  .errori td.ora b { color: var(--ok); font-weight: 600; }
+  .tag { display: inline-block; font: 600 6.5pt/1 Inter, sans-serif; letter-spacing: .1em; text-transform: uppercase; padding: 1.2mm 1.8mm; margin-right: 1.5mm; border-radius: 1mm; vertical-align: 1px; }
+  .tag.sito { background: var(--grey-light); color: var(--ink); }
+  .tag.qui { background: var(--ink); color: #fff; }
+  .griglia { display: grid; grid-template-columns: 1fr 1fr; gap: 4.5mm 7mm; }
+  .blocco { border-top: 2px solid var(--ink); padding-top: 2.5mm; }
+  .blocco ul { margin: 0; padding-left: 3.6mm; }
+  .blocco li { margin-bottom: 1mm; font-size: 8.6pt; line-height: 1.42; }
+  .blocco li::marker { color: var(--grey); }
+  .nota { background: var(--sand); padding: 4mm 5mm; margin-top: 5mm; font-size: 8.6pt; }
+  .todo { counter-reset: t; list-style: none; margin: 0; padding: 0; }
+  .todo li { counter-increment: t; position: relative; padding: 2.6mm 0 2.6mm 10mm; border-top: 1px solid var(--line); font-size: 8.8pt; line-height: 1.45; }
+  .todo li::before { content: counter(t, decimal-leading-zero); position: absolute; left: 0; top: 2.2mm; font: 400 12pt/1.2 Newsreader, serif; color: var(--grey); }
+  .todo li b { color: var(--ink); }
+  .chi { display: inline-block; font: 600 6.5pt/1 Inter, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--grey); border: 1px solid var(--line); padding: 1mm 1.6mm; margin-left: 1.5mm; vertical-align: 1px; }
+  .due { display: grid; grid-template-columns: 1.15fr 1fr; gap: 8mm; }
+  code.p { font: 500 8pt ui-monospace, Consolas, monospace; background: var(--grey-light); padding: .3mm 1.2mm; }
+</style>
+</head>
+<body>
+
+<!-- PAGINA 1 — copertina, numeri, palette -->
+<section class="pagina">
+  <div class="scuro">
+    <div class="marchio">Marcello Franca<small>ARCHITETTO · PESARO</small></div>
+    <p class="eyebrow">Il nuovo sito · resoconto del lavoro · ottobre 2026</p>
+    <h1>Correzioni e miglioramenti <em>rispetto al sito attuale</em></h1>
+    <p class="lead" style="margin-top:5mm; max-width: 150mm">Il sito di marcellofranca.it è stato ricostruito da zero: stessi contenuti dell’architetto, riscritti e ordinati, in italiano e in inglese, con un design sobrio e veloce pensato per chi arriva col passaparola.</p>
+    <div class="numeri">
+      <div><strong>91</strong><span>pagine generate</span></div>
+      <div><strong>2</strong><span>lingue, IT ed EN</span></div>
+      <div><strong>23</strong><span>progetti con testi integrali</span></div>
+      <div><strong>39</strong><span>vecchi indirizzi reindirizzati</span></div>
+      <div><strong>0</strong><span>link interni rotti</span></div>
+    </div>
+  </div>
+
+  <p class="eyebrow">Palette del sito</p>
+  <h2>Antracite, grigi e bianco: <em>la palette del sito attuale, resa sistema</em></h2>
+  <p>Tutti i colori stanno in un unico punto del codice (<code class="p">src/styles/global.css</code>): cambiarne uno lo aggiorna in ogni pagina.</p>
+  <div class="palette">
+    <div class="sw"><i style="background:#222222"></i><b>Antracite</b><code>#222222</code><small>Titoli, pulsanti, sezioni scure (metodo, aree, CTA)</small></div>
+    <div class="sw"><i style="background:#333333"></i><b>Testo</b><code>#333333</code><small>Testo corrente e paragrafi</small></div>
+    <div class="sw"><i style="background:#6b6b6b"></i><b>Grigio</b><code>#6b6b6b</code><small>Didascalie, date, etichette (contrasto AA su bianco)</small></div>
+    <div class="sw"><i style="background:#bbbbbb"></i><b>Grigio su scuro</b><code>#bbbbbb</code><small>Accenti e corsivi sulle sezioni antracite</small></div>
+    <div class="sw"><i style="background:#eeeeee"></i><b>Grigio chiaro</b><code>#eeeeee</code><small>Fondi delle immagini in caricamento, tag</small></div>
+    <div class="sw"><i style="background:#f7f7f7"></i><b>Sabbia</b><code>#f7f7f7</code><small>Fondo alternato delle sezioni</small></div>
+    <div class="sw"><i style="background:#ffffff"></i><b>Bianco</b><code>#ffffff</code><small>Fondo principale</small></div>
+    <div class="sw"><i style="background:#2222221a"></i><b>Linea</b><code>#222222 · 10%</code><small>Filetti e separatori</small></div>
+  </div>
+  <div class="font">
+    <div><span class="serif">Newsreader <em>corsivo</em></span><small>Titoli · carattere editoriale, ospitato sul sito (nessun servizio esterno)</small></div>
+    <div><span class="sans">Inter — testo e interfaccia</span><small>Paragrafi, menu, pulsanti · leggibile anche a corpo piccolo</small></div>
+  </div>
+  <div class="piede"><span>Marcello Franca · nuovo sito</span><span>1 / 4</span></div>
+</section>
+
+<!-- PAGINA 2 — errori corretti -->
+<section class="pagina">
+  <p class="eyebrow">Errori corretti</p>
+  <h2>Cosa non andava, <em>e come è stato risolto</em></h2>
+  <p style="margin-bottom:4mm"><span class="tag sito">Sito attuale</span> problemi del sito WordPress di oggi · <span class="tag qui">Revisione</span> problemi trovati e corretti nei controlli finali del nuovo sito.</p>
+  <table class="errori">
+    <tr><th></th><th>Prima</th><th>Ora</th></tr>
+    <tr><td>01</td><td class="prima"><span class="tag sito">Sito attuale</span>Italiano e inglese <b>mescolati nella stessa pagina</b> (paragrafi “ENG_” seguiti da “ITA_”), titoli metà e metà come “Colored space_ Spazio colorato”.</td><td class="ora"><b>Due versioni separate</b>, italiano e inglese, con selettore IT/EN su ogni pagina che porta alla stessa pagina nell’altra lingua.</td></tr>
+    <tr><td>02</td><td class="prima"><span class="tag sito">Sito attuale</span>Inglese <b>tradotto in automatico</b>: “Entrance of Honor”, “Bocciodromo city of Pesaro”, “Morbidelli Motorsport Museum”, frasi poco comprensibili nei testi lunghi.</td><td class="ora">Inglese <b>riscritto a mano</b> per i 23 progetti, servizi, metodo, FAQ, studio e lo scritto “Philosophy”.</td></tr>
+    <tr><td>03</td><td class="prima"><span class="tag sito">Sito attuale</span>Indirizzi <b>che non descrivono la pagina</b>: <code class="p">/aspetto/</code> per l’Ingresso della Fiera, <code class="p">/una-sezione-della-homepage/</code> per il Motomuseo, <code class="p">/2020/02/02/1051/</code> per Filosofia.</td><td class="ora">Indirizzi <b>leggibili</b> (<code class="p">/progetti/motomuseo-morbidelli/</code>) e <b>39 reindirizzamenti permanenti</b> dai vecchi: chi arriva da Google o da un vecchio link trova la pagina giusta.</td></tr>
+    <tr><td>04</td><td class="prima"><span class="tag sito">Sito attuale</span><b>Privacy policy e cookie policy assenti</b>, obbligatorie per legge (GDPR) su un sito con modulo di contatto.</td><td class="ora"><b>Informative scritte</b> in italiano e inglese, collegate dal piè di pagina e dal modulo (consenso obbligatorio).</td></tr>
+    <tr><td>05</td><td class="prima"><span class="tag sito">Sito attuale</span><b>Due video YouTube non più disponibili</b> (rimossi da YouTube); il video dello stand FOM era un file da scaricare.</td><td class="ora">Video morti rimossi; l’intervista per Blog d’O si carica <b>solo al clic</b> (YouTube “privacy avanzata”); stand convertito in MP4 da 1,3 MB.</td></tr>
+    <tr><td>06</td><td class="prima"><span class="tag sito">Sito attuale</span>Menu con <b>14 voci principali e 26 sottovoci</b>, difficile da usare soprattutto dal telefono.</td><td class="ora">Menu di <b>6 voci</b>; i progetti si filtrano per categoria in una sola pagina.</td></tr>
+    <tr><td>07</td><td class="prima"><span class="tag qui">Revisione</span>Animazione delle card dei servizi che <b>a volte non partiva</b>.</td><td class="ora">Si anima il contenuto delle card, non la griglia: <b>parte sempre</b>.</td></tr>
+    <tr><td>08</td><td class="prima"><span class="tag qui">Revisione</span>Elenco degli Scritti con <b>foto solo su alcune voci</b> e righe vuote.</td><td class="ora">Elenco uniforme, <b>senza foto</b>; le immagini restano dentro gli articoli.</td></tr>
+    <tr><td>09</td><td class="prima"><span class="tag qui">Revisione</span>Modulo contatti <b>disattivato</b>; immagini in cache per un anno (una foto sostituita sarebbe rimasta vecchia).</td><td class="ora">Modulo <b>attivo su Netlify Forms</b> con filtro antispam, anche in inglese; cache immagini a una settimana.</td></tr>
+    <tr><td>10</td><td class="prima"><span class="tag qui">Revisione</span>Pagina 404: il tasto EN puntava a <b>una pagina inesistente</b>.</td><td class="ora">Dalla 404 il selettore porta alla home dell’altra lingua; 0 link rotti su 12.500 controllati.</td></tr>
+  </table>
+  <div class="piede"><span>Marcello Franca · nuovo sito</span><span>2 / 4</span></div>
+</section>
+
+<!-- PAGINA 3 — miglioramenti -->
+<section class="pagina">
+  <p class="eyebrow">Miglioramenti</p>
+  <h2>Cosa c’è in più, <em>senza appesantire</em></h2>
+  <p style="max-width:160mm; margin-bottom:6mm">Il brief chiedeva un sito sobrio per un professionista noto col passaparola, da gestire senza che l’architetto debba occuparsene. Le scelte vanno in questa direzione: poche animazioni, contenuti in primo piano, tutto modificabile da noi in pochi minuti.</p>
+  <div class="griglia">
+    <div class="blocco"><h3>Contenuti completi</h3><ul>
+      <li>23 progetti in 6 categorie, con testo integrale, scheda (intervento, luogo, progettisti) e galleria.</li>
+      <li>5 Scritti, il maestro Michele Provinciali, arte e fotografia.</li>
+      <li>41 committenti, cronologia di 11 tappe dal 1983, copertine delle pubblicazioni, resoconto 2011 in PDF.</li>
+      <li>9 domande frequenti con risposte chiare.</li>
+    </ul></div>
+    <div class="blocco"><h3>Design e animazioni sobrie</h3><ul>
+      <li>Palette e caratteri ripresi dal sito attuale, resi coerenti.</li>
+      <li>Intro breve con il marchio all’apertura.</li>
+      <li>Metodo come percorso: una linea curva che si disegna allo scroll, una fase per schermata.</li>
+      <li>Comparse leggere e numeri che contano; tutto si spegne se il dispositivo chiede “meno movimento”.</li>
+    </ul></div>
+    <div class="blocco"><h3>Velocità</h3><ul>
+      <li>Sito statico: nessun database o plugin da aggiornare, niente da “bucare”.</li>
+      <li>Immagini in AVIF e WebP in più dimensioni, caricate solo quando servono.</li>
+      <li>Caratteri sul sito stesso, nessuna richiesta a servizi esterni.</li>
+    </ul></div>
+    <div class="blocco"><h3>Trovabilità (SEO e AI)</h3><ul>
+      <li>Titolo e descrizione scritti per ogni pagina, in entrambe le lingue.</li>
+      <li>Collegamento IT/EN dichiarato a Google (hreflang): ogni pubblico vede la sua lingua.</li>
+      <li>Robots aperto ai motori AI e <code class="p">llms.txt</code> con la sintesi dello studio.</li>
+    </ul></div>
+    <div class="blocco"><h3>Privacy</h3><ul>
+      <li>Nessun cookie di profilazione e nessun banner di consenso necessario.</li>
+      <li>Mappa OpenStreetMap senza tracciamento; YouTube solo al clic.</li>
+      <li>Intestazioni di sicurezza attive su tutte le pagine.</li>
+    </ul></div>
+    <div class="blocco"><h3>Accessibilità e gestione</h3><ul>
+      <li>Testi alternativi delle foto in italiano e inglese, salto al contenuto, menu da tastiera.</li>
+      <li>Contenuti separati dal codice (un file per progetti, servizi, FAQ…): aggiornare un testo non tocca il design.</li>
+      <li>Pubblicazione automatica: ogni modifica salvata su GitHub va online da sola con Netlify.</li>
+    </ul></div>
+  </div>
+  <div class="piede"><span>Marcello Franca · nuovo sito</span><span>3 / 4</span></div>
+</section>
+
+<!-- PAGINA 4 — da completare -->
+<section class="pagina">
+  <p class="eyebrow">Da completare</p>
+  <h2>Prima e dopo la messa online</h2>
+  <div class="due">
+    <div>
+      <ol class="todo">
+        <li><b>Attivare i moduli su Netlify</b>: Forms → abilitare il rilevamento, poi impostare l’email che riceve le richieste.<span class="chi">Noi</span></li>
+        <li><b>Collegare il dominio</b> www.marcellofranca.it: indirizzi canonici, sitemap e dati per Google puntano già lì. Finché il sito resta su netlify.app, Google continua a vedere il vecchio sito.<span class="chi">Noi + cliente</span></li>
+        <li><b>Dati dello studio</b> non pubblicati oggi: indirizzo (via e CAP), PEC, numero di iscrizione all’Albo, un ritratto dell’architetto.<span class="chi">Cliente</span></li>
+        <li><b>Altre foto</b>: sul sito attuale ci sono circa 550 immagini in più nelle gallerie. Sono già scaricate e possono essere aggiunte ai progetti.<span class="chi">Noi</span></li>
+        <li><b>Quattro Scritti solo in italiano</b>: come sul sito attuale, l’autore non li ha mai tradotti. In inglese sono segnalati con un avviso; la traduzione si può aggiungere quando vuole.<span class="chi">Cliente</span></li>
+        <li><b>Dopo il cambio di dominio</b>: segnalare la sitemap in Google Search Console e controllare che i vecchi indirizzi portino alle pagine nuove.<span class="chi">Noi</span></li>
+      </ol>
+    </div>
+    <div>
+      <div class="nota" style="margin-top:0">
+        <h3>Controlli eseguiti</h3>
+        <ul style="margin:2mm 0 0; padding-left:3.6mm">
+          <li>Compilazione del sito senza errori: 91 pagine.</li>
+          <li>12.525 collegamenti interni (pagine, immagini, file) verificati: nessuno mancante.</li>
+          <li>Ancore dei reindirizzamenti verificate (es. <code class="p">/studio/#maestro</code>).</li>
+          <li>Dati strutturati validi su tutte le pagine.</li>
+          <li>Pagine inglesi senza testo italiano residuo, a parte i 4 Scritti segnalati.</li>
+          <li>Modulo pronto per Netlify sia in italiano sia in inglese.</li>
+          <li>Prova a video di home, progetti, metodo e Scritti.</li>
+        </ul>
+      </div>
+      <div class="nota" style="background: var(--ink); color: #ffffffd9">
+        <h3 style="color:#fff">Gestione</h3>
+        <p style="margin:2mm 0 0">Il codice è su GitHub e Netlify lo pubblica a ogni modifica. Per un nuovo progetto bastano le foto e un testo: lo inseriamo noi, senza che l’architetto debba imparare un pannello di gestione.</p>
+      </div>
+    </div>
+  </div>
+  <div class="piede"><span>Marcello Franca · nuovo sito</span><span>4 / 4</span></div>
+</section>
+
+</body>
+</html>

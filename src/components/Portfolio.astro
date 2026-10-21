@@ -3,21 +3,24 @@
 import ProjectCard from './ProjectCard.astro';
 import { categorie, progetti, type Progetto, type CategoriaId } from '../data/progetti';
 import { diCategoria } from '../lib/progetti';
+import { lingua, loc, traduttore } from '../lib/lingua';
 
 interface Props {
   lista: Progetto[];
   attiva?: CategoriaId;
 }
 const { lista, attiva } = Astro.props;
+const L = lingua(Astro.url);
+const tr = traduttore(L);
 ---
 <section class="section-sm">
   <div class="container">
-    <nav class="filters" aria-label="Filtra per categoria">
-      <a href="/progetti/" aria-current={attiva ? undefined : 'page'}>Tutti <sup>{progetti.length}</sup></a>
+    <nav class="filters" aria-label={tr('Filtra per categoria', 'Filter by category')}>
+      <a href="/progetti/" aria-current={attiva ? undefined : 'page'}>{tr('Tutti', 'All')} <sup>{progetti.length}</sup></a>
       {
         categorie.map((c) => (
           <a href={`/progetti/${c.id}/`} aria-current={attiva === c.id ? 'page' : undefined}>
-            {c.nome} <sup>{diCategoria(c.id).length}</sup>
+            {loc(c, L).nome} <sup>{diCategoria(c.id).length}</sup>
           </a>
         ))
       }

@@ -12,17 +12,23 @@ import { team } from '../data/team';
 import { pagina, briciole, titolo } from '../lib/seo';
 import { studioTestata, studioFoto, numeriStudio } from '../data/sezioni';
 import { progetti } from '../data/progetti';
+import { lingua, ruoloEn, traduttore } from '../lib/lingua';
+import { sitoIn } from '../data/site';
 
-const title = titolo('Marcello Franca, architetto a Pesaro dal 1985');
-const description = 'Marcello Franca, architetto a Pesaro dal 1985: la formazione al Politecnico di Torino, il colore come filo conduttore, i committenti pubblici e privati.';
+const L = lingua(Astro.url);
+const tr = traduttore(L);
+const en = L === 'en';
+const s = sitoIn(L);
+const title = titolo(tr("Marcello Franca, architetto a Pesaro dal 1985", "Marcello Franca, architect in Pesaro since 1985"));
+const description = tr("Marcello Franca, architetto a Pesaro dal 1985: la formazione al Politecnico di Torino, il colore come filo conduttore, i committenti pubblici e privati.", "Marcello Franca, architect in Pesaro since 1985: training at the Politecnico di Torino, colour as a common thread, public and private clients.");
 const og = '/img/og/studio.jpg';
 const heroImg = studioTestata;
 const foto = studioFoto;
 const numeri = numeriStudio.map((x) => ({
-  label: x.label,
+  label: (en && x.labelEn) || x.label,
   n: x.auto === 'team' ? team.length : x.auto === 'progetti' ? progetti.length : x.auto ? team.filter((m) => m.ruolo === x.auto).length : x.n,
 }));
-const approccio = [
+const approccioIt = [
   {
     titolo: 'Il colore è luce',
     testo: 'Indagare la realtà attraverso i colori è un modo per comprendere le cose: luce, colore e materia guidano ogni progetto, dall’edificio al Piano del Colore.',
@@ -36,7 +42,13 @@ const approccio = [
     testo: 'Dalla scala urbana all’oggetto, coordino gruppi di lavoro eterogenei su progetti complessi, seguendo le idee dallo sviluppo alla realizzazione.',
   },
 ];
-const competenze = [
+const approccioEn = [
+  { titolo: 'Colour is light', testo: 'Investigating reality through colour is a way of understanding things: light, colour and material guide every project, from a building to a Colour Plan.' },
+  { titolo: 'The memory of places', testo: 'With respect, but in a critical spirit, for the history, tradition and culture of each place, I reinterpret the project in a modern style tied to the thread of memory.' },
+  { titolo: 'A comprehensive vision', testo: 'From the urban scale to the single object, I coordinate diverse teams on complex projects, following ideas from development to construction.' },
+];
+const approccio = en ? approccioEn : approccioIt;
+const competenzeIt = [
   'Progettazione architettonica e direzione lavori',
   'Architettura d’interni e arredo su misura',
   'Allestimenti museali, fieristici e teatrali',
@@ -45,31 +57,49 @@ const competenze = [
   'Disegno industriale e segnaletica',
   'Pubblicazioni e incontri sul colore',
 ];
+const competenze = en
+  ? [
+      'Architectural design and site supervision',
+      'Interior architecture and bespoke furniture',
+      'Museum, trade fair and theatre design',
+      'Colour Plans and colour restyling',
+      'Urban space, green areas and planning',
+      'Industrial design and signage',
+      'Publications and talks on colour',
+    ]
+  : competenzeIt;
 const ld = [
   pagina({ tipo: 'AboutPage', path: '/studio/', titolo: title, descrizione: description, og, briciole: true }),
   briciole('/studio/', [
     { nome: 'Home', path: '/' },
-    { nome: 'Lo studio', path: '/studio/' },
+    { nome: tr("Lo studio", "The studio"), path: '/studio/' },
   ]),
 ];
 ---
 <Layout title={title} description={description} path="/studio/" og={og} ogType="article" transparent ld={ld}>
   <PageHero
     img={heroImg}
-    briciole={[{ nome: 'Lo studio' }]}
-    eyebrow="Lo studio"
-    lead="Architetto a Pesaro dal 1985: architettura, interni, allestimenti, design e Piani del Colore, con una visione progettuale globale."
+    briciole={[{ nome: tr("Lo studio", "The studio") }]}
+    eyebrow={tr("Lo studio", "The studio")}
+    lead={tr("Architetto a Pesaro dal 1985: architettura, interni, allestimenti, design e Piani del Colore, con una visione progettuale globale.", "Architect in Pesaro since 1985: architecture, interiors, exhibition design, industrial design and Colour Plans, with a comprehensive approach.")}
   >
-    Architettura e colore, <em style="color: var(--accent-on-dark)">sul filo della memoria</em>
+    {tr("Architettura e colore, ", "Architecture and colour, ")}<em style="color: var(--accent-on-dark)">{tr("sul filo della memoria", "along the thread of memory")}</em>
   </PageHero>
 
   <section class="section">
     <div class="container split">
       <div class="reveal">
-        <p class="eyebrow mb-2">Chi sono</p>
-        <h2 class="h2">{site.ragioneSociale}</h2>
+        <p class="eyebrow mb-2">{tr("Chi sono", "About me")}</p>
+        <h2 class="h2">{tr("Studio di Architettura Marcello Franca", "Marcello Franca, Architecture Studio")}</h2>
       </div>
       <div class="prose lead reveal">
+        {en ? (
+          <Fragment>
+            <p><strong>{site.sigla}</strong> was born in Pesaro in 1959, where he has lived and worked as an architect since 1985, after graduating from the Politecnico di Torino with a thesis on colour in the seaside urban landscape.</p>
+            <p>He worked on productions for the Rossini Opera Festival, conceived the Morbidelli Motorcycle Museum and the “Morbidelli Corner” at the Barber Vintage Motorsports Museum in Birmingham (Alabama), and oversaw the Colour Plan for the historic centre of Pesaro.</p>
+            <p>His meeting with Michele Provinciali, friend and mentor, shaped his sensitivity to the world of things and to the relationship between light, colour and material; since 2002 he has taken part in many art exhibitions with the “La Ginestra” Association.</p>
+          </Fragment>
+        ) : (<Fragment>
         <p>
           <strong>{site.sigla}</strong> è nato nel 1959 a Pesaro, dove vive e lavora come architetto dal 1985, dopo la laurea al Politecnico di Torino con una tesi sul colore nel paesaggio urbano lungo il mare.
         </p>
@@ -79,6 +109,7 @@ const ld = [
         <p>
           Dall’incontro con Michele Provinciali, amico e maestro, è nata la sensibilità per il mondo delle cose e per la relazione tra luce, colore e materia; dal 2002 partecipa con l’Associazione “La Ginestra” a numerose mostre d’arte.
         </p>
+        </Fragment>)}
       </div>
     </div>
     <div class="container mt-4">
@@ -92,8 +123,8 @@ const ld = [
     <div class="container">
       <div class="section-head reveal">
         <div>
-          <p class="eyebrow">Approccio</p>
-          <h2 class="h2">Il mio approccio</h2>
+          <p class="eyebrow">{tr("Approccio", "Approach")}</p>
+          <h2 class="h2">{tr("Il mio approccio", "My approach")}</h2>
         </div>
       </div>
       <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 2.5rem">
@@ -123,9 +154,9 @@ const ld = [
     <div class="container">
       <div class="section-head reveal">
         <div>
-          <p class="eyebrow">L’architetto</p>
-          <h2 class="h2">Marcello Franca, architetto</h2>
-          <p class="lead mt-2">Coordino di volta in volta gruppi di lavoro con architetti, ingegneri, geometri e studi di design.</p>
+          <p class="eyebrow">{tr("L’architetto", "The architect")}</p>
+          <h2 class="h2">{tr("Marcello Franca, architetto", "Marcello Franca, architect")}</h2>
+          <p class="lead mt-2">{tr("Coordino di volta in volta gruppi di lavoro con architetti, ingegneri, geometri e studi di design.", "For each project I coordinate teams of architects, engineers, surveyors and design studios.")}</p>
         </div>
       </div>
       <ul class="team-grid">
@@ -136,7 +167,7 @@ const ld = [
                 <Picture img={m.foto} sizes="(min-width: 1100px) 22vw, (min-width: 768px) 30vw, 46vw" />
               </div>
               <h3>{m.nome}</h3>
-              <p>{m.ruolo}</p>
+              <p>{en ? (ruoloEn[m.ruolo] ?? m.ruolo) : m.ruolo}</p>
             </li>
           ))
         }
@@ -152,10 +183,10 @@ const ld = [
         </div>
       </div>
       <div class="reveal">
-        <p class="eyebrow mb-2">Il maestro</p>
+        <p class="eyebrow mb-2">{tr("Il maestro", "The mentor")}</p>
         <h2 class="h2">Michele Provinciali</h2>
         <div class="prose mt-3 lead">
-          {maestro.testo.map((t) => <p>{t}</p>)}
+          {((en && maestro.testoEn) || maestro.testo).map((t) => <p>{t}</p>)}
         </div>
       </div>
     </div>
@@ -165,9 +196,9 @@ const ld = [
     <div class="container">
       <div class="section-head reveal">
         <div>
-          <p class="eyebrow">Percorso</p>
-          <h2 class="h2">Pubblicazioni, mostre e riconoscimenti</h2>
-          <p class="lead mt-2">Quarant’anni di progetti, scritti e mostre attorno a un filo conduttore: il colore nell’ambiente costruito.</p>
+          <p class="eyebrow">{tr("Percorso", "Career")}</p>
+          <h2 class="h2">{tr("Pubblicazioni, mostre e riconoscimenti", "Publications, exhibitions and recognition")}</h2>
+          <p class="lead mt-2">{tr("Quarant’anni di progetti, scritti e mostre attorno a un filo conduttore: il colore nell’ambiente costruito.", "Forty years of projects, writings and exhibitions around one common thread: colour in the built environment.")}</p>
         </div>
       </div>
       <Traguardi voci={traguardi} copertine={copertine} />
@@ -181,9 +212,9 @@ const ld = [
     <div class="container">
       <div class="section-head reveal">
         <div>
-          <p class="eyebrow">Committenti</p>
-          <h2 class="h2">Hanno lavorato con me</h2>
-          <p class="lead mt-2">Progettista e consulente per enti pubblici, istituzioni culturali, associazioni e aziende.</p>
+          <p class="eyebrow">{tr("Committenti", "Clients")}</p>
+          <h2 class="h2">{tr("Hanno lavorato con me", "Who I have worked with")}</h2>
+          <p class="lead mt-2">{tr("Progettista e consulente per enti pubblici, istituzioni culturali, associazioni e aziende.", "Designer and consultant for public bodies, cultural institutions, associations and companies.")}</p>
         </div>
       </div>
       <Committenti gruppi={committenti} />
@@ -198,11 +229,11 @@ const ld = [
         </div>
       </div>
       <div class="reveal">
-        <p class="eyebrow mb-2">Arte e fotografia</p>
-        <h2 class="h2">Lo sguardo del fotografo</h2>
-        <p class="lead mt-3">{arte.testo}</p>
+        <p class="eyebrow mb-2">{tr("Arte e fotografia", "Art and photography")}</p>
+        <h2 class="h2">{tr("Lo sguardo del fotografo", "The photographer’s eye")}</h2>
+        <p class="lead mt-3">{(en && arte.testoEn) || arte.testo}</p>
         <ul class="checklist mt-4">
-          {arte.mostre.map((m) => <li>{m}</li>)}
+          {((en && arte.mostreEn) || arte.mostre).map((m) => <li>{m}</li>)}
         </ul>
       </div>
     </div>
@@ -211,12 +242,12 @@ const ld = [
   <section class="section bg-sand">
     <div class="container grid-2">
       <div class="reveal">
-        <p class="eyebrow mb-2">La sede</p>
+        <p class="eyebrow mb-2">{tr("La sede", "The studio")}</p>
         <h2 class="h2">{[site.indirizzo.via, site.indirizzo.citta].filter(Boolean).join(', ')}</h2>
-        <p class="lead mt-3">Lo studio si trova a {[site.indirizzo.citta, site.indirizzo.zona].filter(Boolean).join(', ')}. {site.ricevimento}</p>
+        <p class="lead mt-3">{tr("Lo studio si trova a", "The studio is in")} {[site.indirizzo.citta, site.indirizzo.zona].filter(Boolean).join(', ')}. {s.ricevimento}</p>
         <div class="btn-row mt-4">
-          <a href="/contatti/" class="btn btn-primary">Contatti e orari</a>
-          <a href={site.mapsUrl} target="_blank" rel="noopener" class="btn btn-outline">Indicazioni stradali</a>
+          <a href="/contatti/" class="btn btn-primary">{tr("Contatti", "Contact")}</a>
+          <a href={site.mapsUrl} target="_blank" rel="noopener" class="btn btn-outline">{tr("Indicazioni stradali", "Directions")}</a>
         </div>
       </div>
       <div class="reveal">

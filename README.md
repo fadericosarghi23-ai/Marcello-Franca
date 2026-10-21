@@ -54,3 +54,15 @@ dell'hero (6 s, puntini), lightbox con tastiera e swipe, menu mobile. CSS: trans
    og: `media/og/<nome>.jpg` (altrimenti per i progetti usa la copertina).
 6. Modulo contatti: `site.form.attivo = true` (Netlify Forms) solo quando il sito è collegato.
 7. Controllo: `npm run slots` deve dare 0, `npm run build` senza errori.
+
+## Versione inglese
+
+- Le pagine inglesi stanno sotto `/en/` (`src/pages/en/`): sono le stesse pagine italiane, la lingua si ricava dall'indirizzo (`src/lib/lingua.ts`).
+- I testi inglesi stanno accanto a quelli italiani nei file di `src/data/` (campi `en`, `labelEn`, `altEn`…); i testi fissi dei componenti usano `tr('italiano', 'English')`.
+- `src/middleware.ts` aggiunge il prefisso `/en` ai link interni e agli indirizzi del JSON-LD delle pagine inglesi.
+- Privacy e cookie policy inglesi sono pagine a parte (`src/pages/en/privacy-policy.astro`, `cookie-policy.astro`).
+
+## Netlify
+
+- `public/_redirects`: 301 dai vecchi indirizzi WordPress alle pagine nuove.
+- Modulo contatti: Netlify Forms (`site.form` in `src/data/site.ts`); in Netlify va abilitato il rilevamento dei form e impostata l'email di notifica.

@@ -1,15 +1,16 @@
 ---
 import Icon from './Icon.astro';
+const en = Astro.url.pathname.startsWith('/en/');
 ---
-<div class="lightbox" hidden role="dialog" aria-modal="true" aria-label="Galleria immagini" data-lightbox>
+<div class="lightbox" hidden role="dialog" aria-modal="true" aria-label={en ? 'Image gallery' : 'Galleria immagini'} data-lightbox>
   <div class="lb-top">
     <span data-lb-count></span>
-    <button type="button" data-lb-close aria-label="Chiudi galleria"><Icon name="chiudi" /></button>
+    <button type="button" data-lb-close aria-label={en ? 'Close gallery' : 'Chiudi galleria'}><Icon name="chiudi" /></button>
   </div>
   <div class="lb-stage">
-    <button type="button" class="lb-nav lb-prev" data-lb-prev aria-label="Immagine precedente"><Icon name="indietro" /></button>
+    <button type="button" class="lb-nav lb-prev" data-lb-prev aria-label={en ? 'Previous image' : 'Immagine precedente'}><Icon name="indietro" /></button>
     <img data-lb-img alt="" />
-    <button type="button" class="lb-nav lb-next" data-lb-next aria-label="Immagine successiva"><Icon name="avanti" /></button>
+    <button type="button" class="lb-nav lb-next" data-lb-next aria-label={en ? 'Next image' : 'Immagine successiva'}><Icon name="avanti" /></button>
   </div>
   <p class="lb-cap" data-lb-cap></p>
 </div>

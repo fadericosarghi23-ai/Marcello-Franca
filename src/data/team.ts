@@ -17,7 +17,7 @@ export const team: Membro[] = [
     nome: 'Marcello Franca',
     ruolo: 'Architetto',
     titolo: 'arch.',
-    foto: { base: '/img/team/marcello-franca', w: 200, h: 200, alt: 'Marcello Franca, architetto a Pesaro', serie: 'team' },
+    foto: { base: '/img/team/marcello-franca', w: 200, h: 200, alt: 'Marcello Franca, architetto a Pesaro', altEn: 'Marcello Franca, architect in Pesaro', serie: 'team' },
   },
 ];
 

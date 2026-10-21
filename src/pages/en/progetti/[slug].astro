@@ -1,0 +1,6 @@
+---
+import Pagina, { getStaticPaths as percorsi } from '../../progetti/[slug].astro';
+
+export const getStaticPaths = percorsi;
+---
+<Pagina {...Astro.props} />

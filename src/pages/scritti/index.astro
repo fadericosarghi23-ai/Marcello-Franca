@@ -1,56 +1,59 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PageHead from '../../components/PageHead.astro';
-import Picture from '../../components/Picture.astro';
 import Cta from '../../components/Cta.astro';
 import { site, url } from '../../data/site';
 import { scritti } from '../../data/scritti';
 import { pagina, briciole, titolo } from '../../lib/seo';
 import { dataEstesa } from '../../lib/date';
+import { lingua, loc, percorsoIn, traduttore } from '../../lib/lingua';
 
-const title = titolo('Scritti: la città, il colore, il maestro');
-const description = `Gli scritti di ${site.nome}: l’immagine della città, il colore e la memoria dei luoghi, i ricordi di Michele Provinciali.`;
+const L = lingua(Astro.url);
+const tr = traduttore(L);
+const pre = L === 'en' ? '/en' : '';
+const path = percorsoIn('/scritti/', L);
+const lista = scritti.map((s) => loc(s, L));
+const title = titolo(tr("Scritti: la città, il colore, il maestro", "Writings: the city, colour, the mentor"));
+const description = tr(
+  `Gli scritti di ${site.nome}: l’immagine della città, il colore e la memoria dei luoghi, i ricordi di Michele Provinciali.`,
+  `Writings by ${site.nome}: the image of the city, colour and the memory of places, memories of Michele Provinciali.`,
+);
 const ld = [
-  pagina({ tipo: 'CollectionPage', path: '/scritti/', titolo: title, descrizione: description, og: site.og.src, briciole: true }),
-  briciole('/scritti/', [
-    { nome: 'Home', path: '/' },
-    { nome: 'Scritti', path: '/scritti/' },
+  pagina({ tipo: 'CollectionPage', path, titolo: title, descrizione: description, og: site.og.src, briciole: true }),
+  briciole(path, [
+    { nome: 'Home', path: percorsoIn('/', L) },
+    { nome: tr("Scritti", "Writings"), path },
   ]),
   {
     '@type': 'ItemList',
-    name: 'Scritti',
-    numberOfItems: scritti.length,
-    itemListElement: scritti.map((s, i) => ({ '@type': 'ListItem', position: i + 1, url: url(`/scritti/${s.slug}/`), name: s.titolo })),
+    name: tr("Scritti", "Writings"),
+    numberOfItems: lista.length,
+    itemListElement: lista.map((s, i) => ({ '@type': 'ListItem', position: i + 1, url: url(`${pre}/scritti/${s.slug}/`), name: s.titolo })),
   },
 ];
 ---
-<Layout title={title} description={description} path="/scritti/" ld={ld}>
+<Layout title={title} description={description} path={path} ld={ld}>
   <PageHead
-    briciole={[{ nome: 'Scritti' }]}
-    eyebrow="Scritti"
-    lead="Riflessioni sull’immagine della città e sul colore, e i ricordi del maestro Michele Provinciali."
+    briciole={[{ nome: tr("Scritti", "Writings") }]}
+    eyebrow={tr("Scritti", "Writings")}
+    lead={tr("Riflessioni sull’immagine della città e sul colore, e i ricordi del maestro Michele Provinciali.", "Reflections on the image of the city and on colour, and memories of my mentor Michele Provinciali.")}
   >
-    Scritti
+    {tr("Scritti", "Writings")}
   </PageHead>
 
   <section class="section">
     <div class="container">
       <ol class="elenco">
         {
-          scritti.map((s) => (
+          lista.map((s) => (
             <li class="reveal">
               <a href={`/scritti/${s.slug}/`} class="voce">
                 <div class="testo">
-                  <p class="data">{dataEstesa(s.data)}</p>
+                  <p class="data">{dataEstesa(s.data, L)}{L === 'en' && !s.en?.blocchi && ' · in Italian'}</p>
                   <h2 class="h3">{s.titolo}</h2>
                   <p class="estratto">{s.estratto}</p>
-                  <span class="text-link link-underline">Leggi</span>
+                  <span class="text-link link-underline">{tr("Leggi", "Read")}</span>
                 </div>
-                {s.img && (
-                  <div class="immagine">
-                    <Picture img={s.img} sizes="(min-width: 900px) 28vw, 92vw" />
-                  </div>
-                )}
               </a>
             </li>
           ))
@@ -81,13 +84,6 @@ const ld = [
     color: inherit;
     text-decoration: none;
   }
-  @media (width >= 900px) {
-    .voce {
-      grid-template-columns: 1fr 22rem;
-      gap: 4rem;
-      align-items: center;
-    }
-  }
   .data {
     color: var(--grey);
     font-size: 0.78rem;
@@ -110,17 +106,5 @@ const ld = [
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-  }
-  .immagine {
-    aspect-ratio: 4/3;
-    overflow: hidden;
-    background: var(--grey-light);
-  }
-  .immagine :global(picture),
-  .immagine :global(img) {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
   }
 </style>

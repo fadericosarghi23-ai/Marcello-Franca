@@ -2,12 +2,15 @@
 // Pubblicazioni, mostre e riconoscimenti: cronologia (anno a sinistra) con eventuali copertine accanto.
 import Picture from './Picture.astro';
 import type { Img } from '../lib/img';
+import { lingua, loc } from '../lib/lingua';
 
 interface Props {
-  voci: { anno: string; titolo: string; testo: string; link?: { testo: string; href: string } }[];
+  voci: { anno: string; titolo: string; testo: string; link?: { testo: string; testoEn?: string; href: string }; en?: { titolo: string; testo: string } }[];
   copertine?: Img[];
 }
-const { voci, copertine = [] } = Astro.props;
+const { voci: vociIt, copertine = [] } = Astro.props;
+const L = lingua(Astro.url);
+const voci = vociIt.map((v) => loc(v, L));
 ---
 <div class:list={['traguardi', { 'con-copertine': copertine.length }]}>
   {
@@ -29,7 +32,7 @@ const { voci, copertine = [] } = Astro.props;
           <div>
             <h3>{v.titolo}</h3>
             <p>{v.testo}</p>
-            {v.link && <a href={v.link.href} class="text-link link-underline" download>{v.link.testo}</a>}
+            {v.link && <a href={v.link.href} class="text-link link-underline" download>{(L === 'en' && v.link.testoEn) || v.link.testo}</a>}
           </div>
         </li>
       ))

@@ -10,6 +10,7 @@ export const GET: APIRoute = () => {
     'User-agent: *',
     'Allow: /',
     'Disallow: /grazie/',
+    'Disallow: /en/grazie/',
     '',
     '# Motori generativi e assistenti AI: accesso consentito (GEO)',
     ...botAI.flatMap((b) => [`User-agent: ${b}`, 'Allow: /', '']),

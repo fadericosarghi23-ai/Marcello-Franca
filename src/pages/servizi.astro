@@ -5,45 +5,48 @@ import Picture from '../components/Picture.astro';
 import Icon from '../components/Icon.astro';
 import Cta from '../components/Cta.astro';
 import { site, url } from '../data/site';
-import { servizi } from '../data/servizi';
+import { servizi as serviziIt } from '../data/servizi';
 import { perSlug, categoria } from '../lib/progetti';
 import { pagina, briciole, titolo } from '../lib/seo';
 import { serviziTestata } from '../data/sezioni';
+import { lingua, loc, percorsoIn, traduttore } from '../lib/lingua';
 
-const title = titolo('Servizi: architettura, interni, allestimenti e colore');
-const description =
-  'Architettura, interni, allestimenti museali e fieristici, Piani del Colore, urbanistica e design: i servizi dello Studio Marcello Franca a Pesaro.';
+const L = lingua(Astro.url);
+const tr = traduttore(L);
+const servizi = serviziIt.map((s) => loc(s, L));
+const title = titolo(tr("Servizi: architettura, interni, allestimenti e colore", "Services: architecture, interiors, exhibitions and colour"));
+const description = tr("Architettura, interni, allestimenti museali e fieristici, Piani del Colore, urbanistica e design: i servizi dello Studio Marcello Franca a Pesaro.", "Architecture, interiors, museum and trade fair design, Colour Plans, urban planning and industrial design: the services of the Marcello Franca studio in Pesaro.");
 const og = '/img/og/servizi.jpg';
 const heroImg = serviziTestata;
 const ld = [
   pagina({ path: '/servizi/', titolo: title, descrizione: description, og, briciole: true }),
   briciole('/servizi/', [
     { nome: 'Home', path: '/' },
-    { nome: 'Servizi', path: '/servizi/' },
+    { nome: tr("Servizi", "Services"), path: '/servizi/' },
   ]),
   ...servizi.map((s) => ({
     '@type': 'Service',
-    '@id': url(`/servizi/#${s.id}`),
+    '@id': url(`${percorsoIn('/servizi/', L)}#${s.id}`),
     name: s.nome,
     serviceType: s.nome,
     description: [s.breve, ...s.testo].join(' '),
     provider: { '@id': `${site.dominio}/#organizzazione` },
     areaServed: site.areeServite.filter((a) => a.tipo !== 'AdministrativeArea').map((a) => ({ '@type': a.tipo, name: a.nome })),
-    url: url(`/servizi/#${s.id}`),
+    url: url(`${percorsoIn('/servizi/', L)}#${s.id}`),
   })),
 ];
 ---
 <Layout title={title} description={description} path="/servizi/" og={og} transparent ld={ld}>
   <PageHero
     img={heroImg}
-    briciole={[{ nome: 'Servizi' }]}
-    eyebrow="Servizi"
-    lead="Dalla scala urbana al dettaglio d’arredo, per enti pubblici, aziende e privati."
+    briciole={[{ nome: tr("Servizi", "Services") }]}
+    eyebrow={tr("Servizi", "Services")}
+    lead={tr("Dalla scala urbana al dettaglio d’arredo, per enti pubblici, aziende e privati.", "From the urban scale to the furniture detail, for public bodies, companies and private clients.")}
   >
-    Architettura, interni, allestimenti e colore in un solo studio
+    {tr("Architettura, interni, allestimenti e colore in un solo studio", "Architecture, interiors, exhibitions and colour in one studio")}
   </PageHero>
 
-  <nav class="bg-sand" aria-label="Indice dei servizi">
+  <nav class="bg-sand" aria-label={tr('Indice dei servizi', 'Services index')}>
     <div class="container" style="padding-block: 1.25rem">
       <ul class="filters" style="margin: 0">
         {servizi.map((s) => <li><a href={`#${s.id}`}>{s.nome}</a></li>)}
@@ -53,7 +56,7 @@ const ld = [
 
   {
     servizi.map((s, i) => {
-      const foto = perSlug(s.foto);
+      const foto = loc(perSlug(s.foto), L);
       const pari = i % 2 === 1;
       return (
         <section id={s.id} class:list={['section', { 'bg-sand': pari }]}>
@@ -63,12 +66,12 @@ const ld = [
                 <div class="media" style="aspect-ratio: 4/5">
                   <Picture img={foto.copertina} sizes="(min-width: 1024px) 38vw, 92vw" />
                 </div>
-                <p class="loc mt-1">Nella foto: {foto.titolo}, {foto.luogo}</p>
+                <p class="loc mt-1">{tr("Nella foto", "Pictured")}: {foto.titolo}, {foto.luogo}</p>
               </a>
             </div>
             <div class="reveal">
               <Icon name={s.icona} class="service-icon" />
-              <p class="eyebrow mt-3 mb-2">Servizio {String(i + 1).padStart(2, '0')}</p>
+              <p class="eyebrow mt-3 mb-2">{tr("Servizio", "Service")} {String(i + 1).padStart(2, '0')}</p>
               <h2 class="h2">{s.nome}</h2>
               <div class="prose mt-3">
                 {s.testo.map((t) => <p>{t}</p>)}
@@ -77,9 +80,9 @@ const ld = [
                 {s.voci.map((v) => <li>{v}</li>)}
               </ul>
               <div class="mt-4">
-                <p class="xs muted" style="text-transform: uppercase; letter-spacing: .16em; font-weight: 600">Progetti correlati</p>
+                <p class="xs muted" style="text-transform: uppercase; letter-spacing: .16em; font-weight: 600">{tr("Progetti correlati", "Related projects")}</p>
                 <ul class="mt-1" style="display: grid; gap: .35rem">
-                  {s.correlati.map(perSlug).map((p) => (
+                  {s.correlati.map(perSlug).map((p) => loc(p, L)).map((p) => (
                     <li>
                       <a href={`/progetti/${p.slug}/`} class="link-underline" style="color: var(--ink)">{p.titolo}</a>{' '}
                       <span class="muted small">— {p.luogo}</span>
@@ -87,7 +90,7 @@ const ld = [
                   ))}
                 </ul>
                 <a href={`/progetti/${s.categoria}/`} class="text-link link-underline mt-3" style="display: inline-block">
-                  Vedi {categoria(s.categoria).nome.toLowerCase()}
+                  {tr("Vedi", "See")} {loc(categoria(s.categoria), L).nome.toLowerCase()}
                 </a>
               </div>
             </div>

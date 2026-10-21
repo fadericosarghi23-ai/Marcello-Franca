@@ -8,48 +8,52 @@ import { categorie } from '../data/progetti';
 import { diCategoria } from '../lib/progetti';
 import { scritti } from '../data/scritti';
 import { pagina, briciole, titolo } from '../lib/seo';
+import { lingua, loc, percorsoIn, traduttore } from '../lib/lingua';
 
-const title = titolo('Mappa del sito');
-const description = `Tutte le pagine del sito di ${site.nome}: studio, servizi, metodo, progetti e contatti.`;
-const path = '/mappa-del-sito/';
+const L = lingua(Astro.url);
+const tr = traduttore(L);
+const pre = L === 'en' ? '/en' : '';
+const title = titolo(tr("Mappa del sito", "Sitemap"));
+const description = tr(`Tutte le pagine del sito di ${site.nome}: studio, servizi, metodo, progetti e contatti.`, `All the pages of the ${site.nome} website: studio, services, method, projects and contact.`);
+const path = percorsoIn('/mappa-del-sito/', L);
 const ld = [
   pagina({ path, titolo: title, descrizione: description, og: site.og.src, briciole: true }),
   briciole(path, [
-    { nome: 'Home', path: '/' },
-    { nome: 'Mappa del sito', path },
+    { nome: 'Home', path: percorsoIn('/', L) },
+    { nome: tr("Mappa del sito", "Sitemap"), path },
   ]),
 ];
 ---
 <Layout title={title} description={description} path={path} ld={ld}>
-  <PageHead briciole={[{ nome: 'Mappa del sito' }]}>Mappa del sito</PageHead>
+  <PageHead briciole={[{ nome: tr("Mappa del sito", "Sitemap") }]}>{tr("Mappa del sito", "Sitemap")}</PageHead>
   <section class="section">
     <div class="container grid-2 prose">
       <div>
-        <h2>Pagine</h2>
+        <h2>{tr("Pagine", "Pages")}</h2>
         <ul>
           <li><a href="/">Home</a></li>
-          {nav.map((v) => <li><a href={v.href}>{v.label}</a></li>)}
+          {nav.map((v) => <li><a href={v.href}>{L === 'en' ? v.labelEn : v.label}</a></li>)}
           <li><a href="/privacy-policy/">Privacy policy</a></li>
           <li><a href="/cookie-policy/">Cookie policy</a></li>
         </ul>
-        <h2>Scritti</h2>
+        <h2>{tr("Scritti", "Writings")}</h2>
         <ul>
-          {scritti.map((s) => <li><a href={`/scritti/${s.slug}/`}>{s.titolo}</a></li>)}
+          {scritti.map((s) => <li><a href={`/scritti/${s.slug}/`}>{loc(s, L).titolo}</a></li>)}
         </ul>
-        <h2>Servizi</h2>
+        <h2>{tr("Servizi", "Services")}</h2>
         <ul>
-          {servizi.map((s) => <li><a href={`/servizi/#${s.id}`}>{s.nome}</a></li>)}
+          {servizi.map((s) => <li><a href={`/servizi/#${s.id}`}>{loc(s, L).nome}</a></li>)}
         </ul>
       </div>
       <div>
         {
           categorie.map((c) => (
             <Fragment>
-              <h2><a href={`/progetti/${c.id}/`} style="text-decoration: none; color: inherit">{c.nome}</a></h2>
+              <h2><a href={`/progetti/${c.id}/`} style="text-decoration: none; color: inherit">{loc(c, L).nome}</a></h2>
               <ul>
                 {diCategoria(c.id).map((p) => (
                   <li>
-                    <a href={`/progetti/${p.slug}/`}>{p.titolo}</a> <span class="muted small">— {p.luogo}</span>
+                    <a href={`/progetti/${p.slug}/`}>{loc(p, L).titolo}</a> <span class="muted small">— {loc(p, L).luogo}</span>
                   </li>
                 ))}
               </ul>

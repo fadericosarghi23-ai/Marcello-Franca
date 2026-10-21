@@ -7,10 +7,11 @@ import ProjectDetail from '../../components/ProjectDetail.astro';
 import Cta from '../../components/Cta.astro';
 import { site, url } from '../../data/site';
 import { progetti, categorie, type Progetto, type Categoria } from '../../data/progetti';
-import { diCategoria, nomiCategorie, testoPiano } from '../../lib/progetti';
+import { diCategoria, testoPiano } from '../../lib/progetti';
 import { membro } from '../../data/team';
 import { pagina, briciole, titolo, tronca, ogPath } from '../../lib/seo';
 import { fallbackSrc } from '../../lib/img';
+import { lingua, loc, percorsoIn, traduttore } from '../../lib/lingua';
 
 export function getStaticPaths() {
   return [
@@ -19,8 +20,13 @@ export function getStaticPaths() {
   ];
 }
 
-const { categoria, progetto } = Astro.props as { categoria?: Categoria; progetto?: Progetto };
-const path = `/progetti/${Astro.params.slug}/`;
+const L = lingua(Astro.url);
+const tr = traduttore(L);
+const props = Astro.props as { categoria?: Categoria; progetto?: Progetto };
+const categoria = props.categoria && loc(props.categoria, L);
+const progetto = props.progetto;
+const path = percorsoIn(`/progetti/${Astro.params.slug}/`, L);
+const pre = L === 'en' ? '/en' : '';
 
 let title: string, description: string, og: string, ogAlt: string | undefined, ld: object[];
 const lista = categoria ? diCategoria(categoria.id) : [];
@@ -33,30 +39,30 @@ if (categoria) {
     pagina({ tipo: 'CollectionPage', path, titolo: title, descrizione: description, og, briciole: true }),
     briciole(path, [
       { nome: 'Home', path: '/' },
-      { nome: 'Progetti', path: '/progetti/' },
+      { nome: tr('Progetti', 'Projects'), path: `${pre}/progetti/` },
       { nome: categoria.nome, path },
     ]),
     {
       '@type': 'ItemList',
       name: categoria.nome,
       numberOfItems: lista.length,
-      itemListElement: lista.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: url(`/progetti/${p.slug}/`), name: p.titolo })),
+      itemListElement: lista.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: url(`${pre}/progetti/${p.slug}/`), name: loc(p, L).titolo })),
     },
   ];
 } else {
-  const p = progetto!;
-  const cat = categorie.find((c) => c.id === p.categorie[0])!;
+  const p = loc(progetto!, L);
+  const cat = loc(categorie.find((c) => c.id === p.categorie[0])!, L);
   title = titolo(`${p.titolo} – ${p.luogo}`, p.titolo);
   description = tronca(`${p.titolo}, ${p.luogo}: ${testoPiano(p.testo)}`);
   og = ogPath(p.slug);
-  ogAlt = p.copertina.alt;
+  ogAlt = (L === 'en' && p.copertina.altEn) || p.copertina.alt;
   const ref = membro(p.referente);
   ld = [
     pagina({ tipo: 'ItemPage', path, titolo: title, descrizione: description, og, briciole: true }),
     briciole(path, [
       { nome: 'Home', path: '/' },
-      { nome: 'Progetti', path: '/progetti/' },
-      { nome: cat.nome, path: `/progetti/${cat.id}/` },
+      { nome: tr('Progetti', 'Projects'), path: `${pre}/progetti/` },
+      { nome: cat.nome, path: `${pre}/progetti/${cat.id}/` },
       { nome: p.titolo, path },
     ]),
     {
@@ -66,13 +72,13 @@ if (categoria) {
       alternativeHeadline: p.intervento,
       description: testoPiano(p.testo),
       url: url(path),
-      inLanguage: 'it-IT',
-      genre: nomiCategorie(p),
+      inLanguage: L === 'en' ? 'en-GB' : 'it-IT',
+      genre: p.categorie.map((c) => loc(categorie.find((x) => x.id === c)!, L).nome),
       keywords: [...p.tag, p.luogo, site.nome].join(', '),
-      image: p.galleria.map((g) => ({ '@type': 'ImageObject', contentUrl: url(fallbackSrc(g.img)), caption: g.img.alt, width: g.img.w, height: g.img.h })),
+      image: p.galleria.map((g) => ({ '@type': 'ImageObject', contentUrl: url(fallbackSrc(g.img)), caption: (L === 'en' && g.img.altEn) || g.img.alt, width: g.img.w, height: g.img.h })),
       locationCreated: { '@type': 'Place', name: p.luogo, address: { '@type': 'PostalAddress', addressLocality: p.luogo, addressCountry: 'IT' } },
       creator: [{ '@id': `${site.dominio}/#organizzazione` }, ...(ref ? [{ '@id': url(`/studio/#${ref.id}`) }] : [])],
-      isPartOf: { '@id': url('/progetti/#pagina') },
+      isPartOf: { '@id': url(`${pre}/progetti/#pagina`) },
     },
   ];
 }
@@ -90,7 +96,7 @@ if (categoria) {
   {
     categoria ? (
       <Fragment>
-        <PageHead briciole={[{ nome: 'Progetti', path: '/progetti/' }, { nome: categoria.nome }]} eyebrow="Portfolio" lead={categoria.intro}>
+        <PageHead briciole={[{ nome: tr('Progetti', 'Projects'), path: '/progetti/' }, { nome: categoria.nome }]} eyebrow="Portfolio" lead={categoria.intro}>
           {categoria.nome}
         </PageHead>
         <Portfolio lista={lista} attiva={categoria.id} />

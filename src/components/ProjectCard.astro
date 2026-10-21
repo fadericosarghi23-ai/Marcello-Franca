@@ -2,6 +2,7 @@
 import Picture from './Picture.astro';
 import type { Progetto } from '../data/progetti';
 import { categoria } from '../lib/progetti';
+import { lingua, loc } from '../lib/lingua';
 
 interface Props {
   p: Progetto;
@@ -9,17 +10,19 @@ interface Props {
   h?: 'h2' | 'h3';
   eager?: boolean;
 }
-const { p, h: H = 'h3', eager = false } = Astro.props;
+const { p: pIt, h: H = 'h3', eager = false } = Astro.props;
+const L = lingua(Astro.url);
+const p = loc(pIt, L);
 ---
 <article class="reveal">
   <a href={`/progetti/${p.slug}/`} class="card">
     <div class:list={['media', { 'is-drawing': p.disegno }]}>
-      <span class="cat">{categoria(p.categorie[0]).etichetta}</span>
+      <span class="cat">{loc(categoria(p.categorie[0]), L).etichetta}</span>
       <Picture img={p.copertina} sizes="(min-width: 1024px) 31vw, (min-width: 640px) 46vw, 92vw" eager={eager} />
     </div>
     <H>{p.titolo}</H>
     <p class="loc">{p.luogo}</p>
-    <ul class="tags" aria-label="Caratteristiche del progetto">
+    <ul class="tags" aria-label={L === 'en' ? 'Project features' : 'Caratteristiche del progetto'}>
       {p.tag.slice(0, 3).map((t) => <li>{t}</li>)}
     </ul>
   </a>

@@ -6,35 +6,39 @@ import Percorso from '../components/Percorso.astro';
 import Cta from '../components/Cta.astro';
 import { site, url } from '../data/site';
 import { ctaPrincipale } from '../data/nav';
-import { processo, fasi } from '../data/metodo';
+import { processo, fasi as fasiIt } from '../data/metodo';
 import { pagina, briciole, titolo } from '../lib/seo';
+import { lingua, loc, percorsoIn, traduttore } from '../lib/lingua';
 
-const title = titolo('Metodo di lavoro: dall’osservazione al progetto');
-const description = 'Le 9 fasi con cui Marcello Franca segue ogni progetto: incontro, rilievo, analisi del luogo, simulazioni, colore, progetto, pratiche e direzione lavori.';
+const L = lingua(Astro.url);
+const tr = traduttore(L);
+const fasi = fasiIt.map((f) => loc(f, L));
+const title = titolo(tr("Metodo di lavoro: dall’osservazione al progetto", "Working method: from observation to design"));
+const description = tr("Le 9 fasi con cui Marcello Franca segue ogni progetto: incontro, rilievo, analisi del luogo, simulazioni, colore, progetto, pratiche e direzione lavori.", "The 9 stages Marcello Franca follows on every project: meeting, survey, context analysis, simulations, colour, design, permits and site supervision.");
 const og = '/img/og/metodo.jpg';
 const ld = [
   pagina({ path: '/metodo/', titolo: title, descrizione: description, og, briciole: true }),
   briciole('/metodo/', [
     { nome: 'Home', path: '/' },
-    { nome: 'Metodo', path: '/metodo/' },
+    { nome: tr("Metodo", "Method"), path: '/metodo/' },
   ]),
   {
     '@type': 'HowTo',
-    '@id': url('/metodo/#metodo'),
-    name: `Come lavora ${site.nome}`,
-    description: 'Le fasi con cui l’architetto Marcello Franca segue un progetto, dal primo incontro alla consegna dell’opera.',
-    step: fasi.map((f, i) => ({ '@type': 'HowToStep', position: i + 1, name: f.titolo, text: f.testo, url: url(`/metodo/#fase-${i + 1}`) })),
+    '@id': url(`${percorsoIn('/metodo/', L)}#metodo`),
+    name: `${tr("Come lavora", "How")} ${site.nome}${tr("", " works")}`,
+    description: tr("Le fasi con cui l’architetto Marcello Franca segue un progetto, dal primo incontro alla consegna dell’opera.", "The stages through which architect Marcello Franca follows a project, from the first meeting to handover."),
+    step: fasi.map((f, i) => ({ '@type': 'HowToStep', position: i + 1, name: f.titolo, text: f.testo, url: url(`${percorsoIn('/metodo/', L)}#fase-${i + 1}`) })),
   },
 ];
 ---
 <Layout title={title} description={description} path="/metodo/" og={og} transparent ld={ld}>
   <PageHero
     img={processo[3].img}
-    briciole={[{ nome: 'Metodo' }]}
-    eyebrow="Metodo"
-    lead="Osservare, ascoltare, progettare e seguire la realizzazione: ogni progetto nasce dal dialogo con i luoghi e con chi li vive."
+    briciole={[{ nome: tr("Metodo", "Method") }]}
+    eyebrow={tr("Metodo", "Method")}
+    lead={tr("Osservare, ascoltare, progettare e seguire la realizzazione: ogni progetto nasce dal dialogo con i luoghi e con chi li vive.", "Observing, listening, designing and following construction: every project grows from a dialogue with places and with the people who live in them.")}
   >
-    Dall’osservazione dei luoghi al progetto
+    {tr("Dall’osservazione dei luoghi al progetto", "From observing places to the project")}
   </PageHero>
 
   <section class="section">
@@ -47,15 +51,15 @@ const ld = [
     <div class="container">
       <div class="section-head reveal">
         <div>
-          <p class="eyebrow mb-2">Le fasi nel dettaglio</p>
-          <h2 class="h2">Nove passaggi, un solo riferimento</h2>
-          <p class="lead mt-2" style="color: rgb(255 255 255 / 0.72)">Ogni progetto è diverso, ma il metodo è lo stesso: chiarezza su idee, tempi e costi in ogni fase.</p>
+          <p class="eyebrow mb-2">{tr("Le fasi nel dettaglio", "The stages in detail")}</p>
+          <h2 class="h2">{tr("Nove passaggi, un solo riferimento", "Nine steps, one point of reference")}</h2>
+          <p class="lead mt-2" style="color: rgb(255 255 255 / 0.72)">{tr("Ogni progetto è diverso, ma il metodo è lo stesso: chiarezza su idee, tempi e costi in ogni fase.", "Every project is different, but the method stays the same: clarity on ideas, timing and cost at every stage.")}</p>
         </div>
-        <a href={ctaPrincipale.href} class="btn btn-outline-light">Fissa un primo incontro</a>
+        <a href={ctaPrincipale.href} class="btn btn-outline-light">{tr("Fissa un primo incontro", "Book a first meeting")}</a>
       </div>
       <Percorso fasi={fasi} />
     </div>
   </section>
 
-  <Cta titolo="Iniziamo da un incontro" />
+  <Cta titolo={tr("Iniziamo da un incontro", "Let’s start with a meeting")} />
 </Layout>

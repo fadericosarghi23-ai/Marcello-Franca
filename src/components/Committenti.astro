@@ -2,9 +2,10 @@
 // Elenco dei committenti: in home una selezione su più colonne, in /studio/ tutti, divisi per gruppo.
 interface Props {
   nomi?: string[];
-  gruppi?: { gruppo: string; nomi: string[] }[];
+  gruppi?: { gruppo: string; gruppoEn?: string; nomi: string[] }[];
 }
 const { nomi, gruppi } = Astro.props;
+const en = Astro.url.pathname.startsWith('/en/');
 ---
 {
   nomi && (
@@ -18,7 +19,7 @@ const { nomi, gruppi } = Astro.props;
     <div class="gruppi">
       {gruppi.map((g) => (
         <div class="gruppo reveal">
-          <h3 class="titolo">{g.gruppo}</h3>
+          <h3 class="titolo">{(en && g.gruppoEn) || g.gruppo}</h3>
           <ul class="nomi">
             {g.nomi.map((n) => <li>{n}</li>)}
           </ul>

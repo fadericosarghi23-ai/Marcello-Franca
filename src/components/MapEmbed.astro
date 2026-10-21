@@ -12,7 +12,7 @@ const bbox = [lng - delta, lat - delta / 2, lng + delta, lat + delta / 2].join('
 const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat}%2C${lng}`;
 ---
 <iframe
-  title={`Mappa: ${[site.nome, site.indirizzo.viaBreve, site.indirizzo.citta].filter(Boolean).join(', ')}`}
+  title={`${Astro.url.pathname.startsWith('/en/') ? 'Map' : 'Mappa'}: ${[site.nome, site.indirizzo.viaBreve, site.indirizzo.citta].filter(Boolean).join(', ')}`}
   loading="lazy"
   referrerpolicy="no-referrer"
   src={src}></iframe>

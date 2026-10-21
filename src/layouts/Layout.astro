@@ -7,6 +7,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site, url } from '../data/site';
 import { organizzazione, sitoWeb } from '../lib/seo';
+import { lingua, percorsoIn, traduttore } from '../lib/lingua';
 
 interface Props {
   title: string;
@@ -28,24 +29,38 @@ const {
   description,
   path,
   og = site.og.src,
-  ogAlt = site.og.alt,
+  ogAlt,
   ogType = 'website',
   noindex = false,
   transparent = false,
   ld = [],
 } = Astro.props;
-const canonical = url(path);
+const L = lingua(Astro.url);
+const tr = traduttore(L);
+const canonical = url(percorsoIn(path, L));
+const altIt = url(percorsoIn(path, 'it'));
+const altEn = url(percorsoIn(path, 'en'));
+const ogAltTesto = ogAlt ?? (L === 'en' ? (site.og.altEn ?? site.og.alt) : site.og.alt);
 const ogUrl = url(og);
 const grafo = { '@context': 'https://schema.org', '@graph': [organizzazione(), sitoWeb(), ...ld] };
 ---
 <!doctype html>
-<html lang={site.lingua} class="no-js">
+<html lang={L} class="no-js">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {
+      !noindex && (
+        <Fragment>
+          <link rel="alternate" hreflang="it" href={altIt} />
+          <link rel="alternate" hreflang="en" href={altEn} />
+          <link rel="alternate" hreflang="x-default" href={altIt} />
+        </Fragment>
+      )
+    }
     <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
     <meta name="theme-color" content={site.themeColor} />
     <meta name="author" content={site.nome} />
@@ -54,7 +69,8 @@ const grafo = { '@context': 'https://schema.org', '@graph': [organizzazione(), s
     <meta name="geo.position" content={`${site.geo.lat};${site.geo.lng}`} />
     <meta name="ICBM" content={`${site.geo.lat}, ${site.geo.lng}`} />
     <meta property="og:type" content={ogType} />
-    <meta property="og:locale" content={site.locale} />
+    <meta property="og:locale" content={L === 'en' ? 'en_GB' : site.locale} />
+    <meta property="og:locale:alternate" content={L === 'en' ? site.locale : 'en_GB'} />
     <meta property="og:site_name" content={site.nome} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -62,7 +78,7 @@ const grafo = { '@context': 'https://schema.org', '@graph': [organizzazione(), s
     <meta property="og:image" content={ogUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={ogAlt} />
+    <meta property="og:image:alt" content={ogAltTesto} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
@@ -77,7 +93,7 @@ const grafo = { '@context': 'https://schema.org', '@graph': [organizzazione(), s
     <script is:inline>document.documentElement.classList.remove('no-js');</script>
   </head>
   <body>
-    <a href="#main" class="skip-link">Salta al contenuto</a>
+    <a href="#main" class="skip-link">{tr('Salta al contenuto', 'Skip to content')}</a>
     <Header transparent={transparent} />
     <main id="main">
       <slot />
@@ -101,9 +117,11 @@ const grafo = { '@context': 'https://schema.org', '@graph': [organizzazione(), s
       const toggle = document.querySelector('.menu-toggle');
       const menu = document.getElementById('mobile-menu');
       if (toggle && menu) {
+        const apri = toggle.getAttribute('aria-label')!;
+        const chiudi = (toggle as HTMLElement).dataset.chiudi!;
         const set = (open: boolean) => {
           toggle.setAttribute('aria-expanded', String(open));
-          toggle.setAttribute('aria-label', open ? 'Chiudi il menu' : 'Apri il menu');
+          toggle.setAttribute('aria-label', open ? chiudi : apri);
           menu.hidden = !open;
           document.body.classList.toggle('menu-open', open);
           document.body.style.overflow = open ? 'hidden' : '';

@@ -81,7 +81,7 @@ export function organizzazione() {
 }
 
 export function sitoWeb() {
-  return { '@type': 'WebSite', '@id': SITO, url: url('/'), name: site.nome, inLanguage: 'it-IT', publisher: { '@id': ORG } };
+  return { '@type': 'WebSite', '@id': SITO, url: url('/'), name: site.nome, inLanguage: ['it-IT', 'en-GB'], publisher: { '@id': ORG } };
 }
 
 export type Briciola = { nome: string; path: string };

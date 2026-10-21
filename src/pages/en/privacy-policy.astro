@@ -1,0 +1,59 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHead from '../../components/PageHead.astro';
+import { site, mailHref, indirizzoRiga } from '../../data/site';
+import { pagina, briciole, titolo } from '../../lib/seo';
+
+const title = titolo('Privacy policy');
+const description = `How the ${site.nome} website processes users’ personal data, under EU Regulation 2016/679 (GDPR).`;
+const path = '/en/privacy-policy/';
+const ld = [
+  pagina({ path, titolo: title, descrizione: description, og: site.og.src, briciole: true }),
+  briciole(path, [
+    { nome: 'Home', path: '/en/' },
+    { nome: 'Privacy policy', path },
+  ]),
+];
+const { indirizzo: a } = site;
+---
+<Layout title={title} description={description} path={path} ld={ld}>
+  <PageHead briciole={[{ nome: 'Privacy policy' }]} lead="Information under Articles 13 and 14 of Regulation (EU) 2016/679. The Italian version prevails." leadClass="lead mt-2">
+    Privacy policy
+  </PageHead>
+  <section class="section">
+    <div class="container narrow prose">
+      <h2>Data controller</h2>
+      <p>
+        {site.nome}, {indirizzoRiga} ({a.provincia}), Italy{site.piva && `, VAT no. ${site.piva}`} — email
+        <a href={mailHref}>{site.email}</a>, tel. {site.telefono.testoEn}{site.pec && `, certified email (PEC) ${site.pec}`}.
+      </p>
+      <h2>Data processed</h2>
+      <p>
+        <strong>Browsing data.</strong> In the course of normal operation, the systems running the website collect some technical data (IP address, browser type, date and time of the request) needed to deliver the pages and keep them secure. This data is not used to identify users.
+      </p>
+      <p>
+        <strong>Data provided voluntarily.</strong> By filling in the contact form or writing to the studio’s email address, users provide their name, email address, phone number if given, and the content of their message.
+      </p>
+      <h2>Purposes and legal basis</h2>
+      <ul>
+        <li>Replying to requests for information and quotes (pre-contractual measures requested by the data subject, Art. 6.1.b GDPR).</li>
+        <li>Ensuring the website works properly and securely (legitimate interest, Art. 6.1.f GDPR).</li>
+      </ul>
+      <h2>Retention</h2>
+      <p>
+        Data sent through the form is kept for as long as needed to handle the request and, if it leads to an engagement, for the period required by law.
+      </p>
+      <h2>Recipients</h2>
+      <p>
+        Data is processed by the studio and by the technical providers that host the website and handle form submissions, appointed as data processors. Data is not disclosed or passed on to third parties for marketing purposes.
+      </p>
+      <h2>Your rights</h2>
+      <p>
+        You may at any time ask for access to your data, its rectification or erasure, restriction of or objection to processing, and data portability, by writing to
+        <a href={mailHref}>{site.email}</a>. You may also lodge a complaint with the Italian Data Protection Authority (www.garanteprivacy.it).
+      </p>
+      <h2>Cookies</h2>
+      <p>For the use of cookies, please see the <a href="/en/cookie-policy/">cookie policy</a>.</p>
+    </div>
+  </section>
+</Layout>

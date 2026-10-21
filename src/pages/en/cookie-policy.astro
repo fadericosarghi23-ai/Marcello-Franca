@@ -1,0 +1,44 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHead from '../../components/PageHead.astro';
+import { site, mailHref } from '../../data/site';
+import { pagina, briciole, titolo } from '../../lib/seo';
+
+const title = titolo('Cookie policy');
+const description = `Cookie information for the ${site.nome} website: no profiling cookies and no third-party analytics.`;
+const path = '/en/cookie-policy/';
+const ld = [
+  pagina({ path, titolo: title, descrizione: description, og: site.og.src, briciole: true }),
+  briciole(path, [
+    { nome: 'Home', path: '/en/' },
+    { nome: 'Cookie policy', path },
+  ]),
+];
+const social = site.social.map((s) => s.nome).join(' or ');
+---
+<Layout title={title} description={description} path={path} ld={ld}>
+  <PageHead briciole={[{ nome: 'Cookie policy' }]} lead="This website respects your privacy: no profiling cookies, no advertising trackers." leadClass="lead mt-2">
+    Cookie policy
+  </PageHead>
+  <section class="section">
+    <div class="container narrow prose">
+      <h2>Cookies used</h2>
+      <p>
+        The {site.nome} website <strong>does not set profiling cookies or third-party analytics cookies</strong>. For this reason no consent banner is needed.
+      </p>
+      <p>Fonts are hosted on our own server, with no connection to external services.</p>
+      <h2>Third-party content</h2>
+      <p>
+        The Home and Contact pages include a map provided by OpenStreetMap, loaded only when that section becomes visible. OpenStreetMap does not use profiling cookies; for more information see the OpenStreetMap Foundation privacy policy (wiki.osmfoundation.org/wiki/Privacy_Policy).
+      </p>
+      <p>
+        Videos appear on the Studio page and in some projects. The YouTube video shows a preview hosted on our server: the player is loaded from YouTube (in “privacy-enhanced” mode, youtube-nocookie.com) only when you press play. From that moment Google’s privacy policy applies (policies.google.com/privacy).
+      </p>
+      <p>External links (for example Google Maps{social && ` or ${social}`}) lead to third-party websites, which apply their own policies.</p>
+      <h2>Managing cookies in your browser</h2>
+      <p>You can delete or block cookies at any time in your browser settings.</p>
+      <h2>Contact</h2>
+      <p>For any questions, write to <a href={mailHref}>{site.email}</a>.</p>
+    </div>
+  </section>
+</Layout>

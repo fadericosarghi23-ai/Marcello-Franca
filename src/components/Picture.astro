@@ -1,5 +1,6 @@
 ---
 import { type Img, srcset, fallbackSrc } from '../lib/img';
+import { lingua } from '../lib/lingua';
 
 interface Props {
   img: Img;
@@ -8,13 +9,14 @@ interface Props {
   class?: string;
 }
 const { img, sizes, eager = false, class: cls } = Astro.props;
+const alt = lingua(Astro.url) === 'en' ? (img.altEn ?? img.alt) : img.alt;
 ---
 <picture>
   <source type="image/avif" srcset={srcset(img, 'avif')} sizes={sizes} />
   <source type="image/webp" srcset={srcset(img, 'webp')} sizes={sizes} />
   <img
     src={fallbackSrc(img)}
-    alt={img.alt}
+    alt={alt}
     width={img.w}
     height={img.h}
     loading={eager ? 'eager' : 'lazy'}

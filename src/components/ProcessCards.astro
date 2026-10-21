@@ -1,15 +1,17 @@
 ---
 import Picture from './Picture.astro';
 import { processo } from '../data/metodo';
+import { lingua, loc } from '../lib/lingua';
 
 interface Props {
   h?: 'h2' | 'h3';
 }
 const { h: H = 'h3' } = Astro.props;
+const L = lingua(Astro.url);
 ---
 <ol class="process">
   {
-    processo.map((s, i) => (
+    processo.map((p) => loc(p, L)).map((s, i) => (
       <li class="process-card reveal" style={`transition-delay: ${i * 60}ms`}>
         <Picture img={s.img} sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" />
         <span class="num">{String(i + 1).padStart(2, '0')}</span>

@@ -8,47 +8,55 @@ import Video from './Video.astro';
 import Cta from './Cta.astro';
 import type { Progetto } from '../data/progetti';
 import { membro } from '../data/team';
-import { categoria, vicini, simili, nomiCategorie } from '../lib/progetti';
-import { fullSrc, sizedSrc, larghezze } from '../lib/img';
+import { categoria, vicini, simili } from '../lib/progetti';
+import { fullSrc, sizedSrc, larghezze, type Img } from '../lib/img';
+import { lingua, loc, ruoloEn, traduttore } from '../lib/lingua';
 
 interface Props {
   p: Progetto;
 }
-const { p } = Astro.props;
-const cat = categoria(p.categorie[0]);
+const L = lingua(Astro.url);
+const tr = traduttore(L);
+const en = L === 'en';
+const p = loc(Astro.props.p, L);
+const alt = (img: Img) => (en && img.altEn) || img.alt;
+const cat = loc(categoria(p.categorie[0]), L);
+const nomiCat = p.categorie.map((c) => loc(categoria(c), L).nome);
 const briciole = [
-  { nome: 'Progetti', path: '/progetti/' },
+  { nome: tr('Progetti', 'Projects'), path: '/progetti/' },
   { nome: cat.nome, path: `/progetti/${cat.id}/` },
   { nome: p.titolo },
 ];
 const ref = membro(p.referente);
-const { prev, next } = vicini(p);
+const v = vicini(Astro.props.p);
+const prev = loc(v.prev, L);
+const next = loc(v.next, L);
 ---
 {
   p.hero ? (
-    <PageHero img={p.copertina} briciole={briciole} eyebrow={nomiCategorie(p).join(' · ')} lead={p.luogo}>
+    <PageHero img={p.copertina} briciole={briciole} eyebrow={nomiCat.join(' · ')} lead={p.luogo}>
       {p.titolo}
     </PageHero>
   ) : (
-    <PageHead briciole={briciole} eyebrow={nomiCategorie(p).join(' · ')} lead={p.luogo} leadClass="lead mt-2" h1Style="max-width: 24ch">
+    <PageHead briciole={briciole} eyebrow={nomiCat.join(' · ')} lead={p.luogo} leadClass="lead mt-2" h1Style="max-width: 24ch">
       {p.titolo}
     </PageHead>
   )
 }
 <article class="section">
   <div class="container project-layout">
-    <aside class="facts" aria-label="Scheda del progetto">
+    <aside class="facts" aria-label={tr('Scheda del progetto', 'Project details')}>
       <dl>
-        <div class="row"><dt>Intervento</dt><dd>{p.intervento}</dd></div>
-        <div class="row"><dt>Luogo</dt><dd>{p.luogo}</dd></div>
+        <div class="row"><dt>{tr("Intervento", "Work")}</dt><dd>{p.intervento}</dd></div>
+        <div class="row"><dt>{tr("Luogo", "Location")}</dt><dd>{p.luogo}</dd></div>
         <div class="row">
-          <dt>Categoria</dt>
+          <dt>{tr("Categoria", "Category")}</dt>
           <dd>
             {
               p.categorie.map((c, i) => (
                 <Fragment>
                   {i > 0 && ', '}
-                  <a href={`/progetti/${c}/`} class="link-underline">{categoria(c).nome}</a>
+                  <a href={`/progetti/${c}/`} class="link-underline">{loc(categoria(c), L).nome}</a>
                 </Fragment>
               ))
             }
@@ -57,52 +65,52 @@ const { prev, next } = vicini(p);
         {
           p.progettisti && (
             <div class="row">
-              <dt>Progettisti e ruoli</dt>
+              <dt>{tr("Progettisti e ruoli", "Designers and roles")}</dt>
               <dd><ul>{p.progettisti.map((r) => <li>{r}</li>)}</ul></dd>
             </div>
           )
         }
-        {p.importo && <div class="row"><dt>Importo lavori</dt><dd>{p.importo}</dd></div>}
+        {p.importo && <div class="row"><dt>{tr("Importo lavori", "Contract value")}</dt><dd>{p.importo}</dd></div>}
         <div class="row">
-          <dt>Temi</dt>
+          <dt>{tr("Temi", "Themes")}</dt>
           <dd><ul class="tags" style="margin-top:0">{p.tag.map((t) => <li>{t}</li>)}</ul></dd>
         </div>
         {
           ref && (
             <div class="row">
-              <dt>Referente</dt>
+              <dt>{tr("Referente", "Contact person")}</dt>
               <dd>
                 <a href={`/studio/#${ref.id}`} class="lead-person">
                   <img src={sizedSrc(ref.foto, larghezze(ref.foto)[0])} alt="" width="52" height="52" loading="lazy" />
-                  <span><strong style="font-weight:500">{ref.nome}</strong><br /><span class="muted small">{ref.ruolo}</span></span>
+                  <span><strong style="font-weight:500">{ref.nome}</strong><br /><span class="muted small">{en ? (ruoloEn[ref.ruolo] ?? ref.ruolo) : ref.ruolo}</span></span>
                 </a>
               </dd>
             </div>
           )
         }
       </dl>
-      <a href="/contatti/#richiesta" class="btn btn-primary mt-4" style="width: 100%">Parliamo del tuo progetto</a>
+      <a href="/contatti/#richiesta" class="btn btn-primary mt-4" style="width: 100%">{tr("Parliamo del tuo progetto", "Let’s talk about your project")}</a>
     </aside>
     <div>
       {
         !p.hero && (
           <figure class="mb-3">
             <Picture img={p.copertina} sizes="(min-width: 1024px) 60vw, 92vw" eager class="full-img" />
-            <figcaption class="xs muted mt-1">{p.copertina.alt}</figcaption>
+            <figcaption class="xs muted mt-1">{alt(p.copertina)}</figcaption>
           </figure>
         )
       }
-      <h2 class="h3 mb-3">Il progetto</h2>
+      <h2 class="h3 mb-3">{tr("Il progetto", "The project")}</h2>
       <div class="prose lead" style="font-size: 1.1rem" set:html={p.testo} />
       {p.video && <div class="mt-4 mb-3"><Video video={p.video} /></div>}
       <div class="gallery" data-gallery>
         {
           p.galleria.map((g, i) => (
             <figure class={g.classe || undefined} style={p.hero && i === 0 ? 'display:none' : undefined}>
-              <button type="button" data-index={i} data-full={fullSrc(g.img)} data-alt={g.img.alt} aria-label={`Ingrandisci: ${g.img.alt}`}>
+              <button type="button" data-index={i} data-full={fullSrc(g.img)} data-alt={alt(g.img)} aria-label={`${tr('Ingrandisci', 'Enlarge')}: ${alt(g.img)}`}>
                 <Picture img={g.img} sizes="(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw" />
               </button>
-              <figcaption>{g.img.alt}</figcaption>
+              <figcaption>{alt(g.img)}</figcaption>
             </figure>
           ))
         }
@@ -110,30 +118,30 @@ const { prev, next } = vicini(p);
       {
         p.hero && (
           <button type="button" class="text-link link-underline mt-3" data-open-all>
-            Vedi tutte le {p.galleria.length} immagini
+            {tr("Vedi tutte le", "See all")} {p.galleria.length} {tr("immagini", "images")}
           </button>
         )
       }
     </div>
   </div>
 </article>
-<nav class="container" aria-label="Altri progetti">
+<nav class="container" aria-label={tr('Altri progetti', 'More projects')}>
   <div class="pager">
-    <a href={`/progetti/${prev.slug}/`} rel="prev"><small>← Progetto precedente</small><span>{prev.titolo}</span></a>
-    <a href={`/progetti/${next.slug}/`} rel="next"><small>Progetto successivo →</small><span>{next.titolo}</span></a>
+    <a href={`/progetti/${prev.slug}/`} rel="prev"><small>← {tr("Progetto precedente", "Previous project")}</small><span>{prev.titolo}</span></a>
+    <a href={`/progetti/${next.slug}/`} rel="next"><small>{tr("Progetto successivo", "Next project")} →</small><span>{next.titolo}</span></a>
   </div>
 </nav>
 <section class="section">
   <div class="container">
     <div class="section-head">
       <div>
-        <p class="eyebrow">Progetti simili</p>
-        <h2 class="h2">Potrebbe interessarti anche</h2>
+        <p class="eyebrow">{tr("Progetti simili", "Similar projects")}</p>
+        <h2 class="h2">{tr("Potrebbe interessarti anche", "You may also like")}</h2>
       </div>
       <a href={`/progetti/${cat.id}/`} class="text-link link-underline">{cat.nome}</a>
     </div>
     <div class="projects-grid">
-      {simili(p).map((s) => <ProjectCard p={s} />)}
+      {simili(Astro.props.p).map((s) => <ProjectCard p={s} />)}
     </div>
   </div>
 </section>

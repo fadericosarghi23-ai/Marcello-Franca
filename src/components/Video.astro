@@ -6,33 +6,37 @@ import type { Img } from '../lib/img';
 import { fallbackSrc } from '../lib/img';
 
 import type { VideoDati } from '../lib/video';
+import { lingua, traduttore } from '../lib/lingua';
 
 interface Props {
   video: VideoDati;
   didascalia?: string;
 }
 const { video, didascalia } = Astro.props;
+const L = lingua(Astro.url);
+const tr = traduttore(L);
+const titolo = (L === 'en' && video.titoloEn) || video.titolo;
 ---
 <figure class="video">
   <div class="schermo" style={`aspect-ratio: ${video.poster.w} / ${video.poster.h}`}>
     {
       video.tipo === 'youtube' ? (
-        <button type="button" class="avvia" data-youtube={video.id} data-titolo={video.titolo} aria-label={`Guarda il video: ${video.titolo}`}>
+        <button type="button" class="avvia" data-youtube={video.id} data-titolo={titolo} aria-label={`${tr('Guarda il video', 'Watch the video')}: ${titolo}`}>
           <Picture img={video.poster} sizes="(min-width: 900px) 48rem, 92vw" />
           <span class="play" aria-hidden="true">
             <svg viewBox="0 0 48 48"><path d="M18 14v20l16-10z" fill="currentColor" /></svg>
           </span>
         </button>
       ) : (
-        <video controls preload="none" playsinline poster={fallbackSrc(video.poster)} title={video.titolo}>
+        <video controls preload="none" playsinline poster={fallbackSrc(video.poster)} title={titolo}>
           <source src={video.src} type="video/mp4" />
-          <a href={video.src}>Scarica il video</a>
+          <a href={video.src}>{tr('Scarica il video', 'Download the video')}</a>
         </video>
       )
     }
   </div>
   <figcaption class="xs muted mt-1">
-    {didascalia ?? video.titolo}{video.tipo === 'youtube' && ' · il video si carica da YouTube quando lo avvii'}
+    {didascalia ?? titolo}{video.tipo === 'youtube' && tr(' · il video si carica da YouTube quando lo avvii', ' · the video loads from YouTube when you play it')}
   </figcaption>
 </figure>
 

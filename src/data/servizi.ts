@@ -17,6 +17,8 @@ export type Servizio = {
   correlati: string[];
   /** Categoria del portfolio collegata */
   categoria: CategoriaId;
+  /** Versione inglese */
+  en?: Partial<Pick<Servizio, 'nome' | 'breve' | 'testo' | 'voci'>>;
 };
 
 export const servizi: Servizio[] = [
@@ -142,3 +144,99 @@ export const servizi: Servizio[] = [
     categoria: 'design',
   },
 ];
+
+// Versione inglese (/en/), per id del servizio
+const serviziEn: Record<string, Servizio['en']> = {
+  "architettura": {
+    "nome": "Architecture",
+    "breve": "Public and private buildings, homes and community spaces, in dialogue with the place, the landscape and its history.",
+    "testo": [
+      "Making architecture means observing and studying the phenomena around us, rethinking the relationship between society and environment and seeking a balance between form and function, recovering the value of memory and the skilful use of materials.",
+      "From residential neighbourhoods to the Main Entrance of the Pesaro Exhibition Centre, I look for simple, precise solutions in both function and appearance, with attention to cost, energy saving and low-impact materials."
+    ],
+    "voci": [
+      "Architectural design",
+      "Single- and multi-family homes",
+      "Public and sports buildings",
+      "Site supervision and artistic direction",
+      "Building permits",
+      "Renderings and simulations for cost assessment"
+    ]
+  },
+  "interni": {
+    "nome": "Interior architecture",
+    "breve": "Houses, villas and apartments: spaces, furniture, light, materials and colours designed around the people who live in them.",
+    "testo": [
+      "Home is our refuge, the most intimate place where we find ourselves and the people we love: that is why every interior project starts by listening to those who will live in it, and reflects their character.",
+      "For over twenty years I have worked with the Telemaco design and interior architecture studio in Pesaro on the design and site supervision of private villas, taking care of every construction detail, the materials, the colours and the furnishings."
+    ],
+    "voci": [
+      "Bespoke furniture design",
+      "Renovation of apartments and villas",
+      "Materials, finishes and colours",
+      "Lighting design",
+      "Interior site supervision"
+    ]
+  },
+  "allestimenti": {
+    "nome": "Museum, trade fair and theatre design",
+    "breve": "Museums, exhibitions, stands, stages and sets: temporary and permanent spaces that tell the story of collections and events.",
+    "testo": [
+      "Designing a space, whether permanent or for a single day, makes it possible to experiment with forms and functions that the reality of building often denies: for me it has been a true training ground in design.",
+      "From events at the Campanara Exhibition Centre to the Rossini Opera Festival productions in Piazza del Popolo, from the Pesaro Civic Museums to the Morbidelli Motorcycle Museum and the Bicycle Museum."
+    ],
+    "voci": [
+      "Museum and exhibition design",
+      "Stands and trade fair spaces",
+      "Stages, sets and fashion shows",
+      "Theatres and performance spaces",
+      "Bespoke display units"
+    ]
+  },
+  "colore": {
+    "nome": "Colour and Colour Plans",
+    "breve": "Colour Plans, colour restyling and colour consultancy for the built environment, for cities, public bodies and companies.",
+    "testo": [
+      "There is no reality without colour, because colour is light: studying the original historic colours safeguards the chromatic memory of the city and the territory.",
+      "I oversaw the Colour Plan for the historic centre of Pesaro and contributed to many Colour Plans for Italian cities, as well as colour restyling projects, publications and consultancy for companies such as Akzo Nobel Sikkens and Colorificio MP in Rimini."
+    ],
+    "voci": [
+      "Colour Plans for historic centres",
+      "Colour restyling of buildings",
+      "Survey and analysis of historic colours",
+      "Colour consultancy for companies",
+      "Publications and talks on colour"
+    ]
+  },
+  "urbanistica": {
+    "nome": "Urban space and planning",
+    "breve": "Squares, gardens, neighbourhoods and proposals for urban transformation, with care for the image of the city.",
+    "testo": [
+      "Planning means foreseeing and anticipating, but above all steering social and economic behaviour towards a balance with nature: planning whose watchword is “subtraction”, to increase the quality rather than the quantity of built space.",
+      "Caring for the image of the city is more than simply placing street furniture: it calls for attention to public buildings, to safety and to respect for the history and culture of each place."
+    ],
+    "voci": [
+      "Redevelopment of squares and public spaces",
+      "Landscaped urban green areas",
+      "Planning of residential neighbourhoods",
+      "Design proposals and simulations",
+      "Ideas competitions"
+    ]
+  },
+  "design": {
+    "nome": "Industrial design and signage",
+    "breve": "Urban and corporate signage, furniture components, lighting and everyday objects.",
+    "testo": [
+      "In 1987-88 I carried out research on outdoor lighting systems for Frank Soriano and Surya Illuminazione, later working closely with designers such as Enzo Mari.",
+      "I designed the signage for the historic centre of Pesaro, corporate totems, railings, kiosks and bathroom fittings for people with disabilities, published in trade magazines."
+    ],
+    "voci": [
+      "Urban and corporate signage",
+      "Furniture components and details",
+      "Lighting",
+      "Graphic design and communication",
+      "Models and prototypes"
+    ]
+  }
+};
+servizi.forEach((s) => (s.en = serviziEn[s.id]));

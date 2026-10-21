@@ -7,20 +7,27 @@ import { site, url } from '../../data/site';
 import { scritti, type Scritto } from '../../data/scritti';
 import { pagina, briciole, titolo, tronca } from '../../lib/seo';
 import { dataEstesa } from '../../lib/date';
+import { lingua, loc, percorsoIn, traduttore } from '../../lib/lingua';
 
 export function getStaticPaths() {
   return scritti.map((s) => ({ params: { slug: s.slug }, props: { s } }));
 }
-const { s } = Astro.props as { s: Scritto };
-const path = `/scritti/${s.slug}/`;
+const L = lingua(Astro.url);
+const tr = traduttore(L);
+const pre = L === 'en' ? '/en' : '';
+const sIt = (Astro.props as { s: Scritto }).s;
+const s = { ...loc(sIt, L), blocchi: (L === 'en' && sIt.en?.blocchi) || sIt.blocchi };
+// In inglese il testo resta in italiano quando manca la traduzione dell'autore
+const soloItaliano = L === 'en' && !sIt.en?.blocchi;
+const path = percorsoIn(`/scritti/${s.slug}/`, L);
 const title = titolo(s.titolo);
 const description = tronca(s.estratto.replace(/\n/g, ' '));
-const altri = scritti.filter((x) => x !== s);
+const altri = scritti.filter((x) => x !== sIt).map((x) => loc(x, L));
 const ld = [
   pagina({ tipo: 'WebPage', path, titolo: title, descrizione: description, og: site.og.src, briciole: true }),
   briciole(path, [
-    { nome: 'Home', path: '/' },
-    { nome: 'Scritti', path: '/scritti/' },
+    { nome: 'Home', path: percorsoIn('/', L) },
+    { nome: tr("Scritti", "Writings"), path: `${pre}/scritti/` },
     { nome: s.titolo, path },
   ]),
   {
@@ -28,7 +35,7 @@ const ld = [
     '@id': url(`${path}#articolo`),
     headline: s.titolo,
     datePublished: s.data,
-    inLanguage: 'it-IT',
+    inLanguage: soloItaliano || L === 'it' ? 'it-IT' : 'en-GB',
     author: { '@id': `${site.dominio}/#organizzazione`, name: site.nome },
     mainEntityOfPage: url(path),
     ...(s.img ? { image: url(`${s.img.base}-${Math.min(s.img.w, 1200)}.jpg`) } : {}),
@@ -37,8 +44,8 @@ const ld = [
 ---
 <Layout title={title} description={description} path={path} ogType="article" ld={ld}>
   <PageHead
-    briciole={[{ nome: 'Scritti', path: '/scritti/' }, { nome: s.titolo }]}
-    eyebrow={dataEstesa(s.data)}
+    briciole={[{ nome: tr("Scritti", "Writings"), path: '/scritti/' }, { nome: s.titolo }]}
+    eyebrow={dataEstesa(s.data, L)}
     lead={s.sottotitolo}
     leadClass="lead mt-2"
     h1Style="max-width: 24ch"
@@ -52,11 +59,12 @@ const ld = [
         s.img && (
           <figure class="figura reveal">
             <Picture img={s.img} sizes="(min-width: 900px) 640px, 92vw" eager />
-            {s.img.alt && <figcaption class="xs muted mt-1">{s.img.alt}</figcaption>}
+            {s.img.alt && <figcaption class="xs muted mt-1">{(L === 'en' && s.img.altEn) || s.img.alt}</figcaption>}
           </figure>
         )
       }
-      <div class="prose corpo">
+      {soloItaliano && <p class="small muted mb-3">This text is available in Italian only.</p>}
+      <div class="prose corpo" lang={soloItaliano ? 'it' : undefined}>
         {
           s.blocchi.map((b) =>
             b.tipo === 'h' ? (
@@ -81,17 +89,17 @@ const ld = [
     <div class="container">
       <div class="section-head">
         <div>
-          <p class="eyebrow">Scritti</p>
-          <h2 class="h2">Continua a leggere</h2>
+          <p class="eyebrow">{tr("Scritti", "Writings")}</p>
+          <h2 class="h2">{tr("Continua a leggere", "Keep reading")}</h2>
         </div>
-        <a href="/scritti/" class="text-link link-underline">Tutti gli scritti</a>
+        <a href="/scritti/" class="text-link link-underline">{tr("Tutti gli scritti", "All writings")}</a>
       </div>
       <ul class="altri">
         {
           altri.map((a) => (
             <li>
               <a href={`/scritti/${a.slug}/`} class="link-underline">{a.titolo}</a>
-              <span class="muted small"> — {dataEstesa(a.data)}</span>
+              <span class="muted small"> — {dataEstesa(a.data, L)}</span>
             </li>
           ))
         }

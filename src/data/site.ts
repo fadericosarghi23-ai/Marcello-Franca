@@ -38,7 +38,7 @@ export const site = {
   geo: { lat: 43.9098, lng: 12.9131 },
   /** Link "Indicazioni stradali" */
   mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Pesaro%20PU',
-  telefono: { testo: '347 338 8121', href: '+393473388121' },
+  telefono: { testo: '347 338 8121', testoEn: '+39 347 338 8121', href: '+393473388121' },
   email: 'architetto@marcellofranca.it',
   /** Vuoti = non mostrati */
   pec: '',
@@ -52,6 +52,7 @@ export const site = {
     w: 882,
     h: 182,
     alt: 'Marcello Franca architetto — architettura, interni, allestimenti, design e colore',
+    altEn: 'Marcello Franca architect — architecture, interiors, exhibition design, design and colour',
     didascalia: 'Logo Marcello Franca architetto',
   },
   /** Colore della barra del browser (= --accent in global.css) */
@@ -80,10 +81,22 @@ export const site = {
     'direzione lavori',
   ],
   /** Immagine Open Graph predefinita (1200×630) */
-  og: { src: '/img/og/sito.jpg', alt: 'Marcello Franca, architetto a Pesaro: architettura, interni e colore' },
+  og: { src: '/img/og/sito.jpg', alt: 'Marcello Franca, architetto a Pesaro: architettura, interni e colore', altEn: 'Marcello Franca, architect in Pesaro: architecture, interiors and colour' },
+  /** Testi in inglese (versione /en/) */
+  en: {
+    slogan: 'Colour is light.',
+    descrizione:
+      'The Marcello Franca architecture studio in Pesaro has worked for over thirty years in architecture, interior design, exhibition design, industrial design, urban planning and Colour Plans, with a comprehensive approach to design.',
+    descrizioneBreve: 'Architect in Pesaro: architecture, interiors and colour',
+    descrizioneFooter: 'Architect in Pesaro since 1985: architecture, interiors, exhibition design, design and Colour Plans. Colour is light.',
+    ricevimento: 'Get in touch to arrange a meeting.',
+  },
   /** Modulo contatti: con attivo=false non invia nulla. Attivare quando il sito è pubblicato su Netlify. */
-  form: { attivo: false, netlify: true, nome: 'contatti', grazie: '/grazie/' },
+  form: { attivo: true, netlify: true, nome: 'contatti', grazie: '/grazie/' },
 };
+
+/** Identità nella lingua della pagina */
+export const sitoIn = (L: 'it' | 'en') => (L === 'en' ? { ...site, ...site.en } : site);
 
 export const telHref = `tel:${site.telefono.href}`;
 export const mailHref = `mailto:${site.email}`;

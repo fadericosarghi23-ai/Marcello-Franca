@@ -1,6 +1,6 @@
 import type { Img } from '../lib/img';
 
-// Gli scritti di Marcello Franca (articoli del sito attuale), in italiano.
+// Gli scritti di Marcello Franca (articoli del sito attuale). In inglese esiste solo "Filosofia" (come sul sito attuale).
 export type Blocco =
   | { tipo: 'p' | 'h' | 'firma'; testo: string }
   | { tipo: 'citazione'; testo: string; fonte: string };
@@ -16,6 +16,8 @@ export type Scritto = {
   img?: Img;
   /** Paragrafi (gli a capo singoli restano, es. versi), titoletti, citazioni, firma */
   blocchi: Blocco[];
+  /** Versione inglese: senza blocchi il testo resta in italiano (con un avviso) */
+  en?: { titolo: string; sottotitolo?: string; estratto: string; blocchi?: Blocco[] };
 };
 
 export const scritti: Scritto[] = [
@@ -28,7 +30,8 @@ export const scritti: Scritto[] = [
       "base": "/img/scritti/immagine-della-citta",
       "w": 1100,
       "h": 956,
-      "alt": "Pianta storica di Pesaro dal Theatrum di Blaeu"
+      "alt": "Pianta storica di Pesaro dal Theatrum di Blaeu",
+      "altEn": "Historic map of Pesaro from Blaeu’s Theatrum"
     },
     "blocchi": [
       {
@@ -288,7 +291,8 @@ export const scritti: Scritto[] = [
       "base": "/img/scritti/i-francobolli-di-michele",
       "w": 418,
       "h": 512,
-      "alt": "Uno dei francobolli giganti di Michele Provinciali"
+      "alt": "Uno dei francobolli giganti di Michele Provinciali",
+      "altEn": "One of Michele Provinciali’s giant stamps"
     },
     "blocchi": [
       {
@@ -346,7 +350,8 @@ export const scritti: Scritto[] = [
       "base": "/img/scritti/l-asparagina-di-michele",
       "w": 1440,
       "h": 1920,
-      "alt": "La botte con l’asparagina nella piazzetta di Novilara"
+      "alt": "La botte con l’asparagina nella piazzetta di Novilara",
+      "altEn": "The barrel with the asparagus fern in the little square of Novilara"
     },
     "blocchi": [
       {
@@ -392,3 +397,44 @@ export const scritti: Scritto[] = [
     ]
   }
 ];
+
+// Versione inglese (/en/), per slug
+const scrittiEn: Record<string, Scritto['en']> = {
+  "immagine-della-citta": {
+    "titolo": "The image of the city: my vision",
+    "estratto": "The image of the city belongs to everyone, and everyone has the right to a more beautiful city in harmony with its environment, whether the built environment or the natural one."
+  },
+  "filosofia": {
+    "titolo": "Philosophy: colour and the memory of places",
+    "estratto": "Investigating reality through colour is a way of understanding things, the world as it changes; in their universality, colours expand the small world of observation in which we are all immersed every day, until it carries boundless meaning. When they meet the world of colour, painting and photography, from tools of subjective expressive knowledge and objective analysis, together become one and the same thing: the fruit of surrendering to our imaginative side and the visible expression of our own creative and interpretive spirit. It is a constant oscillation between rational and irrational, between order and disorder, between the “natural world” and the world “built” by man: a dichotomy that, through colour, disappears and becomes, through painting and photography, the same thing.",
+    "blocchi": [
+      {
+        "tipo": "citazione",
+        "testo": "But the city does not speak its past,\nit holds it like the lines of a hand,\nwritten in the corners of the streets, in the grilles of the windows,\nin the banisters of the stairs, in the rods of the lightning conductors,\nevery segment in turn marked with scratches, notches, carvings, flourishes",
+        "fonte": "Italo Calvino, Invisible Cities"
+      },
+      {
+        "tipo": "p",
+        "testo": "Investigating reality through colour is a way of understanding things, the world as it changes; in their universality, colours expand the small world of observation in which we are all immersed every day, until it carries boundless meaning. When they meet the world of colour, painting and photography, from tools of subjective expressive knowledge and objective analysis, together become one and the same thing: the fruit of surrendering to our imaginative side and the visible expression of our own creative and interpretive spirit. It is a constant oscillation between rational and irrational, between order and disorder, between the “natural world” and the world “built” by man: a dichotomy that, through colour, disappears and becomes, through painting and photography, the same thing."
+      },
+      {
+        "tipo": "p",
+        "testo": "Why does man colour things? Colour is a means of representation, relationship and communication on many levels, through one of our most important senses: sight. Sight captures light, the image of reality which, decoded by the brain, becomes part of human knowledge and of a growing culture, shaped by and shaping our shared store of knowledge and messages, in a continuous exchange of sensations and information. Our task becomes an opportunity to convey meanings and messages that bring back to light the role colour must play in the creative design practice of whoever uses it, whatever their motives, bringing out again the visual importance of the relationship between colours, the environment and nature, and the visual stimuli this relationship produces in people. Since meeting Michele Provinciali, I have felt a growing, unconditional passion for studying and researching my surroundings, and a greater sensitivity to the world of things and everyday objects: a sensitivity that comes from an open mind, acquired and necessary for a sound approach to analysing colour and the close relationship, in space and time, between light, colour and material. With attention and respect, though critical, for the History, Tradition and Culture of the Place, I tend to reinterpret signs and marks along the thread of memory: a poetic and philosophical reading of reality through which I try to bear witness to the present in all its aspects, coherent or contradictory, without ever forgetting our origins, which come back to each of us in sign and gesture."
+      }
+    ]
+  },
+  "ricordo-di-michele-provinciali": {
+    "titolo": "Remembering Michele Provinciali",
+    "sottotitolo": "Michele’s Colours",
+    "estratto": "The phone call was brief. When I arrived, I only had to lift the latch of the wooden door to enter a courtyard where time seemed to have stopped. Inside, on the threshold of another door, Michele was waiting to welcome me in."
+  },
+  "i-francobolli-di-michele": {
+    "titolo": "Michele’s stamps",
+    "estratto": "Some years had passed since we last met; a few misunderstandings, and perhaps too many things left unsaid, had drawn us apart, when one day Michele phoned me and, directly and with little preamble, asked: “Would you come with me to Turin, to Bolaffi?”"
+  },
+  "l-asparagina-di-michele": {
+    "titolo": "Michele’s asparagus fern",
+    "estratto": "One day Michele, my Friend and Mentor, called me to Novilara. He was very annoyed that someone there had placed a wooden barrel with pots of asparagus fern on it in the little square in front of the church."
+  }
+};
+scritti.forEach((s) => (s.en = scrittiEn[s.slug]));
